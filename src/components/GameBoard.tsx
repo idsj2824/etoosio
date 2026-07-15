@@ -77,7 +77,7 @@ export function GameBoard({
     }
 
     const interval = setInterval(() => {
-      const elapsed = Math.floor((Date.now() - state.turnStartTime) / 1000);
+      const elapsed = Math.floor((Date.now() - state.turnStartTime!) / 1000);
       const remaining = state.turnTimeLimit - elapsed;
       setRemainingTime(Math.max(0, remaining));
 

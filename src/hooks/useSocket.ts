@@ -27,8 +27,6 @@ export function useSocket() {
     };
   }, []);
 
-  const socket = socketRef.current;
-
   const createRoom = useCallback((playerName: string, playerCount: number) => {
     if (!socketRef.current) return;
     socketRef.current.emit('createRoom', { playerName, playerCount });

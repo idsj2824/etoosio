@@ -55,7 +55,7 @@ export function OnlineGameBoard({ roomId, onBack }: OnlineGameBoardProps) {
     }
 
     const interval = setInterval(() => {
-      const elapsed = Math.floor((Date.now() - gameState.turnStartTime) / 1000);
+      const elapsed = Math.floor((Date.now() - gameState.turnStartTime!) / 1000);
       const remaining = gameState.turnTimeLimit - elapsed;
       setRemainingTime(Math.max(0, remaining));
     }, 1000);
@@ -70,14 +70,14 @@ export function OnlineGameBoard({ roomId, onBack }: OnlineGameBoardProps) {
       setSelectedTileIds([]);
       // Find my player name from the players list
       if (socket?.id) {
-        const myPlayer = newPlayers.find(p => p.id === socket.id);
+        const myPlayer = newPlayers.find((p: Player) => p.id === socket.id);
         if (myPlayer) {
           setMyPlayerName(myPlayer.name);
         }
       }
       // Show notification when I become lead
       if (newGameState.isNewLead && myPlayerName) {
-        const myPlayerIndex = newPlayers.findIndex(p => p.id === socket?.id);
+        const myPlayerIndex = newPlayers.findIndex((p: Player) => p.id === socket?.id);
         if (myPlayerIndex === newGameState.currentPlayerIndex) {
           setNotification(`${myPlayerName}이(가) 새로운 선이 되었습니다!`);
         }
