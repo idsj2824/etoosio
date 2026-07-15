@@ -1,0 +1,158 @@
+.board {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: linear-gradient(180deg, #e8edf2 0%, #d4dce6 40%, #c5d0db 100%);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background: rgba(30, 58, 95, 0.92);
+  color: white;
+  flex-shrink: 0;
+}
+
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.round {
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.headerRight {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.headerRight button {
+  padding: 6px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s;
+}
+
+.headerRight button:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.headerRight button:focus-visible {
+  outline: 3px solid #60a5fa;
+  outline-offset: 2px;
+}
+
+.main {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+.sidebar {
+  width: 260px;
+  flex-shrink: 0;
+  padding: 12px;
+  overflow: hidden;
+}
+
+.table {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 12px 16px;
+  overflow-y: auto;
+}
+
+.opponents {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+.center {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.turnInfo {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+  font-size: 0.9rem;
+  color: #475569;
+}
+
+.currentTurn strong {
+  color: #2563eb;
+  font-size: 1.05rem;
+}
+
+.lastPlay,
+.passes {
+  color: #64748b;
+}
+
+.scores {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.scoreItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 8px 14px;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 10px;
+  font-size: 0.82rem;
+  min-width: 80px;
+}
+
+.cumulative {
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.playerSection {
+  flex-shrink: 0;
+  background: rgba(255, 255, 255, 0.85);
+  border-top: 2px solid rgba(30, 58, 95, 0.12);
+}
+
+@media (max-width: 1024px) {
+  .sidebar {
+    display: none;
+  }
+
+  .headerRight button {
+    padding: 5px 10px;
+    font-size: 0.75rem;
+  }
+}
+
+@media (min-width: 1440px) {
+  .sidebar {
+    width: 300px;
+  }
+}

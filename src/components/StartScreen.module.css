@@ -1,0 +1,148 @@
+.screen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1e3a5f 0%, #2d5a87 50%, #1a365d 100%);
+  padding: 24px;
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  padding: 48px 56px;
+  max-width: 480px;
+  width: 100%;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  text-align: center;
+}
+
+.logo h1 {
+  margin: 0;
+  font-size: 3rem;
+  font-weight: 900;
+  color: #1e3a5f;
+  letter-spacing: -0.03em;
+}
+
+.subtitle {
+  margin: 8px 0 0;
+  font-size: 1.1rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.players {
+  margin: 32px 0;
+}
+
+.label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #475569;
+  margin-bottom: 10px;
+}
+
+.playerButtons {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.playerButtons button {
+  padding: 10px 24px;
+  border: 2px solid #cbd5e1;
+  border-radius: 10px;
+  background: white;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.15s;
+}
+
+.playerButtons button.active {
+  border-color: #2563eb;
+  background: #eff6ff;
+  color: #1d4ed8;
+}
+
+.playerButtons button:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 2px;
+}
+
+.playerInfo {
+  margin: 10px 0 0;
+  font-size: 0.8rem;
+  color: #94a3b8;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.actions button {
+  padding: 14px 24px;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  transition: transform 0.1s, background 0.15s;
+}
+
+.actions button:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 2px;
+}
+
+.actions button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.actions button:not(:disabled):hover {
+  transform: translateY(-2px);
+}
+
+.primary {
+  background: #2563eb;
+  color: white;
+}
+
+.primary:hover {
+  background: #1d4ed8;
+}
+
+.online {
+  background: #059669;
+  color: white;
+}
+
+.online:hover {
+  background: #047857;
+}
+
+.secondary {
+  background: #e2e8f0;
+  color: #1e293b;
+}
+
+.secondary:not(:disabled):hover {
+  background: #cbd5e1;
+}
+
+@media (max-width: 1024px) {
+  .card {
+    padding: 32px 28px;
+  }
+
+  .logo h1 {
+    font-size: 2.4rem;
+  }
+}

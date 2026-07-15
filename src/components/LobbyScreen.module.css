@@ -1,0 +1,266 @@
+.screen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1e3a5f 0%, #2d5a87 50%, #1a365d 100%);
+  padding: 24px;
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  padding: 40px 48px;
+  max-width: 480px;
+  width: 100%;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.card h2 {
+  margin: 0 0 24px;
+  font-size: 2rem;
+  color: #1e3a5f;
+  text-align: center;
+}
+
+.modeToggle {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.modeToggle button {
+  flex: 1;
+  padding: 12px;
+  border: 2px solid #cbd5e1;
+  border-radius: 10px;
+  background: white;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.15s;
+}
+
+.modeToggle button.active {
+  border-color: #2563eb;
+  background: #eff6ff;
+  color: #1d4ed8;
+}
+
+.modeToggle button:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 2px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.field label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #475569;
+}
+
+.field input {
+  padding: 12px 16px;
+  border: 2px solid #cbd5e1;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-family: inherit;
+  transition: border-color 0.15s;
+}
+
+.field input:focus {
+  outline: none;
+  border-color: #2563eb;
+}
+
+.field input.readonly {
+  background: #f1f5f9;
+  cursor: not-allowed;
+}
+
+.playerCount {
+  display: flex;
+  gap: 8px;
+}
+
+.playerCount button {
+  flex: 1;
+  padding: 10px;
+  border: 2px solid #cbd5e1;
+  border-radius: 10px;
+  background: white;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.15s;
+}
+
+.playerCount button.active {
+  border-color: #2563eb;
+  background: #eff6ff;
+  color: #1d4ed8;
+}
+
+.playerCount button:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 2px;
+}
+
+.primary {
+  background: #2563eb;
+  color: white;
+  padding: 14px 24px;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  transition: transform 0.1s, background 0.15s;
+}
+
+.primary:hover {
+  background: #1d4ed8;
+  transform: translateY(-2px);
+}
+
+.primary:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 2px;
+}
+
+.secondary {
+  background: #e2e8f0;
+  color: #1e293b;
+  padding: 14px 24px;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  transition: transform 0.1s, background 0.15s;
+}
+
+.secondary:hover {
+  background: #cbd5e1;
+  transform: translateY(-2px);
+}
+
+.secondary:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 2px;
+}
+
+.back {
+  background: transparent;
+  color: #64748b;
+  padding: 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s;
+  margin-top: 16px;
+}
+
+.back:hover {
+  background: #f1f5f9;
+}
+
+.back:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 2px;
+}
+
+.error {
+  color: #dc2626;
+  font-weight: 600;
+  text-align: center;
+  margin: 0;
+}
+
+.roomInfo {
+  background: #f8fafc;
+  padding: 16px;
+  border-radius: 10px;
+  margin-bottom: 24px;
+}
+
+.roomInfo p {
+  margin: 4px 0;
+  font-size: 0.95rem;
+  color: #334155;
+}
+
+.roomInfo strong {
+  color: #1e293b;
+}
+
+.players {
+  margin-bottom: 24px;
+}
+
+.players h3 {
+  margin: 0 0 12px;
+  font-size: 1.1rem;
+  color: #1e293b;
+}
+
+.players ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.player {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  background: #f1f5f9;
+  border-radius: 8px;
+  margin-bottom: 6px;
+}
+
+.name {
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.hostBadge {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: white;
+  background: #2563eb;
+  padding: 2px 8px;
+  border-radius: 6px;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.waiting {
+  text-align: center;
+  color: #64748b;
+  font-size: 0.9rem;
+  margin: 0;
+}

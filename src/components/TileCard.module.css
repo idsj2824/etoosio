@@ -1,0 +1,112 @@
+.tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 72px;
+  height: 96px;
+  border-radius: 10px;
+  border: 2px solid rgba(0, 0, 0, 0.15);
+  background: linear-gradient(145deg, #ffffff 0%, #f0f0f0 100%);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+  padding: 6px 4px;
+  font-family: inherit;
+  position: relative;
+}
+
+.tile:hover {
+  transform: scale(1.06);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+}
+
+.tile:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 2px;
+}
+
+.tile.compact {
+  width: 56px;
+  height: 76px;
+  font-size: 0.85em;
+}
+
+.tile.selected {
+  transform: translateY(-12px) scale(1.04);
+  border-color: #2563eb;
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.35);
+}
+
+.tile.hinted {
+  border-color: #f59e0b;
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.4);
+}
+
+.tile.faceDown {
+  background: linear-gradient(145deg, #1e3a5f 0%, #0f2744 100%);
+  cursor: default;
+  border-color: #2d4a6f;
+}
+
+.tile.faceDown:hover {
+  transform: none;
+}
+
+.backPattern {
+  color: rgba(255, 255, 255, 0.3);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  transform: rotate(-15deg);
+}
+
+.icon {
+  font-size: 1.1rem;
+  line-height: 1;
+  margin-bottom: 2px;
+}
+
+.rank {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.number {
+  font-size: 1.4rem;
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.employee {
+  border-left: 4px solid #3b82f6;
+  background: linear-gradient(145deg, #eff6ff 0%, #dbeafe 100%);
+}
+
+.employee .rank { color: #1d4ed8; }
+.employee .number { color: #1e40af; }
+
+.assistant-manager {
+  border-left: 4px solid #10b981;
+  background: linear-gradient(145deg, #ecfdf5 0%, #d1fae5 100%);
+}
+
+.assistant-manager .rank { color: #047857; }
+.assistant-manager .number { color: #065f46; }
+
+.manager {
+  border-left: 4px solid #f59e0b;
+  background: linear-gradient(145deg, #fffbeb 0%, #fef3c7 100%);
+}
+
+.manager .rank { color: #b45309; }
+.manager .number { color: #92400e; }
+
+.director {
+  border-left: 4px solid #8b5cf6;
+  background: linear-gradient(145deg, #f5f3ff 0%, #ede9fe 100%);
+}
+
+.director .rank { color: #6d28d9; }
+.director .number { color: #5b21b6; }
