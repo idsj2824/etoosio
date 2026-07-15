@@ -106,6 +106,26 @@
   font-size: 1.05rem;
 }
 
+.timer {
+  font-weight: 700;
+  color: #059669;
+  font-size: 1rem;
+}
+
+.timer.urgent {
+  color: #dc2626;
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
 .lastPlay,
 .passes {
   color: #64748b;

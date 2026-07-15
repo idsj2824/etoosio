@@ -44,6 +44,7 @@ export function GameBoard({
 }: GameBoardProps) {
   const [notification, setNotification] = useState<string | null>(null);
   const playedTilesRef = useRef<HTMLDivElement>(null);
+  const [remainingTime, setRemainingTime] = useState<number>(state.turnTimeLimit);
 
   const human = state.players.find((p) => p.type === "human")!;
   const computers = state.players.filter((p) => p.type === "computer");
@@ -67,6 +68,26 @@ export function GameBoard({
       playedTilesRef.current.scrollTop = playedTilesRef.current.scrollHeight;
     }
   }, [state.playedTiles]);
+
+  // Timer countdown
+  useEffect(() => {
+    if (state.phase !== "playing" || !state.turnStartTime) {
+      setRemainingTime(state.turnTimeLimit);
+      return;
+    }
+
+    const interval = setInterval(() => {
+      const elapsed = Math.floor((Date.now() - state.turnStartTime) / 1000);
+      const remaining = state.turnTimeLimit - elapsed;
+      setRemainingTime(Math.max(0, remaining));
+
+      if (remaining <= 0 && isHumanTurn) {
+        onPass();
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [state.turnStartTime, state.phase, isHumanTurn, onPass]);
 
   return (
     <div className={styles.board}>
@@ -126,6 +147,11 @@ export function GameBoard({
               <span className={styles.currentTurn}>
                 현재 차례: <strong>{currentPlayer?.name}</strong>
               </span>
+              {state.phase === "playing" && (
+                <span className={`${styles.timer} ${remainingTime <= 5 ? styles.urgent : ''}`}>
+                  ⏱️ {remainingTime}초
+                </span>
+              )}
               {lastPlayer && state.currentCombination && (
                 <span className={styles.lastPlay}>
                   마지막 제출: {lastPlayer.name}

@@ -26,6 +26,8 @@ interface GameState {
   isNewLead: boolean;
   logs: Array<{ message: string; timestamp: number }>;
   playedTiles: Array<{ playerIndex: number; playerName: string; tiles: any[] }>;
+  turnStartTime: number | null;
+  turnTimeLimit: number;
 }
 
 export function OnlineGameBoard({ roomId, onBack }: OnlineGameBoardProps) {
@@ -36,6 +38,7 @@ export function OnlineGameBoard({ roomId, onBack }: OnlineGameBoardProps) {
   const [myPlayerName, setMyPlayerName] = useState<string | null>(null);
   const [notification, setNotification] = useState<string | null>(null);
   const playedTilesRef = useRef<HTMLDivElement>(null);
+  const [remainingTime, setRemainingTime] = useState<number>(30);
 
   // Auto-scroll played tiles to bottom when new tiles are added
   useEffect(() => {
@@ -43,6 +46,22 @@ export function OnlineGameBoard({ roomId, onBack }: OnlineGameBoardProps) {
       playedTilesRef.current.scrollTop = playedTilesRef.current.scrollHeight;
     }
   }, [gameState?.playedTiles]);
+
+  // Timer countdown
+  useEffect(() => {
+    if (!gameState?.turnStartTime) {
+      setRemainingTime(30);
+      return;
+    }
+
+    const interval = setInterval(() => {
+      const elapsed = Math.floor((Date.now() - gameState.turnStartTime) / 1000);
+      const remaining = gameState.turnTimeLimit - elapsed;
+      setRemainingTime(Math.max(0, remaining));
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [gameState?.turnStartTime]);
 
   useEffect(() => {
     on('gameStateUpdated', ({ gameState: newGameState, players: newPlayers }) => {
@@ -181,6 +200,11 @@ export function OnlineGameBoard({ roomId, onBack }: OnlineGameBoardProps) {
         <div className={styles.center}>
           <div className={styles.turnInfo}>
             <span>현재 차례: <strong>{currentPlayer?.name}</strong></span>
+            {gameState && (
+              <span className={`${styles.timer} ${remainingTime <= 5 ? styles.urgent : ''}`}>
+                ⏱️ {remainingTime}초
+              </span>
+            )}
             {lastPlayer && gameState.currentCombination && (
               <span>마지막 제출: {lastPlayer.name}</span>
             )}

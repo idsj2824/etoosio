@@ -97,6 +97,7 @@ function advanceAfterPlay(state: GameState, playerIndex: number): GameState {
     currentPlayerIndex: nextIndex,
     selectedTileIds: [],
     hintTileIds: [],
+    turnStartTime: Date.now(),
   };
 }
 
@@ -147,6 +148,7 @@ function handlePass(state: GameState): GameState {
     logs,
     selectedTileIds: [],
     hintTileIds: [],
+    turnStartTime: Date.now(),
   };
 }
 
@@ -227,6 +229,8 @@ export function createInitialState(): GameState {
     selectedTileIds: [],
     hintTileIds: [],
     playedTiles: [],
+    turnStartTime: null,
+    turnTimeLimit: 30,
   };
 }
 
@@ -261,6 +265,8 @@ export function startNewRound(state: GameState): GameState {
     selectedTileIds: [],
     hintTileIds: [],
     playedTiles: [],
+    turnStartTime: Date.now(),
+    turnTimeLimit: 30,
   };
 }
 

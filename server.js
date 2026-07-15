@@ -156,10 +156,56 @@ function startGame(room) {
     consecutivePasses: 0,
     isNewLead: true,
     logs: [{ message: `${room.players[startIndex].name}이(가) 선입니다.`, timestamp: Date.now() }],
-    playedTiles: [] // Track all tiles played on the table
+    playedTiles: [], // Track all tiles played on the table
+    turnStartTime: Date.now(),
+    turnTimeLimit: 30
   };
 
   room.status = 'playing';
+
+  // Start timer for this room
+  startRoomTimer(roomId);
+}
+
+function startRoomTimer(roomId) {
+  const timer = setInterval(() => {
+    const room = getRoom(roomId);
+    if (!room || room.status !== 'playing') {
+      clearInterval(timer);
+      return;
+    }
+
+    const gameState = room.gameState;
+    if (!gameState.turnStartTime) return;
+
+    const elapsed = Math.floor((Date.now() - gameState.turnStartTime) / 1000);
+    if (elapsed >= gameState.turnTimeLimit) {
+      // Time limit exceeded, auto-pass
+      const currentPlayer = room.players[gameState.currentPlayerIndex];
+      if (currentPlayer) {
+        gameState.consecutivePasses++;
+        gameState.logs.push({ message: `${currentPlayer.name}이(가) 시간 초과로 패스했습니다.`, timestamp: Date.now() });
+        gameState.turnStartTime = Date.now();
+
+        const othersCount = room.players.filter(p => p.hand.length > 0).length - 1;
+
+        if (gameState.consecutivePasses >= othersCount) {
+          gameState.currentCombination = null;
+          gameState.consecutivePasses = 0;
+          gameState.isNewLead = true;
+          gameState.currentPlayerIndex = gameState.lastPlayedByIndex;
+          gameState.logs.push({
+            message: `${room.players[gameState.lastPlayedByIndex].name}이(가) 새로운 선이 되었습니다.`,
+            timestamp: Date.now()
+          });
+        } else {
+          gameState.currentPlayerIndex = (gameState.currentPlayerIndex + 1) % room.players.length;
+        }
+
+        io.to(roomId).emit('gameStateUpdated', { gameState, players: room.players });
+      }
+    }
+  }, 1000);
 }
 
 io.on('connection', (socket) => {
@@ -277,7 +323,8 @@ io.on('connection', (socket) => {
     gameState.consecutivePasses = 0;
     gameState.isNewLead = false;
     gameState.logs.push({ message: `${player.name}이(가) 타일을 냈습니다.`, timestamp: Date.now() });
-    
+    gameState.turnStartTime = Date.now();
+
     // Move to next player
     gameState.currentPlayerIndex = (gameState.currentPlayerIndex + 1) % room.players.length;
     
@@ -314,7 +361,8 @@ io.on('connection', (socket) => {
     
     gameState.consecutivePasses++;
     gameState.logs.push({ message: `${player.name}이(가) 패스했습니다.`, timestamp: Date.now() });
-    
+    gameState.turnStartTime = Date.now();
+
     const othersCount = room.players.filter(p => p.hand.length > 0).length - 1;
     
     if (gameState.consecutivePasses >= othersCount) {

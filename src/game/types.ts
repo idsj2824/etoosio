@@ -70,6 +70,8 @@ export interface GameState {
   selectedTileIds: string[];
   hintTileIds: string[];
   playedTiles: Array<{ playerIndex: number; playerName: string; tiles: Tile[] }>;
+  turnStartTime: number | null;
+  turnTimeLimit: number;
 }
 
 export type GameAction =
