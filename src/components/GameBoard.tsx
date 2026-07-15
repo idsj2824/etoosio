@@ -117,16 +117,20 @@ export function GameBoard({
               </div>
               <div className={styles.allPlayedTiles}>
                 {state.playedTiles && state.playedTiles.length > 0 ? (
-                  state.playedTiles.map((played, index) => (
-                    <div key={index} className={styles.playedGroup}>
-                      <div className={styles.playedBy}>{played.playerName}</div>
-                      <div className={styles.tiles}>
+                  <div className={styles.tilesContainer}>
+                    {state.playedTiles.map((played, index) => (
+                      <div key={index} className={styles.tileGroup}>
                         {played.tiles.map((tile) => (
-                          <TileCard key={tile.id} tile={tile} compact />
+                          <TileCard
+                            key={tile.id}
+                            tile={tile}
+                            compact
+                            className={index === state.playedTiles.length - 1 ? styles.recent : ''}
+                          />
                         ))}
                       </div>
-                    </div>
-                  ))
+                    ))}
+                  </div>
                 ) : (
                   <div className={styles.empty}>
                     <p>아직 타일이 없습니다</p>

@@ -9,6 +9,7 @@ interface TileCardProps {
   faceDown?: boolean;
   onClick?: () => void;
   compact?: boolean;
+  className?: string;
 }
 
 export function TileCard({
@@ -18,11 +19,12 @@ export function TileCard({
   faceDown = false,
   onClick,
   compact = false,
+  className = '',
 }: TileCardProps) {
   if (faceDown) {
     return (
       <div
-        className={`${styles.tile} ${styles.faceDown} ${compact ? styles.compact : ""}`}
+        className={`${styles.tile} ${styles.faceDown} ${compact ? styles.compact : ""} ${className}`}
         aria-label="뒷면 타일"
       >
         <span className={styles.backPattern}>이투시오</span>
@@ -42,7 +44,7 @@ export function TileCard({
 
   return (
     <TileComponent
-      className={`${styles.tile} ${rankClass} ${selected ? styles.selected : ""} ${hinted ? styles.hinted : ""} ${compact ? styles.compact : ""}`}
+      className={`${styles.tile} ${rankClass} ${selected ? styles.selected : ""} ${hinted ? styles.hinted : ""} ${compact ? styles.compact : ""} ${className}`}
       {...buttonProps}
     >
       <span className={styles.icon}>{RANK_ICONS[tile.rank]}</span>
