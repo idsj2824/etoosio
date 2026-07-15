@@ -7,7 +7,6 @@ import styles from './OnlineGameBoard.module.css';
 
 interface OnlineGameBoardProps {
   roomId: string;
-  playerName: string;
   onBack: () => void;
 }
 
@@ -24,19 +23,28 @@ interface GameState {
   consecutivePasses: number;
   isNewLead: boolean;
   logs: Array<{ message: string; timestamp: number }>;
+  playedTiles: Array<{ playerIndex: number; playerName: string; tiles: any[] }>;
 }
 
-export function OnlineGameBoard({ roomId, playerName, onBack }: OnlineGameBoardProps) {
-  const { playTiles, pass, on, off, leaveRoom } = useSocket();
+export function OnlineGameBoard({ roomId, onBack }: OnlineGameBoardProps) {
+  const { playTiles, pass, on, off, leaveRoom, socket } = useSocket();
   const [players, setPlayers] = useState<Player[]>([]);
   const [gameState, setGameState] = useState<GameState | null>(null);
   const [selectedTileIds, setSelectedTileIds] = useState<string[]>([]);
+  const [myPlayerName, setMyPlayerName] = useState<string | null>(null);
 
   useEffect(() => {
     on('gameStateUpdated', ({ gameState: newGameState, players: newPlayers }) => {
       setGameState(newGameState);
       setPlayers(newPlayers);
       setSelectedTileIds([]);
+      // Find my player name from the players list
+      if (socket?.id) {
+        const myPlayer = newPlayers.find(p => p.id === socket.id);
+        if (myPlayer) {
+          setMyPlayerName(myPlayer.name);
+        }
+      }
     });
 
     on('gameFinished', ({ winner }) => {
@@ -61,7 +69,7 @@ export function OnlineGameBoard({ roomId, playerName, onBack }: OnlineGameBoardP
     };
   }, [on, off, onBack]);
 
-  const myPlayer = players.find(p => p.name === playerName);
+  const myPlayer = players.find(p => p.name === myPlayerName);
   const isMyTurn = gameState && myPlayer && players.indexOf(myPlayer) === gameState.currentPlayerIndex;
   const currentPlayer = gameState && players[gameState.currentPlayerIndex];
   const lastPlayer = gameState && gameState.lastPlayedByIndex !== null ? players[gameState.lastPlayedByIndex] : null;
@@ -132,7 +140,7 @@ export function OnlineGameBoard({ roomId, playerName, onBack }: OnlineGameBoardP
             >
               <span className={styles.name}>{player.name}</span>
               <span className={styles.count}>{player.hand.length}장</span>
-              {player.name === playerName && <span className={styles.you}>나</span>}
+              {player.name === myPlayerName && <span className={styles.you}>나</span>}
             </div>
           ))}
         </div>
@@ -149,21 +157,27 @@ export function OnlineGameBoard({ roomId, playerName, onBack }: OnlineGameBoardP
           </div>
 
           <div className={styles.playedArea}>
-            {gameState.currentCombination ? (
-              <div className={styles.combination}>
-                <div className={styles.label}>{getCombinationLabel(gameState.currentCombination)}</div>
-                <div className={styles.tiles}>
-                  {gameState.currentCombination.tiles.map((tile: any) => (
-                    <TileCard key={tile.id} tile={tile} />
-                  ))}
+            <div className={styles.playedTilesHeader}>
+              <h3>바닥에 깔린 타일</h3>
+            </div>
+            <div className={styles.allPlayedTiles}>
+              {gameState.playedTiles && gameState.playedTiles.length > 0 ? (
+                gameState.playedTiles.map((played, index) => (
+                  <div key={index} className={styles.playedGroup}>
+                    <div className={styles.playedBy}>{played.playerName}</div>
+                    <div className={styles.tiles}>
+                      {played.tiles.map((tile: any) => (
+                        <TileCard key={tile.id} tile={tile} />
+                      ))}
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className={styles.empty}>
+                  <p>아직 타일이 없습니다</p>
                 </div>
-              </div>
-            ) : (
-              <div className={styles.empty}>
-                <p>바닥이 비어 있습니다</p>
-                <p className={styles.sub}>{currentPlayer?.name}이(가) 조합을 낼 차례입니다</p>
-              </div>
-            )}
+              )}
+            </div>
           </div>
 
           <div className={styles.logs}>

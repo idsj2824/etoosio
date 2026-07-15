@@ -128,7 +128,48 @@
 
 .playedArea {
   width: 100%;
-  max-width: 600px;
+  max-width: 800px;
+}
+
+.playedTilesHeader {
+  margin-bottom: 12px;
+}
+
+.playedTilesHeader h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #1e293b;
+  text-align: center;
+}
+
+.allPlayedTiles {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: 300px;
+  overflow-y: auto;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 16px;
+  border: 2px dashed rgba(0, 0, 0, 0.1);
+}
+
+.playedGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.playedBy {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #2563eb;
+  padding-bottom: 4px;
+  border-bottom: 2px solid rgba(37, 99, 235, 0.2);
 }
 
 .combination {

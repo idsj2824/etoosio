@@ -11,18 +11,18 @@ interface Room {
 }
 
 interface LobbyScreenProps {
-  playerName: string;
   onBack: () => void;
   onGameStart: (roomId: string, players: any[], gameState: any) => void;
 }
 
-export function LobbyScreen({ playerName, onBack, onGameStart }: LobbyScreenProps) {
+export function LobbyScreen({ onBack, onGameStart }: LobbyScreenProps) {
   const { createRoom, joinRoom, startGame, leaveRoom, on, off, setRoomId } = useSocket();
   const [mode, setMode] = useState<'create' | 'join'>('create');
   const [playerCount, setPlayerCount] = useState(5);
   const [roomIdInput, setRoomIdInput] = useState('');
   const [currentRoom, setCurrentRoom] = useState<Room | null>(null);
   const [error, setError] = useState('');
+  const [playerName, setPlayerName] = useState('플레이어');
 
   useEffect(() => {
     on('roomCreated', ({ roomId, room }: { roomId: string; room: Room }) => {
@@ -169,8 +169,9 @@ export function LobbyScreen({ playerName, onBack, onGameStart }: LobbyScreenProp
               <input
                 type="text"
                 value={playerName}
-                readOnly
-                className={styles.readonly}
+                onChange={(e) => setPlayerName(e.target.value)}
+                placeholder="이름 입력"
+                maxLength={10}
               />
             </div>
             <div className={styles.field}>
@@ -208,8 +209,9 @@ export function LobbyScreen({ playerName, onBack, onGameStart }: LobbyScreenProp
               <input
                 type="text"
                 value={playerName}
-                readOnly
-                className={styles.readonly}
+                onChange={(e) => setPlayerName(e.target.value)}
+                placeholder="이름 입력"
+                maxLength={10}
               />
             </div>
             <button className={styles.primary} onClick={handleJoinRoom}>

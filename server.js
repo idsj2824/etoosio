@@ -144,20 +144,21 @@ function startGame(room) {
   const deck = shuffleDeck(createDeck(room.playerCount));
   const hands = dealTiles(deck, room.playerCount);
   const startIndex = findStartingPlayerIndex(hands);
-  
+
   room.players.forEach((player, index) => {
     player.hand = hands[index];
   });
-  
+
   room.gameState = {
     currentPlayerIndex: startIndex,
     currentCombination: null,
     lastPlayedByIndex: null,
     consecutivePasses: 0,
     isNewLead: true,
-    logs: [{ message: `${room.players[startIndex].name}이(가) 선입니다.`, timestamp: Date.now() }]
+    logs: [{ message: `${room.players[startIndex].name}이(가) 선입니다.`, timestamp: Date.now() }],
+    playedTiles: [] // Track all tiles played on the table
   };
-  
+
   room.status = 'playing';
 }
 
@@ -262,7 +263,14 @@ io.on('connection', (socket) => {
     
     // Remove played tiles from hand
     player.hand = player.hand.filter(t => !tiles.some(pt => pt.id === t.id));
-    
+
+    // Add tiles to played tiles on table
+    gameState.playedTiles.push({
+      playerIndex,
+      playerName: player.name,
+      tiles: [...tiles]
+    });
+
     // Update game state
     gameState.currentCombination = { type: 'played', tiles };
     gameState.lastPlayedByIndex = playerIndex;
