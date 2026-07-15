@@ -1,9 +1,9 @@
 import type { GameState } from "../game/types";
 import { PlayerArea } from "./PlayerArea";
-import { PlayedCombination } from "./PlayedCombination";
 import { HumanHand } from "./HumanHand";
 import { GameControls } from "./GameControls";
 import { GameLog } from "./GameLog";
+import { TileCard } from "./TileCard";
 import styles from "./GameBoard.module.css";
 
 interface GameBoardProps {
@@ -111,10 +111,29 @@ export function GameBoard({
               )}
             </div>
 
-            <PlayedCombination
-              combination={state.currentCombination}
-              playedBy={lastPlayer?.name}
-            />
+            <div className={styles.playedArea}>
+              <div className={styles.playedTilesHeader}>
+                <h3>바닥에 깔린 타일</h3>
+              </div>
+              <div className={styles.allPlayedTiles}>
+                {state.playedTiles && state.playedTiles.length > 0 ? (
+                  state.playedTiles.map((played, index) => (
+                    <div key={index} className={styles.playedGroup}>
+                      <div className={styles.playedBy}>{played.playerName}</div>
+                      <div className={styles.tiles}>
+                        {played.tiles.map((tile) => (
+                          <TileCard key={tile.id} tile={tile} compact />
+                        ))}
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <div className={styles.empty}>
+                    <p>아직 타일이 없습니다</p>
+                  </div>
+                )}
+              </div>
+            </div>
 
             <div className={styles.scores}>
               {state.players.map((p) => (

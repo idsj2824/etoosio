@@ -323,9 +323,10 @@ io.on('connection', (socket) => {
       gameState.consecutivePasses = 0;
       gameState.isNewLead = true;
       gameState.currentPlayerIndex = gameState.lastPlayedByIndex;
-      gameState.logs.push({ 
-        message: `${room.players[gameState.lastPlayedByIndex].name}이(가) 새로운 선이 되었습니다.`, 
-        timestamp: Date.now() 
+      // Keep played tiles on table (don't clear)
+      gameState.logs.push({
+        message: `${room.players[gameState.lastPlayedByIndex].name}이(가) 새로운 선이 되었습니다.`,
+        timestamp: Date.now()
       });
     } else {
       gameState.currentPlayerIndex = (gameState.currentPlayerIndex + 1) % room.players.length;

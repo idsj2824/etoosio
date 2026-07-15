@@ -126,6 +126,7 @@ function handlePass(state: GameState): GameState {
       consecutivePasses: 0,
       isNewLead: true,
       currentPlayerIndex: state.lastPlayedByIndex,
+      // Keep played tiles on table (don't clear)
       logs: [
         ...logs,
         createLog(
@@ -176,6 +177,16 @@ function handlePlay(
     i === playerIndex ? { ...p, hand: newHand } : p
   );
 
+  // Add tiles to played tiles
+  const newPlayedTiles = [
+    ...(state.playedTiles || []),
+    {
+      playerIndex,
+      playerName: player.name,
+      tiles: [...tiles]
+    }
+  ];
+
   const desc = getCombinationDescription(combination);
   const newState: GameState = {
     ...state,
@@ -190,6 +201,7 @@ function handlePlay(
     ],
     selectedTileIds: [],
     hintTileIds: [],
+    playedTiles: newPlayedTiles,
   };
 
   return advanceAfterPlay(newState, playerIndex);
@@ -214,6 +226,7 @@ export function createInitialState(): GameState {
     soundEnabled: true,
     selectedTileIds: [],
     hintTileIds: [],
+    playedTiles: [],
   };
 }
 
@@ -247,6 +260,7 @@ export function startNewRound(state: GameState): GameState {
     cumulativeScores,
     selectedTileIds: [],
     hintTileIds: [],
+    playedTiles: [],
   };
 }
 

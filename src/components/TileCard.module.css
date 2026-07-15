@@ -27,9 +27,22 @@
 }
 
 .tile.compact {
-  width: 56px;
-  height: 76px;
-  font-size: 0.85em;
+  width: 48px;
+  height: 64px;
+  font-size: 0.75em;
+  border-width: 1px;
+}
+
+.tile.compact .icon {
+  font-size: 0.9rem;
+}
+
+.tile.compact .rank {
+  font-size: 0.65rem;
+}
+
+.tile.compact .number {
+  font-size: 1.1rem;
 }
 
 .tile.selected {

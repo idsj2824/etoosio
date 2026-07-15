@@ -32,17 +32,22 @@ export function TileCard({
 
   const rankClass = styles[tile.rank.toLowerCase().replace(/_/g, "-")];
 
+  const TileComponent = onClick ? 'button' : 'div';
+  const buttonProps = onClick ? {
+    type: 'button' as const,
+    onClick,
+    'aria-label': `${RANK_LABELS[tile.rank]} ${tile.number}`,
+    'aria-pressed': selected,
+  } : {};
+
   return (
-    <button
-      type="button"
+    <TileComponent
       className={`${styles.tile} ${rankClass} ${selected ? styles.selected : ""} ${hinted ? styles.hinted : ""} ${compact ? styles.compact : ""}`}
-      onClick={onClick}
-      aria-label={`${RANK_LABELS[tile.rank]} ${tile.number}`}
-      aria-pressed={selected}
+      {...buttonProps}
     >
       <span className={styles.icon}>{RANK_ICONS[tile.rank]}</span>
       <span className={styles.rank}>{RANK_LABELS[tile.rank]}</span>
       <span className={styles.number}>{tile.number}</span>
-    </button>
+    </TileComponent>
   );
 }

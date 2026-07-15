@@ -69,6 +69,7 @@ export interface GameState {
   soundEnabled: boolean;
   selectedTileIds: string[];
   hintTileIds: string[];
+  playedTiles: Array<{ playerIndex: number; playerName: string; tiles: Tile[] }>;
 }
 
 export type GameAction =

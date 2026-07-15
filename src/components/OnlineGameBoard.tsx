@@ -167,7 +167,7 @@ export function OnlineGameBoard({ roomId, onBack }: OnlineGameBoardProps) {
                     <div className={styles.playedBy}>{played.playerName}</div>
                     <div className={styles.tiles}>
                       {played.tiles.map((tile: any) => (
-                        <TileCard key={tile.id} tile={tile} />
+                        <TileCard key={tile.id} tile={tile} compact />
                       ))}
                     </div>
                   </div>
