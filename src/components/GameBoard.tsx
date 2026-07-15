@@ -5,6 +5,8 @@ import { GameControls } from "./GameControls";
 import { GameLog } from "./GameLog";
 import { TileCard } from "./TileCard";
 import { CombinationReference } from "./CombinationReference";
+import { Notification } from "./Notification";
+import { useState, useEffect } from "react";
 import styles from "./GameBoard.module.css";
 
 interface GameBoardProps {
@@ -40,6 +42,8 @@ export function GameBoard({
   onSave,
   onMenu,
 }: GameBoardProps) {
+  const [notification, setNotification] = useState<string | null>(null);
+
   const human = state.players.find((p) => p.type === "human")!;
   const computers = state.players.filter((p) => p.type === "computer");
   const currentPlayer = state.players[state.currentPlayerIndex];
@@ -49,8 +53,21 @@ export function GameBoard({
       : null;
   const isHumanTurn = currentPlayer?.type === "human";
 
+  // Show notification when human becomes lead
+  useEffect(() => {
+    if (state.isNewLead && isHumanTurn && currentPlayer?.type === "human") {
+      setNotification(`${currentPlayer.name}이(가) 새로운 선이 되었습니다!`);
+    }
+  }, [state.isNewLead, isHumanTurn, currentPlayer]);
+
   return (
     <div className={styles.board}>
+      {notification && (
+        <Notification
+          message={notification}
+          onClose={() => setNotification(null)}
+        />
+      )}
       <header className={styles.header}>
         <div className={styles.headerLeft}>
           <span className={styles.round}>

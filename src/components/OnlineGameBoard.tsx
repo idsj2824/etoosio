@@ -4,6 +4,7 @@ import { evaluateCombination, getCombinationLabel } from '../game/combination';
 import { canPlayCombination } from '../game/playableMoves';
 import { TileCard } from './TileCard';
 import { CombinationReference } from './CombinationReference';
+import { Notification } from './Notification';
 import styles from './OnlineGameBoard.module.css';
 
 interface OnlineGameBoardProps {
@@ -33,6 +34,7 @@ export function OnlineGameBoard({ roomId, onBack }: OnlineGameBoardProps) {
   const [gameState, setGameState] = useState<GameState | null>(null);
   const [selectedTileIds, setSelectedTileIds] = useState<string[]>([]);
   const [myPlayerName, setMyPlayerName] = useState<string | null>(null);
+  const [notification, setNotification] = useState<string | null>(null);
 
   useEffect(() => {
     on('gameStateUpdated', ({ gameState: newGameState, players: newPlayers }) => {
@@ -44,6 +46,13 @@ export function OnlineGameBoard({ roomId, onBack }: OnlineGameBoardProps) {
         const myPlayer = newPlayers.find(p => p.id === socket.id);
         if (myPlayer) {
           setMyPlayerName(myPlayer.name);
+        }
+      }
+      // Show notification when I become lead
+      if (newGameState.isNewLead && myPlayerName) {
+        const myPlayerIndex = newPlayers.findIndex(p => p.id === socket?.id);
+        if (myPlayerIndex === newGameState.currentPlayerIndex) {
+          setNotification(`${myPlayerName}이(가) 새로운 선이 되었습니다!`);
         }
       }
     });
@@ -123,6 +132,12 @@ export function OnlineGameBoard({ roomId, onBack }: OnlineGameBoardProps) {
 
   return (
     <div className={styles.board}>
+      {notification && (
+        <Notification
+          message={notification}
+          onClose={() => setNotification(null)}
+        />
+      )}
       <header className={styles.header}>
         <div className={styles.headerLeft}>
           <span className={styles.roomCode}>방 코드: {roomId}</span>
