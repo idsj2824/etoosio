@@ -4,6 +4,7 @@ import { HumanHand } from "./HumanHand";
 import { GameControls } from "./GameControls";
 import { GameLog } from "./GameLog";
 import { TileCard } from "./TileCard";
+import { CombinationReference } from "./CombinationReference";
 import styles from "./GameBoard.module.css";
 
 interface GameBoardProps {
@@ -77,6 +78,7 @@ export function GameBoard({
 
       <div className={styles.main}>
         <aside className={styles.sidebar}>
+          <CombinationReference />
           <GameLog logs={state.logs} />
         </aside>
 

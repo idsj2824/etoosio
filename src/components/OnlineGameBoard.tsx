@@ -3,6 +3,7 @@ import { useSocket } from '../hooks/useSocket';
 import { evaluateCombination, getCombinationLabel } from '../game/combination';
 import { canPlayCombination } from '../game/playableMoves';
 import { TileCard } from './TileCard';
+import { CombinationReference } from './CombinationReference';
 import styles from './OnlineGameBoard.module.css';
 
 interface OnlineGameBoardProps {
@@ -132,10 +133,19 @@ export function OnlineGameBoard({ roomId, onBack }: OnlineGameBoardProps) {
       </header>
 
       <div className={styles.main}>
+        <aside className={styles.sidebar}>
+          <CombinationReference />
+          <div className={styles.logs}>
+            {gameState.logs.slice(-5).map((log, index) => (
+              <div key={index} className={styles.log}>{log.message}</div>
+            ))}
+          </div>
+        </aside>
+
         <div className={styles.players}>
           {players.map((player, index) => (
-            <div 
-              key={player.id} 
+            <div
+              key={player.id}
               className={`${styles.player} ${index === gameState.currentPlayerIndex ? styles.current : ''}`}
             >
               <span className={styles.name}>{player.name}</span>
@@ -182,12 +192,6 @@ export function OnlineGameBoard({ roomId, onBack }: OnlineGameBoardProps) {
                 </div>
               )}
             </div>
-          </div>
-
-          <div className={styles.logs}>
-            {gameState.logs.slice(-5).map((log, index) => (
-              <div key={index} className={styles.log}>{log.message}</div>
-            ))}
           </div>
         </div>
       </div>
