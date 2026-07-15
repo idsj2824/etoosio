@@ -6,7 +6,7 @@ import { GameLog } from "./GameLog";
 import { TileCard } from "./TileCard";
 import { CombinationReference } from "./CombinationReference";
 import { Notification } from "./Notification";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import styles from "./GameBoard.module.css";
 
 interface GameBoardProps {
@@ -43,6 +43,7 @@ export function GameBoard({
   onMenu,
 }: GameBoardProps) {
   const [notification, setNotification] = useState<string | null>(null);
+  const playedTilesRef = useRef<HTMLDivElement>(null);
 
   const human = state.players.find((p) => p.type === "human")!;
   const computers = state.players.filter((p) => p.type === "computer");
@@ -59,6 +60,13 @@ export function GameBoard({
       setNotification(`${currentPlayer.name}이(가) 새로운 선이 되었습니다!`);
     }
   }, [state.isNewLead, isHumanTurn, currentPlayer]);
+
+  // Auto-scroll played tiles to bottom when new tiles are added
+  useEffect(() => {
+    if (playedTilesRef.current) {
+      playedTilesRef.current.scrollTop = playedTilesRef.current.scrollHeight;
+    }
+  }, [state.playedTiles]);
 
   return (
     <div className={styles.board}>
@@ -134,7 +142,7 @@ export function GameBoard({
               <div className={styles.playedTilesHeader}>
                 <h3>바닥에 깔린 타일</h3>
               </div>
-              <div className={styles.allPlayedTiles}>
+              <div className={styles.allPlayedTiles} ref={playedTilesRef}>
                 {state.playedTiles && state.playedTiles.length > 0 ? (
                   <div className={styles.tilesContainer}>
                     {state.playedTiles.map((played, index) => (

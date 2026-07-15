@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import { useSocket } from '../hooks/useSocket';
 import { evaluateCombination, getCombinationLabel } from '../game/combination';
 import { canPlayCombination } from '../game/playableMoves';
@@ -35,6 +35,14 @@ export function OnlineGameBoard({ roomId, onBack }: OnlineGameBoardProps) {
   const [selectedTileIds, setSelectedTileIds] = useState<string[]>([]);
   const [myPlayerName, setMyPlayerName] = useState<string | null>(null);
   const [notification, setNotification] = useState<string | null>(null);
+  const playedTilesRef = useRef<HTMLDivElement>(null);
+
+  // Auto-scroll played tiles to bottom when new tiles are added
+  useEffect(() => {
+    if (playedTilesRef.current && gameState?.playedTiles) {
+      playedTilesRef.current.scrollTop = playedTilesRef.current.scrollHeight;
+    }
+  }, [gameState?.playedTiles]);
 
   useEffect(() => {
     on('gameStateUpdated', ({ gameState: newGameState, players: newPlayers }) => {
@@ -185,7 +193,7 @@ export function OnlineGameBoard({ roomId, onBack }: OnlineGameBoardProps) {
             <div className={styles.playedTilesHeader}>
               <h3>바닥에 깔린 타일</h3>
             </div>
-            <div className={styles.allPlayedTiles}>
+            <div className={styles.allPlayedTiles} ref={playedTilesRef}>
               {gameState.playedTiles && gameState.playedTiles.length > 0 ? (
                 <div className={styles.tilesContainer}>
                   {gameState.playedTiles.map((played, index) => (
