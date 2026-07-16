@@ -88,6 +88,7 @@ export function useSocket() {
 
   return {
     isConnected,
+    connectionError,
     roomId,
     setRoomId,
     socket: socketRef.current,
