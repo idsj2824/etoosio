@@ -1,20 +1,34 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { io, Socket } from 'socket.io-client';
 
-const SERVER_URL = import.meta.env.VITE_SERVER_URL || 'http://localhost:3001';
+const SERVER_URL = import.meta.env.VITE_SERVER_URL || 'http://10.10.20.76:3001';
 
 export function useSocket() {
   const [isConnected, setIsConnected] = useState(false);
   const [roomId, setRoomId] = useState<string | null>(null);
+  const [connectionError, setConnectionError] = useState<string | null>(null);
   const socketRef = useRef<Socket | null>(null);
 
   useEffect(() => {
-    const socket = io(SERVER_URL);
+    console.log('Attempting to connect to:', SERVER_URL);
+    const socket = io(SERVER_URL, {
+      transports: ['polling'], // Only use polling to avoid WebSocket issues
+      reconnection: true,
+      reconnectionAttempts: 5,
+      reconnectionDelay: 1000,
+    });
     socketRef.current = socket;
 
     socket.on('connect', () => {
       setIsConnected(true);
+      setConnectionError(null);
       console.log('Connected to server');
+    });
+
+    socket.on('connect_error', (error) => {
+      console.error('Connection error:', error);
+      setConnectionError(error.message);
+      setIsConnected(false);
     });
 
     socket.on('disconnect', () => {
@@ -28,7 +42,11 @@ export function useSocket() {
   }, []);
 
   const createRoom = useCallback((playerName: string, playerCount: number) => {
-    if (!socketRef.current) return;
+    console.log('Creating room:', playerName, playerCount);
+    if (!socketRef.current) {
+      console.error('Socket not connected');
+      return;
+    }
     socketRef.current.emit('createRoom', { playerName, playerCount });
   }, []);
 

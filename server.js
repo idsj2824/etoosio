@@ -83,8 +83,9 @@ const app = express();
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: {
-    origin: '*',
-    methods: ['GET', 'POST']
+    origin: ['http://localhost:5173', 'http://localhost:3000', 'http://127.0.0.1:5173', 'http://127.0.0.1:3000', 'http://10.10.20.76:5174', 'http://10.10.20.76:5173', 'http://10.10.20.76:3000'],
+    methods: ['GET', 'POST'],
+    credentials: true
   }
 });
 
@@ -268,22 +269,30 @@ io.on('connection', (socket) => {
   });
   
   socket.on('startGame', ({ roomId }) => {
+    console.log('startGame event received:', { roomId, socketId: socket.id });
     const room = getRoom(roomId);
     
     if (!room) {
+      console.log('Room not found:', roomId);
+      socket.emit('error', { message: '방을 찾을 수 없습니다.' });
       return;
     }
     
+    console.log('Room hostId:', room.hostId, 'Socket ID:', socket.id);
     if (room.hostId !== socket.id) {
+      console.log('Not host - rejecting start game');
       socket.emit('error', { message: '방장만 게임을 시작할 수 있습니다.' });
       return;
     }
     
+    console.log('Players count:', room.players.length);
     if (room.players.length < 2) {
+      console.log('Not enough players');
       socket.emit('error', { message: '최소 2명이 필요합니다.' });
       return;
     }
     
+    console.log('Starting game...');
     startGame(room);
     io.to(roomId).emit('gameStarted', { gameState: room.gameState, players: room.players });
     
