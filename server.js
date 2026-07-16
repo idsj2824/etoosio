@@ -83,10 +83,21 @@ const app = express();
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: {
-    origin: ['http://localhost:5173', 'http://localhost:3000', 'http://127.0.0.1:5173', 'http://127.0.0.1:3000', 'http://10.10.20.76:5174', 'http://10.10.20.76:5173', 'http://10.10.20.76:3000', 'https://etoosio.vercel.app'],
+    origin: (origin, callback) => {
+      // Allow all origins dynamically (useful for Vercel preview deployments and localhost)
+      callback(null, true);
+    },
     methods: ['GET', 'POST'],
     credentials: true
   }
+});
+
+app.get('/', (req, res) => {
+  res.send('Etoosio Server is running!');
+});
+
+app.get('/health', (req, res) => {
+  res.status(200).send('OK');
 });
 
 const PORT = process.env.PORT || 3001;
