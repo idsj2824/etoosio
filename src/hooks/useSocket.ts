@@ -12,7 +12,7 @@ export function useSocket() {
   useEffect(() => {
     console.log('Attempting to connect to:', SERVER_URL);
     const socket = io(SERVER_URL, {
-      transports: ['polling'], // Only use polling to avoid WebSocket issues
+      transports: ['websocket'], // Use websocket directly to avoid cross-domain polling issues
       reconnection: true,
       reconnectionAttempts: 5,
       reconnectionDelay: 1000,
