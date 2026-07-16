@@ -176,7 +176,7 @@ function startGame(room) {
   room.status = 'playing';
 
   // Start timer for this room
-  startRoomTimer(roomId);
+  startRoomTimer(room.id);
 }
 
 function startRoomTimer(roomId) {

@@ -76,6 +76,8 @@ function App() {
     return (
       <OnlineGameBoard
         roomId={onlineGameRoom.roomId}
+        initialPlayers={onlineGameRoom.players}
+        initialGameState={onlineGameRoom.gameState}
         onBack={handleBackFromOnlineGame}
       />
     );

@@ -10,6 +10,8 @@ import styles from './OnlineGameBoard.module.css';
 interface OnlineGameBoardProps {
   roomId: string;
   onBack: () => void;
+  initialPlayers: Player[];
+  initialGameState: GameState;
 }
 
 interface Player {
@@ -30,15 +32,25 @@ interface GameState {
   turnTimeLimit: number;
 }
 
-export function OnlineGameBoard({ roomId, onBack }: OnlineGameBoardProps) {
+export function OnlineGameBoard({ roomId, onBack, initialPlayers, initialGameState }: OnlineGameBoardProps) {
   const { playTiles, pass, on, off, leaveRoom, socket } = useSocket();
-  const [players, setPlayers] = useState<Player[]>([]);
-  const [gameState, setGameState] = useState<GameState | null>(null);
+  const [players, setPlayers] = useState<Player[]>(initialPlayers);
+  const [gameState, setGameState] = useState<GameState | null>(initialGameState);
   const [selectedTileIds, setSelectedTileIds] = useState<string[]>([]);
   const [myPlayerName, setMyPlayerName] = useState<string | null>(null);
   const [notification, setNotification] = useState<string | null>(null);
   const playedTilesRef = useRef<HTMLDivElement>(null);
   const [remainingTime, setRemainingTime] = useState<number>(30);
+
+  // Set initial player name
+  useEffect(() => {
+    if (socket?.id && initialPlayers) {
+      const myPlayer = initialPlayers.find(p => p.id === socket.id);
+      if (myPlayer) {
+        setMyPlayerName(myPlayer.name);
+      }
+    }
+  }, [socket?.id, initialPlayers]);
 
   // Auto-scroll played tiles to bottom when new tiles are added
   useEffect(() => {
