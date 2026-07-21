@@ -223,13 +223,20 @@ function startRoomTimer(roomId) {
 io.on('connection', (socket) => {
   console.log('Client connected:', socket.id);
   
-  // Check if this socket was previously in a room and reconnect them
-  for (const [roomId, room] of rooms.entries()) {
-    const existingPlayer = room.players.find(p => p.disconnected && p.name === socket.id);
-    if (existingPlayer) {
+  socket.on('rejoinRoom', ({ roomId, playerName }) => {
+    const room = getRoom(roomId);
+    
+    if (!room) {
+      socket.emit('error', { message: '방을 찾을 수 없습니다.' });
+      return;
+    }
+    
+    // Find disconnected player with same name
+    const disconnectedPlayer = room.players.find(p => p.disconnected && p.name === playerName);
+    if (disconnectedPlayer) {
       // Reconnect the player
-      existingPlayer.id = socket.id;
-      existingPlayer.disconnected = false;
+      disconnectedPlayer.id = socket.id;
+      disconnectedPlayer.disconnected = false;
       socket.join(roomId);
       
       // Send current game state if game is in progress
@@ -239,10 +246,9 @@ io.on('connection', (socket) => {
         socket.emit('roomUpdated', room);
       }
       
-      console.log(`Player reconnected to room ${roomId}`);
-      break;
+      console.log(`Player ${playerName} reconnected to room ${roomId}`);
     }
-  }
+  });
   
   socket.on('createRoom', ({ playerName, playerCount }) => {
     const roomId = generateRoomId();

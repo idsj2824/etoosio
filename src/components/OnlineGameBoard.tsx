@@ -33,7 +33,7 @@ interface GameState {
 }
 
 export function OnlineGameBoard({ roomId, onBack, initialPlayers, initialGameState }: OnlineGameBoardProps) {
-  const { playTiles, pass, on, off, leaveRoom, socket } = useSocket();
+  const { playTiles, pass, on, off, leaveRoom, socket, rejoinRoom } = useSocket();
   const [players, setPlayers] = useState<Player[]>(initialPlayers);
   const [gameState, setGameState] = useState<GameState | null>(initialGameState);
   const [selectedTileIds, setSelectedTileIds] = useState<string[]>([]);
@@ -41,6 +41,13 @@ export function OnlineGameBoard({ roomId, onBack, initialPlayers, initialGameSta
   const [notification, setNotification] = useState<string | null>(null);
   const playedTilesRef = useRef<HTMLDivElement>(null);
   const [remainingTime, setRemainingTime] = useState<number>(30);
+
+  // Rejoin room on socket connection
+  useEffect(() => {
+    if (socket?.id && myPlayerName && roomId) {
+      rejoinRoom(roomId, myPlayerName);
+    }
+  }, [socket?.id, myPlayerName, roomId, rejoinRoom]);
 
   // Set initial player name
   useEffect(() => {
