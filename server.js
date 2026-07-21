@@ -223,6 +223,27 @@ function startRoomTimer(roomId) {
 io.on('connection', (socket) => {
   console.log('Client connected:', socket.id);
   
+  // Check if this socket was previously in a room and reconnect them
+  for (const [roomId, room] of rooms.entries()) {
+    const existingPlayer = room.players.find(p => p.disconnected && p.name === socket.id);
+    if (existingPlayer) {
+      // Reconnect the player
+      existingPlayer.id = socket.id;
+      existingPlayer.disconnected = false;
+      socket.join(roomId);
+      
+      // Send current game state if game is in progress
+      if (room.status === 'playing' && room.gameState) {
+        socket.emit('gameStarted', { gameState: room.gameState, players: room.players });
+      } else {
+        socket.emit('roomUpdated', room);
+      }
+      
+      console.log(`Player reconnected to room ${roomId}`);
+      break;
+    }
+  }
+  
   socket.on('createRoom', ({ playerName, playerCount }) => {
     const roomId = generateRoomId();
     const room = createRoom(roomId, socket.id, playerName, playerCount);
@@ -409,14 +430,19 @@ io.on('connection', (socket) => {
     // Remove player from all rooms
     for (const [roomId, room] of rooms.entries()) {
       if (room.players.some(p => p.id === socket.id)) {
-        removePlayerFromRoom(room, socket.id);
+        // Don't remove player immediately - mark as disconnected
+        const player = room.players.find(p => p.id === socket.id);
+        if (player) {
+          player.disconnected = true;
+        }
         io.to(roomId).emit('roomUpdated', room);
-        io.to(roomId).emit('playerLeft', { playerId: socket.id });
         
-        if (room.status === 'playing') {
-          // Handle disconnect during game
+        // Don't abort game on disconnect - allow reconnection
+        // Only abort if all players are disconnected
+        const allDisconnected = room.players.every(p => p.disconnected);
+        if (allDisconnected && room.status === 'playing') {
           room.status = 'finished';
-          io.to(roomId).emit('gameAborted', { message: '플레이어가 연결이 끊겼습니다.' });
+          io.to(roomId).emit('gameAborted', { message: '모든 플레이어가 연결이 끊겼습니다.' });
         }
       }
     }
