@@ -59,6 +59,11 @@ export function useSocket() {
     socketRef.current.emit('rejoinRoom', { roomId, playerName });
   }, []);
 
+  const requestGameState = useCallback((roomId: string) => {
+    if (!socketRef.current) return;
+    socketRef.current.emit('requestGameState', { roomId });
+  }, []);
+
   const leaveRoom = useCallback((roomId: string) => {
     if (!socketRef.current) return;
     socketRef.current.emit('leaveRoom', { roomId });
@@ -99,6 +104,7 @@ export function useSocket() {
     createRoom,
     joinRoom,
     rejoinRoom,
+    requestGameState,
     leaveRoom,
     startGame,
     playTiles,

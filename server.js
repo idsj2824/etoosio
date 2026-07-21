@@ -436,7 +436,7 @@ io.on('connection', (socket) => {
     // Remove player from all rooms
     for (const [roomId, room] of rooms.entries()) {
       if (room.players.some(p => p.id === socket.id)) {
-        // Don't remove player immediately - mark as disconnected
+        // Mark player as disconnected but keep them in the room
         const player = room.players.find(p => p.id === socket.id);
         if (player) {
           player.disconnected = true;
@@ -451,6 +451,14 @@ io.on('connection', (socket) => {
           io.to(roomId).emit('gameAborted', { message: '모든 플레이어가 연결이 끊겼습니다.' });
         }
       }
+    }
+  });
+  
+  // Send game state to reconnected players
+  socket.on('requestGameState', ({ roomId }) => {
+    const room = getRoom(roomId);
+    if (room && room.status === 'playing' && room.gameState) {
+      socket.emit('gameStarted', { gameState: room.gameState, players: room.players });
     }
   });
 });

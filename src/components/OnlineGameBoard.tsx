@@ -33,7 +33,7 @@ interface GameState {
 }
 
 export function OnlineGameBoard({ roomId, onBack, initialPlayers, initialGameState }: OnlineGameBoardProps) {
-  const { playTiles, pass, on, off, leaveRoom, socket, rejoinRoom } = useSocket();
+  const { playTiles, pass, on, off, leaveRoom, socket, requestGameState } = useSocket();
   const [players, setPlayers] = useState<Player[]>(initialPlayers);
   const [gameState, setGameState] = useState<GameState | null>(initialGameState);
   const [selectedTileIds, setSelectedTileIds] = useState<string[]>([]);
@@ -42,12 +42,36 @@ export function OnlineGameBoard({ roomId, onBack, initialPlayers, initialGameSta
   const playedTilesRef = useRef<HTMLDivElement>(null);
   const [remainingTime, setRemainingTime] = useState<number>(30);
 
-  // Rejoin room on socket connection
+  // Save game state to localStorage when updated
   useEffect(() => {
-    if (socket?.id && myPlayerName && roomId) {
-      rejoinRoom(roomId, myPlayerName);
+    if (gameState && roomId) {
+      localStorage.setItem(`gameState_${roomId}`, JSON.stringify(gameState));
+      localStorage.setItem(`players_${roomId}`, JSON.stringify(players));
     }
-  }, [socket?.id, myPlayerName, roomId, rejoinRoom]);
+  }, [gameState, players, roomId]);
+
+  // Load game state from localStorage on mount
+  useEffect(() => {
+    if (!gameState && roomId) {
+      const savedGameState = localStorage.getItem(`gameState_${roomId}`);
+      const savedPlayers = localStorage.getItem(`players_${roomId}`);
+      if (savedGameState && savedPlayers) {
+        try {
+          setGameState(JSON.parse(savedGameState));
+          setPlayers(JSON.parse(savedPlayers));
+        } catch (e) {
+          console.error('Failed to load saved game state:', e);
+        }
+      }
+    }
+  }, [gameState, roomId]);
+
+  // Request game state if still not available after loading from localStorage
+  useEffect(() => {
+    if (!gameState && socket?.connected && roomId) {
+      requestGameState(roomId);
+    }
+  }, [gameState, socket?.connected, roomId, requestGameState]);
 
   // Set initial player name
   useEffect(() => {
