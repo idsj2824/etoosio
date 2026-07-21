@@ -161,13 +161,17 @@ function startGame(room) {
     player.hand = hands[index];
   });
 
+  // Ensure startIndex is valid
+  const safeStartIndex = Math.min(startIndex, room.players.length - 1);
+  const startingPlayer = room.players[safeStartIndex];
+
   room.gameState = {
-    currentPlayerIndex: startIndex,
+    currentPlayerIndex: safeStartIndex,
     currentCombination: null,
     lastPlayedByIndex: null,
     consecutivePasses: 0,
     isNewLead: true,
-    logs: [{ message: `${room.players[startIndex].name}이(가) 선입니다.`, timestamp: Date.now() }],
+    logs: [{ message: `${startingPlayer?.name || '플레이어'}이(가) 선입니다.`, timestamp: Date.now() }],
     playedTiles: [], // Track all tiles played on the table
     turnStartTime: Date.now(),
     turnTimeLimit: 30
