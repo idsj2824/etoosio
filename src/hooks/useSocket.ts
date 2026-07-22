@@ -1,98 +1,110 @@
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { io, Socket } from 'socket.io-client';
 
 const SERVER_URL = import.meta.env.VITE_SERVER_URL || 'https://etoosio-server.onrender.com';
+
+// Singleton socket instance to share connection across screens
+let socketInstance: Socket | null = null;
+
+function getSocket() {
+  if (!socketInstance) {
+    console.log('Initializing singleton socket connection to:', SERVER_URL);
+    socketInstance = io(SERVER_URL, {
+      reconnection: true,
+      reconnectionAttempts: 5,
+      reconnectionDelay: 1000,
+    });
+  }
+  return socketInstance;
+}
 
 export function useSocket() {
   const [isConnected, setIsConnected] = useState(false);
   const [roomId, setRoomId] = useState<string | null>(null);
   const [connectionError, setConnectionError] = useState<string | null>(null);
-  const socketRef = useRef<Socket | null>(null);
 
   useEffect(() => {
-    console.log('Attempting to connect to:', SERVER_URL);
-    const socket = io(SERVER_URL, {
-      reconnection: true,
-      reconnectionAttempts: 5,
-      reconnectionDelay: 1000,
-    });
-    socketRef.current = socket;
+    const socket = getSocket();
+    setIsConnected(socket.connected);
 
-    socket.on('connect', () => {
+    const onConnect = () => {
       setIsConnected(true);
       setConnectionError(null);
       console.log('Connected to server');
-    });
+    };
 
-    socket.on('connect_error', (error) => {
+    const onConnectError = (error: any) => {
       console.error('Connection error:', error);
       setConnectionError(error.message);
       setIsConnected(false);
-    });
+    };
 
-    socket.on('disconnect', () => {
+    const onDisconnect = () => {
       setIsConnected(false);
       console.log('Disconnected from server');
-    });
+    };
+
+    socket.on('connect', onConnect);
+    socket.on('connect_error', onConnectError);
+    socket.on('disconnect', onDisconnect);
 
     return () => {
-      socket.disconnect();
+      socket.off('connect', onConnect);
+      socket.off('connect_error', onConnectError);
+      socket.off('disconnect', onDisconnect);
     };
   }, []);
 
   const createRoom = useCallback((playerName: string, playerCount: number) => {
     console.log('Creating room:', playerName, playerCount);
-    if (!socketRef.current) {
-      console.error('Socket not connected');
-      return;
-    }
-    socketRef.current.emit('createRoom', { playerName, playerCount });
+    const socket = getSocket();
+    socket.emit('createRoom', { playerName, playerCount });
   }, []);
 
   const joinRoom = useCallback((roomId: string, playerName: string) => {
-    if (!socketRef.current) return;
-    socketRef.current.emit('joinRoom', { roomId, playerName });
+    const socket = getSocket();
+    socket.emit('joinRoom', { roomId, playerName });
   }, []);
 
   const rejoinRoom = useCallback((roomId: string, playerName: string) => {
-    if (!socketRef.current) return;
-    socketRef.current.emit('rejoinRoom', { roomId, playerName });
+    const socket = getSocket();
+    socket.emit('rejoinRoom', { roomId, playerName });
   }, []);
 
   const requestGameState = useCallback((roomId: string) => {
-    if (!socketRef.current) return;
-    socketRef.current.emit('requestGameState', { roomId });
+    const socket = getSocket();
+    socket.emit('requestGameState', { roomId });
   }, []);
 
   const leaveRoom = useCallback((roomId: string) => {
-    if (!socketRef.current) return;
-    socketRef.current.emit('leaveRoom', { roomId });
+    const socket = getSocket();
+    socket.emit('leaveRoom', { roomId });
     setRoomId(null);
   }, []);
 
   const startGame = useCallback((roomId: string) => {
-    if (!socketRef.current) return;
-    socketRef.current.emit('startGame', { roomId });
+    const socket = getSocket();
+    socket.emit('startGame', { roomId });
   }, []);
 
   const playTiles = useCallback((roomId: string, tiles: any[]) => {
-    if (!socketRef.current) return;
-    socketRef.current.emit('playTiles', { roomId, tiles });
+    const socket = getSocket();
+    socket.emit('playTiles', { roomId, tiles });
   }, []);
 
   const pass = useCallback((roomId: string) => {
-    if (!socketRef.current) return;
-    socketRef.current.emit('pass', { roomId });
+    const socket = getSocket();
+    socket.emit('pass', { roomId });
   }, []);
 
   const on = useCallback((event: string, callback: (...args: any[]) => void) => {
-    if (!socketRef.current) return;
-    socketRef.current.on(event, callback);
+    const socket = getSocket();
+    socket.on(event, callback);
   }, []);
 
   const off = useCallback((event: string, callback?: (...args: any[]) => void) => {
-    if (!socketRef.current) return;
-    socketRef.current.off(event, callback);
+    const socket = getSocket();
+    socket.off(event, callback);
   }, []);
 
   return {
@@ -100,7 +112,7 @@ export function useSocket() {
     connectionError,
     roomId,
     setRoomId,
-    socket: socketRef.current,
+    socket: getSocket(),
     createRoom,
     joinRoom,
     rejoinRoom,

@@ -107,7 +107,7 @@ export function OnlineGameBoard({ roomId, onBack, initialPlayers, initialGameSta
   }, [gameState?.turnStartTime]);
 
   useEffect(() => {
-    on('gameStateUpdated', ({ gameState: newGameState, players: newPlayers }) => {
+    const handleStateUpdate = ({ gameState: newGameState, players: newPlayers }: { gameState: any; players: any[] }) => {
       setGameState(newGameState);
       setPlayers(newPlayers);
       setSelectedTileIds([]);
@@ -125,7 +125,10 @@ export function OnlineGameBoard({ roomId, onBack, initialPlayers, initialGameSta
           setNotification(`${myPlayerName}이(가) 새로운 선이 되었습니다!`);
         }
       }
-    });
+    };
+
+    on('gameStateUpdated', handleStateUpdate);
+    on('gameStarted', handleStateUpdate);
 
     on('gameFinished', ({ winner }) => {
       alert(`${winner.name}이(가) 승리했습니다!`);
@@ -143,11 +146,12 @@ export function OnlineGameBoard({ roomId, onBack, initialPlayers, initialGameSta
 
     return () => {
       off('gameStateUpdated');
+      off('gameStarted');
       off('gameFinished');
       off('gameAborted');
       off('playerLeft');
     };
-  }, [on, off, onBack]);
+  }, [on, off, onBack, myPlayerName, socket?.id]);
 
   const myPlayer = players.find(p => p.name === myPlayerName);
   const isMyTurn = gameState && myPlayer && players.indexOf(myPlayer) === gameState.currentPlayerIndex;
