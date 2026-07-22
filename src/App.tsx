@@ -17,7 +17,7 @@ function App() {
   const { play } = useSound(state.soundEnabled);
   const [showRules, setShowRules] = useState(false);
   const [showLobby, setShowLobby] = useState(false);
-  const [onlineGameRoom, setOnlineGameRoom] = useState<{ roomId: string; players: any[]; gameState: any } | null>(null);
+  const [onlineGameRoom, setOnlineGameRoom] = useState<{ roomId: string; players: any[]; gameState: any; playerName: string } | null>(null);
 
   const handleStart = useCallback(
     (playerCount: number) => {
@@ -63,8 +63,8 @@ function App() {
     setShowLobby(false);
   }, []);
 
-  const handleOnlineGameStart = useCallback((roomId: string, players: any[], gameState: any) => {
-    setOnlineGameRoom({ roomId, players, gameState });
+  const handleOnlineGameStart = useCallback((roomId: string, players: any[], gameState: any, playerName: string) => {
+    setOnlineGameRoom({ roomId, players, gameState, playerName });
     setShowLobby(false);
   }, []);
 
@@ -78,6 +78,7 @@ function App() {
         roomId={onlineGameRoom.roomId}
         initialPlayers={onlineGameRoom.players}
         initialGameState={onlineGameRoom.gameState}
+        playerName={onlineGameRoom.playerName}
         onBack={handleBackFromOnlineGame}
       />
     );

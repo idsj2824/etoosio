@@ -341,7 +341,7 @@ io.on('connection', (socket) => {
     console.log(`Game started in room ${roomId}`);
   });
   
-  socket.on('playTiles', ({ roomId, tiles }) => {
+  socket.on('playTiles', ({ roomId, tiles, combination }) => {
     const room = getRoom(roomId);
     
     if (!room || room.status !== 'playing') {
@@ -369,7 +369,7 @@ io.on('connection', (socket) => {
     });
 
     // Update game state
-    gameState.currentCombination = { type: 'played', tiles };
+    gameState.currentCombination = combination || { type: 'played', tiles };
     gameState.lastPlayedByIndex = playerIndex;
     gameState.consecutivePasses = 0;
     gameState.isNewLead = false;

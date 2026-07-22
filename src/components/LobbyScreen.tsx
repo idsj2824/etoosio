@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useSocket } from '../hooks/useSocket';
 import styles from './LobbyScreen.module.css';
 
@@ -12,7 +12,7 @@ interface Room {
 
 interface LobbyScreenProps {
   onBack: () => void;
-  onGameStart: (roomId: string, players: any[], gameState: any) => void;
+  onGameStart: (roomId: string, players: any[], gameState: any, playerName: string) => void;
 }
 
 export function LobbyScreen({ onBack, onGameStart }: LobbyScreenProps) {
@@ -23,6 +23,9 @@ export function LobbyScreen({ onBack, onGameStart }: LobbyScreenProps) {
   const [currentRoom, setCurrentRoom] = useState<Room | null>(null);
   const [error, setError] = useState('');
   const [playerName, setPlayerName] = useState('플레이어');
+
+  const playerNameRef = useRef(playerName);
+  playerNameRef.current = playerName;
 
   useEffect(() => {
     on('roomCreated', ({ roomId, room }: { roomId: string; room: Room }) => {
@@ -42,7 +45,7 @@ export function LobbyScreen({ onBack, onGameStart }: LobbyScreenProps) {
     });
 
     on('gameStarted', ({ gameState, players }: { gameState: any; players: any[] }) => {
-      onGameStart(currentRoom?.id || '', players, gameState);
+      onGameStart(currentRoom?.id || '', players, gameState, playerNameRef.current);
     });
 
     on('error', ({ message }: { message: string }) => {

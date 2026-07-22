@@ -13,6 +13,7 @@ interface OnlineGameBoardProps {
   onBack: () => void;
   initialPlayers: Player[];
   initialGameState: GameState;
+  playerName?: string;
 }
 
 interface Player {
@@ -33,12 +34,12 @@ interface GameState {
   turnTimeLimit: number;
 }
 
-export function OnlineGameBoard({ roomId, onBack, initialPlayers, initialGameState }: OnlineGameBoardProps) {
+export function OnlineGameBoard({ roomId, onBack, initialPlayers, initialGameState, playerName }: OnlineGameBoardProps) {
   const { playTiles, pass, on, off, leaveRoom, socket, requestGameState } = useSocket();
   const [players, setPlayers] = useState<Player[]>(initialPlayers);
   const [gameState, setGameState] = useState<GameState | null>(initialGameState);
   const [selectedTileIds, setSelectedTileIds] = useState<string[]>([]);
-  const [myPlayerName, setMyPlayerName] = useState<string | null>(null);
+  const [myPlayerName, setMyPlayerName] = useState<string | null>(playerName || null);
   const [notification, setNotification] = useState<string | null>(null);
   const playedTilesRef = useRef<HTMLDivElement>(null);
   const [remainingTime, setRemainingTime] = useState<number>(30);
@@ -183,7 +184,7 @@ export function OnlineGameBoard({ roomId, onBack, initialPlayers, initialGameSta
       }
     }
 
-    playTiles(roomId, selected);
+    playTiles(roomId, selected, evaluated);
   }, [myPlayer, gameState, selectedTileIds, players.length, playTiles, roomId]);
 
   const handlePass = useCallback(() => {

@@ -87,9 +87,9 @@ export function useSocket() {
     socket.emit('startGame', { roomId });
   }, []);
 
-  const playTiles = useCallback((roomId: string, tiles: any[]) => {
+  const playTiles = useCallback((roomId: string, tiles: any[], combination?: any) => {
     const socket = getSocket();
-    socket.emit('playTiles', { roomId, tiles });
+    socket.emit('playTiles', { roomId, tiles, combination });
   }, []);
 
   const pass = useCallback((roomId: string) => {
