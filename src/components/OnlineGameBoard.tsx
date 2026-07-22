@@ -6,6 +6,7 @@ import { TileCard } from './TileCard';
 import { CombinationReference } from './CombinationReference';
 import { Notification } from './Notification';
 import styles from './OnlineGameBoard.module.css';
+import { sortTiles, sortTilesByRank } from '../game/deck';
 
 interface OnlineGameBoardProps {
   roomId: string;
@@ -41,6 +42,7 @@ export function OnlineGameBoard({ roomId, onBack, initialPlayers, initialGameSta
   const [notification, setNotification] = useState<string | null>(null);
   const playedTilesRef = useRef<HTMLDivElement>(null);
   const [remainingTime, setRemainingTime] = useState<number>(30);
+  const [sortBy, setSortBy] = useState<'number' | 'rank'>('number');
 
   // Save game state to localStorage when updated
   useEffect(() => {
@@ -204,6 +206,9 @@ export function OnlineGameBoard({ roomId, onBack, initialPlayers, initialGameSta
     return <div className={styles.loading}>게임 로딩 중...</div>;
   }
 
+  // Sort the hand based on the user's selected preference
+  const sortedHand = sortBy === 'number' ? sortTiles(myPlayer.hand) : sortTilesByRank(myPlayer.hand);
+
   return (
     <div className={styles.board}>
       {notification && (
@@ -320,6 +325,18 @@ export function OnlineGameBoard({ roomId, onBack, initialPlayers, initialGameSta
             >
               선택 초기화
             </button>
+            <button 
+              className={`${styles.secondary} ${sortBy === 'number' ? styles.activeSort : ''}`}
+              onClick={() => setSortBy('number')}
+            >
+              숫자순 정렬
+            </button>
+            <button 
+              className={`${styles.secondary} ${sortBy === 'rank' ? styles.activeSort : ''}`}
+              onClick={() => setSortBy('rank')}
+            >
+              직급순 정렬
+            </button>
           </div>
         </div>
 
@@ -333,7 +350,7 @@ export function OnlineGameBoard({ roomId, onBack, initialPlayers, initialGameSta
             {selected.length === 0 && <span className={styles.hint}>타일을 선택하세요</span>}
           </div>
           <div className={styles.tiles}>
-            {myPlayer.hand.map((tile) => (
+            {sortedHand.map((tile) => (
               <TileCard
                 key={tile.id}
                 tile={tile}

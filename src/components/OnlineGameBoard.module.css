@@ -361,6 +361,13 @@
   background: #cbd5e1;
 }
 
+.activeSort {
+  background: #cbd5e1 !important;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15) !important;
+  font-weight: 700 !important;
+  border: 1px solid rgba(0, 0, 0, 0.1) !important;
+}
+
 .hand {
   display: flex;
   flex-direction: column;
