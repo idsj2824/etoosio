@@ -152,7 +152,62 @@ function removePlayerFromRoom(room, playerId) {
   }
 }
 
+function calculateRoundScores(players) {
+  const remaining = players.map((p) => ({
+    playerId: p.id,
+    remaining: p.hand.length,
+  }));
+
+  const scores = players.map((p) => ({
+    playerId: p.id,
+    playerName: p.name,
+    roundPoints: 0,
+    remainingTiles: p.hand.length,
+  }));
+
+  for (let i = 0; i < remaining.length; i++) {
+    for (let j = i + 1; j < remaining.length; j++) {
+      const a = remaining[i];
+      const b = remaining[j];
+      const diff = Math.abs(a.remaining - b.remaining);
+
+      if (a.remaining < b.remaining) {
+        const scoreA = scores.find((s) => s.playerId === a.playerId);
+        const scoreB = scores.find((s) => s.playerId === b.playerId);
+        if (scoreA) scoreA.roundPoints += diff;
+        if (scoreB) scoreB.roundPoints -= diff;
+      } else if (b.remaining < a.remaining) {
+        const scoreA = scores.find((s) => s.playerId === a.playerId);
+        const scoreB = scores.find((s) => s.playerId === b.playerId);
+        if (scoreB) scoreB.roundPoints += diff;
+        if (scoreA) scoreA.roundPoints -= diff;
+      }
+    }
+  }
+
+  return scores;
+}
+
+function applyRoundScores(cumulativeScores, roundScores) {
+  const updated = { ...cumulativeScores };
+  for (const rs of roundScores) {
+    updated[rs.playerId] = (updated[rs.playerId] ?? 0) + rs.roundPoints;
+  }
+  return updated;
+}
+
 function startGame(room) {
+  room.currentRound = 1;
+  room.totalRounds = 5;
+  room.cumulativeScores = {};
+  room.players.forEach(p => {
+    room.cumulativeScores[p.id] = 0;
+  });
+
+  startNewRound(room);
+}
+
+function startNewRound(room) {
   const deck = shuffleDeck(createDeck(room.playerCount));
   const hands = dealTiles(deck, room.playerCount);
   const startIndex = findStartingPlayerIndex(hands);
@@ -171,10 +226,17 @@ function startGame(room) {
     lastPlayedByIndex: null,
     consecutivePasses: 0,
     isNewLead: true,
-    logs: [{ message: `${startingPlayer?.name || '플레이어'}이(가) 선입니다.`, timestamp: Date.now() }],
+    logs: [{ message: `라운드 ${room.currentRound}이(가) 시작되었습니다. ${startingPlayer?.name || '플레이어'}이(가) 선입니다.`, timestamp: Date.now() }],
     playedTiles: [], // Track all tiles played on the table
     turnStartTime: Date.now(),
-    turnTimeLimit: 30
+    turnTimeLimit: 30,
+    phase: 'playing',
+    roundWinnerId: null,
+    roundScores: null,
+    currentRound: room.currentRound,
+    totalRounds: room.totalRounds,
+    cumulativeScores: room.cumulativeScores,
+    hostId: room.hostId
   };
 
   room.status = 'playing';
@@ -184,14 +246,29 @@ function startGame(room) {
 }
 
 function startRoomTimer(roomId) {
+  const room = getRoom(roomId);
+  if (!room) return;
+
+  if (room.timer) {
+    clearInterval(room.timer);
+    room.timer = null;
+  }
+
   const timer = setInterval(() => {
     const room = getRoom(roomId);
     if (!room || room.status !== 'playing') {
       clearInterval(timer);
+      if (room) room.timer = null;
       return;
     }
 
     const gameState = room.gameState;
+    if (gameState.phase !== 'playing') {
+      clearInterval(timer);
+      room.timer = null;
+      return;
+    }
+
     if (!gameState.turnStartTime) return;
 
     const elapsed = Math.floor((Date.now() - gameState.turnStartTime) / 1000);
@@ -222,6 +299,8 @@ function startRoomTimer(roomId) {
       }
     }
   }, 1000);
+
+  room.timer = timer;
 }
 
 io.on('connection', (socket) => {
@@ -374,17 +453,37 @@ io.on('connection', (socket) => {
     gameState.consecutivePasses = 0;
     gameState.isNewLead = false;
     gameState.logs.push({ message: `${player.name}이(가) 타일을 냈습니다.`, timestamp: Date.now() });
-    gameState.turnStartTime = Date.now();
-
-    // Move to next player
-    gameState.currentPlayerIndex = (gameState.currentPlayerIndex + 1) % room.players.length;
-    
     // Check if player finished
     if (player.hand.length === 0) {
-      room.status = 'finished';
-      io.to(roomId).emit('gameFinished', { winner: player, room });
+      const roundScores = calculateRoundScores(room.players);
+      room.cumulativeScores = applyRoundScores(room.cumulativeScores, roundScores);
+
+      gameState.roundWinnerId = player.id;
+      gameState.roundScores = roundScores;
+      gameState.cumulativeScores = room.cumulativeScores;
+      gameState.logs.push({ message: `${player.name}이(가) 모든 타일을 냈습니다! 라운드 종료!`, timestamp: Date.now() });
+
+      // Stop timer
+      gameState.turnStartTime = null;
+      if (room.timer) {
+        clearInterval(room.timer);
+        room.timer = null;
+      }
+
+      if (room.currentRound >= room.totalRounds) {
+        gameState.phase = 'gameEnd';
+        room.status = 'finished';
+      } else {
+        gameState.phase = 'roundEnd';
+      }
+
+      io.to(roomId).emit('gameStateUpdated', { gameState, players: room.players });
       return;
     }
+
+    // Move to next player (only if current player didn't finish)
+    gameState.currentPlayerIndex = (gameState.currentPlayerIndex + 1) % room.players.length;
+    gameState.turnStartTime = Date.now();
     
     io.to(roomId).emit('gameStateUpdated', { gameState, players: room.players });
   });
@@ -432,6 +531,22 @@ io.on('connection', (socket) => {
     }
     
     io.to(roomId).emit('gameStateUpdated', { gameState, players: room.players });
+  });
+  
+  socket.on('nextRound', ({ roomId }) => {
+    const room = getRoom(roomId);
+    if (!room) return;
+    
+    if (room.hostId !== socket.id) {
+      socket.emit('error', { message: '방장만 다음 라운드를 시작할 수 있습니다.' });
+      return;
+    }
+    
+    if (room.status === 'playing' && room.gameState && room.gameState.phase === 'roundEnd') {
+      room.currentRound += 1;
+      startNewRound(room);
+      io.to(roomId).emit('gameStarted', { gameState: room.gameState, players: room.players });
+    }
   });
   
   socket.on('disconnect', () => {

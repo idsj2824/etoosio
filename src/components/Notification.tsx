@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import styles from './Notification.module.css';
 
 interface NotificationProps {
@@ -9,15 +9,20 @@ interface NotificationProps {
 
 export function Notification({ message, duration = 3000, onClose }: NotificationProps) {
   const [visible, setVisible] = useState(true);
+  const onCloseRef = useRef(onClose);
+
+  useEffect(() => {
+    onCloseRef.current = onClose;
+  }, [onClose]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
       setVisible(false);
-      setTimeout(() => onClose?.(), 300);
+      setTimeout(() => onCloseRef.current?.(), 300);
     }, duration);
 
     return () => clearTimeout(timer);
-  }, [duration, onClose]);
+  }, [duration]);
 
   if (!visible) return null;
 
