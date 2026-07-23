@@ -210,7 +210,7 @@ export function OnlineGameBoard({ roomId, onBack, initialPlayers, initialGameSta
   }
 
   // Sort the hand based on the user's selected preference
-  const sortedHand = sortBy === 'number' ? sortTiles(myPlayer.hand) : sortTilesByRank(myPlayer.hand);
+  const sortedHand = myPlayer ? (sortBy === 'number' ? sortTiles(myPlayer.hand) : sortTilesByRank(myPlayer.hand)) : [];
 
   // Prepare board state for GameBoard component, injecting sorted hand for current player
   const boardState = {
@@ -221,7 +221,7 @@ export function OnlineGameBoard({ roomId, onBack, initialPlayers, initialGameSta
     turnStartTime: gameState.turnStartTime,
     turnTimeLimit: gameState.turnTimeLimit,
     soundEnabled: gameState.soundEnabled,
-    players: players.map(p => p.id === myPlayer.id ? { ...p, hand: sortedHand } : p),
+    players: myPlayer ? players.map(p => p.id === myPlayer.id ? { ...p, hand: sortedHand } : p) : players,
   };
 
   // Determine play status for GameBoard

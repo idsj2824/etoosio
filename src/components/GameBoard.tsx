@@ -46,7 +46,7 @@ export function GameBoard({
   const playedTilesRef = useRef<HTMLDivElement>(null);
   const [remainingTime, setRemainingTime] = useState<number>(state.turnTimeLimit);
 
-  const human = state.players.find((p) => p.type === "human")!;
+  const human = state.players.find((p) => p.type === "human") ?? null;
   const computers = state.players.filter((p) => p.type === "computer");
   const currentPlayer = state.players[state.currentPlayerIndex];
   const lastPlayer =
@@ -196,7 +196,7 @@ export function GameBoard({
               {state.players.map((p) => (
                 <div key={p.id} className={styles.scoreItem}>
                   <span>{p.name}</span>
-                  <span>{p.hand.length}장</span>
+                  <span>{p.hand?.length ?? 0}장</span>
                   <span className={styles.cumulative}>
                     {state.cumulativeScores[p.id] ?? 0}점
                   </span>
@@ -219,13 +219,15 @@ export function GameBoard({
           onSortNumber={onSortNumber}
           onSortRank={onSortRank}
         />
-        <HumanHand
-          hand={human.hand}
-          selectedIds={state.selectedTileIds}
-          hintIds={state.hintTileIds}
-          playerCount={state.playerCount}
-          onSelect={onSelectTile}
-        />
+        {human && (
+          <HumanHand
+            hand={human.hand}
+            selectedIds={state.selectedTileIds}
+            hintIds={state.hintTileIds}
+            playerCount={state.playerCount}
+            onSelect={onSelectTile}
+          />
+        )}
       </div>
     </div>
   );
