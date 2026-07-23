@@ -20,17 +20,31 @@ interface OnlineGameBoardProps {
 
 // duplicate import removed
 export function OnlineGameBoard({ roomId, onBack, initialPlayers, initialGameState, playerName }: OnlineGameBoardProps) {
-  const { playTiles, pass, leaveRoom, socket, requestGameState } = useSocket();
+  const { playTiles, pass, leaveRoom, socket, requestGameState, on, off } = useSocket();
   const [players, setPlayers] = useState<Player[]>(initialPlayers);
   const [gameState, setGameState] = useState<GameState | null>(initialGameState);
   const [selectedTileIds, setSelectedTileIds] = useState<string[]>([]);
   const [myPlayerName, setMyPlayerName] = useState<string | null>(playerName || null);
 
-
   const playedTilesRef = useRef<HTMLDivElement>(null);
-  // const lastNotifiedTurnRef = useRef<string | null>(null); // removed unused
-
   const [sortBy, setSortBy] = useState<'number' | 'rank'>('number');
+
+  // Real-time socket event listeners for game state updates
+  useEffect(() => {
+    const handleUpdate = ({ gameState: newGameState, players: newPlayers }: { gameState: GameState; players: Player[] }) => {
+      setGameState(newGameState);
+      setPlayers(newPlayers);
+      setSelectedTileIds([]);
+    };
+
+    on('gameStateUpdated', handleUpdate);
+    on('gameStarted', handleUpdate);
+
+    return () => {
+      off('gameStateUpdated', handleUpdate);
+      off('gameStarted', handleUpdate);
+    };
+  }, [on, off]);
 
   // Save game state to localStorage when updated
   useEffect(() => {
@@ -65,7 +79,7 @@ export function OnlineGameBoard({ roomId, onBack, initialPlayers, initialGameSta
 
   // Set initial player name
   useEffect(() => {
-    if (socket?.id && initialPlayers) {
+    if (socket?.id && initialPlayers && initialPlayers.length > 0) {
       const myPlayer = initialPlayers.find(p => p.id === socket.id);
       if (myPlayer) {
         setMyPlayerName(myPlayer.name);
@@ -80,13 +94,9 @@ export function OnlineGameBoard({ roomId, onBack, initialPlayers, initialGameSta
     }
   }, [gameState?.playedTiles]);
 
-
-
-
-
-  const myPlayer = players.find(p => p.name === myPlayerName);
-  const isMyTurn = gameState && myPlayer && players.indexOf(myPlayer) === gameState.currentPlayerIndex;
-
+  const myPlayer = players.find(p => (socket?.id && p.id === socket.id) || (myPlayerName && p.name === myPlayerName));
+  const myPlayerIndex = myPlayer ? players.indexOf(myPlayer) : -1;
+  const isMyTurn = gameState && myPlayerIndex !== -1 && myPlayerIndex === gameState.currentPlayerIndex;
 
   const handleSelectTile = useCallback((tileId: string) => {
     if (!isMyTurn) return;
@@ -210,10 +220,20 @@ export function OnlineGameBoard({ roomId, onBack, initialPlayers, initialGameSta
   }
 
   // Sort the hand based on the user's selected preference
-  const sortedHand = myPlayer ? (sortBy === 'number' ? sortTiles(myPlayer.hand) : sortTilesByRank(myPlayer.hand)) : [];
+  const sortedHand = myPlayer && myPlayer.hand ? (sortBy === 'number' ? sortTiles(myPlayer.hand) : sortTilesByRank(myPlayer.hand)) : [];
 
-  // Prepare board state for GameBoard component, injecting sorted hand for current player
-  const boardState = {
+  // Map players for GameBoard component: set type to 'human' for local player, and 'computer' for opponents
+  const mappedPlayers: Player[] = players.map(p => {
+    const isMe = (socket?.id && p.id === socket.id) || (myPlayerName && p.name === myPlayerName);
+    return {
+      ...p,
+      type: isMe ? 'human' as const : 'computer' as const,
+      hand: isMe ? sortedHand : (p.hand || []),
+    };
+  });
+
+  // Prepare board state for GameBoard component
+  const boardState: GameState = {
     ...gameState,
     selectedTileIds,
     hintTileIds: [],
@@ -221,7 +241,7 @@ export function OnlineGameBoard({ roomId, onBack, initialPlayers, initialGameSta
     turnStartTime: gameState.turnStartTime,
     turnTimeLimit: gameState.turnTimeLimit,
     soundEnabled: gameState.soundEnabled,
-    players: myPlayer ? players.map(p => p.id === myPlayer.id ? { ...p, hand: sortedHand } : p) : players,
+    players: mappedPlayers,
   };
 
   // Determine play status for GameBoard
@@ -239,7 +259,6 @@ export function OnlineGameBoard({ roomId, onBack, initialPlayers, initialGameSta
   }
 
   // Render unified GameBoard UI
-  // Render unified GameBoard UI with sorted hand
   return (
     <GameBoard
       state={boardState}
