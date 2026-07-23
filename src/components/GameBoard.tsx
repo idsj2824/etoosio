@@ -219,15 +219,13 @@ export function GameBoard({
           onSortNumber={onSortNumber}
           onSortRank={onSortRank}
         />
-        {human && (
-          <HumanHand
-            hand={human.hand}
-            selectedIds={state.selectedTileIds}
-            hintIds={state.hintTileIds}
-            playerCount={state.playerCount}
-            onSelect={onSelectTile}
-          />
-        )}
+                <HumanHand
+          hand={human?.hand ?? []}
+          selectedIds={state.selectedTileIds}
+          hintIds={state.hintTileIds}
+          playerCount={state.playerCount}
+          onSelect={onSelectTile}
+        />
       </div>
     </div>
   );
