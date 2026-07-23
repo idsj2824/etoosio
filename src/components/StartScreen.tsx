@@ -47,6 +47,14 @@ export function StartScreen({
         </div>
 
         <div className={styles.actions}>
+          <a
+            href="/tutorial.html"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.tutorial}
+          >
+            📖 처음이라면? 튜토리얼
+          </a>
           <button
             type="button"
             className={styles.primary}
