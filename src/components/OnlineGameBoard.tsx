@@ -247,11 +247,16 @@ export function OnlineGameBoard({ roomId, onBack, initialPlayers, initialGameSta
   // Determine play status for GameBoard
   let playStatus: "idle" | "invalid" | "tooWeak" | "ready" | "mustPlay" = "idle";
   if (isMyTurn) {
-    if (!evaluated) {
+    if (selected.length === 0) {
+      playStatus = gameState.isNewLead ? "mustPlay" : "idle";
+    } else if (selected.length === 4) {
       playStatus = "invalid";
-    } else if (!gameState.currentCombination) {
-      playStatus = "mustPlay";
-    } else if (!canPlayCombination(selected, gameState.currentCombination, players.length)) {
+    } else if (!evaluated || evaluated.type === "INVALID") {
+      playStatus = "invalid";
+    } else if (
+      gameState.currentCombination &&
+      !canPlayCombination(selected, gameState.currentCombination, players.length)
+    ) {
       playStatus = "tooWeak";
     } else {
       playStatus = "ready";
