@@ -17,6 +17,15 @@
   text-align: center;
 }
 
+.logoIcon {
+  width: 76px;
+  height: 76px;
+  border-radius: 18px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+  margin-bottom: 12px;
+  object-fit: cover;
+}
+
 .logo h1 {
   margin: 0;
   font-size: 3rem;

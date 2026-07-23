@@ -23,6 +23,7 @@ export function StartScreen({
     <div className={styles.screen}>
       <div className={styles.card}>
         <div className={styles.logo}>
+          <img src="/app_icon.jpg" alt="이투시오 로고" className={styles.logoIcon} />
           <h1>{GAME_NAME}</h1>
           <p className={styles.subtitle}>{GAME_SUBTITLE}</p>
         </div>
