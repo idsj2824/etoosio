@@ -38,19 +38,43 @@ function getOnlinePlayStatus(
   return "ready";
 }
 
-describe('Online Game Play & Button State Test', () => {
+describe('Online Game Full Round Simulation', () => {
   let ioServer: Server;
   let httpServer: any;
   let client1: ClientSocket;
   let client2: ClientSocket;
   let port: number;
 
+  // In-memory server room state for test
+  const RANKS = ["EMPLOYEE", "ASSISTANT_MANAGER", "MANAGER", "DIRECTOR"];
+  function createDeck() {
+    const deck = [];
+    let id = 0;
+    for (const rank of RANKS) {
+      for (let num = 1; num <= 13; num++) {
+        deck.push({ id: `tile-${id++}`, number: num, rank });
+      }
+    }
+    return deck;
+  }
+
+  function calculateRoundScores(players: any[]) {
+    const scores = players.map(p => ({
+      playerId: p.id,
+      playerName: p.name,
+      roundPoints: p.hand.length === 0 ? 10 : -p.hand.length,
+      remainingTiles: p.hand.length
+    }));
+    return scores;
+  }
+
+  let roomState: any = null;
+
   beforeAll(async () => {
     const app = express();
     httpServer = createServer(app);
     ioServer = new Server(httpServer);
 
-    // Dynamic port allocation
     await new Promise<void>((resolve) => {
       httpServer.listen(0, () => {
         port = (httpServer.address() as any).port;
@@ -58,69 +82,115 @@ describe('Online Game Play & Button State Test', () => {
       });
     });
 
-    // Mirror server handlers from server.js
-    const RANKS = ["EMPLOYEE", "ASSISTANT_MANAGER", "MANAGER", "DIRECTOR"];
-    function createDeck() {
-      const deck = [];
-      let id = 0;
-      for (const rank of RANKS) {
-        for (let num = 1; num <= 13; num++) {
-          deck.push({ id: `tile-${id++}`, number: num, rank });
-        }
-      }
-      return deck;
-    }
-
     ioServer.on('connection', (socket) => {
       socket.on('createRoom', ({ playerName }) => {
-        socket.join('ROOM1');
-        socket.emit('roomCreated', { roomId: 'ROOM1', room: { id: 'ROOM1', hostId: socket.id, players: [{ id: socket.id, name: playerName }] } });
+        roomState = {
+          id: 'TEST_ROOM',
+          hostId: socket.id,
+          players: [{ id: socket.id, name: playerName, hand: [] }],
+          gameState: null,
+          status: 'waiting',
+          currentRound: 1,
+          totalRounds: 5,
+          cumulativeScores: { [socket.id]: 0 }
+        };
+        socket.join('TEST_ROOM');
+        socket.emit('roomCreated', { roomId: 'TEST_ROOM', room: roomState });
       });
 
       socket.on('joinRoom', ({ playerName }) => {
-        socket.join('ROOM1');
-        ioServer.to('ROOM1').emit('roomUpdated', { id: 'ROOM1', players: [{ id: 'p1', name: 'P1' }, { id: socket.id, name: playerName }] });
+        roomState.players.push({ id: socket.id, name: playerName, hand: [] });
+        roomState.cumulativeScores[socket.id] = 0;
+        socket.join('TEST_ROOM');
+        ioServer.to('TEST_ROOM').emit('roomUpdated', roomState);
       });
 
       socket.on('startGame', () => {
         const deck = createDeck();
-        const p1Hand = deck.slice(0, 13);
-        const p2Hand = deck.slice(13, 26);
-        const players = [
-          { id: client1.id, name: 'P1', hand: p1Hand, type: 'human' },
-          { id: client2.id, name: 'P2', hand: p2Hand, type: 'human' }
-        ];
-        const gameState = {
+        // Give client1 2 tiles, client2 3 tiles for quick round completion test
+        roomState.players[0].hand = deck.slice(0, 2);
+        roomState.players[1].hand = deck.slice(2, 5);
+
+        roomState.gameState = {
           currentPlayerIndex: 0,
           currentCombination: null,
+          lastPlayedByIndex: null,
+          consecutivePasses: 0,
           isNewLead: true,
+          logs: [{ message: '게임 시작' }],
           playedTiles: [],
-          logs: [],
           turnStartTime: Date.now(),
           turnTimeLimit: 30,
-          phase: 'playing'
+          phase: 'playing',
+          roundWinnerId: null,
+          roundScores: null,
+          currentRound: 1,
+          totalRounds: 5,
+          cumulativeScores: roomState.cumulativeScores
         };
-        ioServer.to('ROOM1').emit('gameStarted', { gameState, players });
+        roomState.status = 'playing';
+        ioServer.to('TEST_ROOM').emit('gameStarted', { gameState: roomState.gameState, players: roomState.players });
       });
 
       socket.on('playTiles', ({ tiles, combination }) => {
-        const p1Hand = createDeck().slice(0, 13).filter(t => !tiles.some((pt: any) => pt.id === t.id));
-        const p2Hand = createDeck().slice(13, 26);
-        const players = [
-          { id: client1.id, name: 'P1', hand: p1Hand, type: 'human' },
-          { id: client2.id, name: 'P2', hand: p2Hand, type: 'human' }
-        ];
-        const gameState = {
-          currentPlayerIndex: 1,
-          currentCombination: combination,
-          isNewLead: false,
-          playedTiles: [{ playerIndex: 0, playerName: 'P1', tiles }],
-          logs: [{ message: 'P1이 타일을 냈습니다.' }],
-          turnStartTime: Date.now(),
-          turnTimeLimit: 30,
-          phase: 'playing'
-        };
-        ioServer.to('ROOM1').emit('gameStateUpdated', { gameState, players });
+        const playerIndex = roomState.gameState.currentPlayerIndex;
+        const player = roomState.players[playerIndex];
+
+        // Remove played tiles
+        player.hand = player.hand.filter((t: any) => !tiles.some((pt: any) => pt.id === t.id));
+
+        roomState.gameState.playedTiles.push({
+          playerIndex,
+          playerName: player.name,
+          tiles: [...tiles]
+        });
+
+        roomState.gameState.currentCombination = combination;
+        roomState.gameState.lastPlayedByIndex = playerIndex;
+        roomState.gameState.isNewLead = false;
+
+        // Check if player won round
+        if (player.hand.length === 0) {
+          const roundScores = calculateRoundScores(roomState.players);
+          roomState.gameState.roundWinnerId = player.id;
+          roomState.gameState.roundScores = roundScores;
+          roomState.gameState.phase = 'roundEnd';
+          ioServer.to('TEST_ROOM').emit('gameStateUpdated', { gameState: roomState.gameState, players: roomState.players });
+          return;
+        }
+
+        // Turn moves to next player
+        roomState.gameState.currentPlayerIndex = (playerIndex + 1) % roomState.players.length;
+        ioServer.to('TEST_ROOM').emit('gameStateUpdated', { gameState: roomState.gameState, players: roomState.players });
+      });
+
+      socket.on('pass', () => {
+        const playerIndex = roomState.gameState.currentPlayerIndex;
+        roomState.gameState.consecutivePasses += 1;
+
+        if (roomState.gameState.consecutivePasses >= roomState.players.length - 1) {
+          roomState.gameState.currentCombination = null;
+          roomState.gameState.consecutivePasses = 0;
+          roomState.gameState.isNewLead = true;
+          roomState.gameState.currentPlayerIndex = roomState.gameState.lastPlayedByIndex;
+        } else {
+          roomState.gameState.currentPlayerIndex = (playerIndex + 1) % roomState.players.length;
+        }
+
+        ioServer.to('TEST_ROOM').emit('gameStateUpdated', { gameState: roomState.gameState, players: roomState.players });
+      });
+
+      socket.on('nextRound', () => {
+        roomState.currentRound += 1;
+        const deck = createDeck();
+        roomState.players[0].hand = deck.slice(5, 7);
+        roomState.players[1].hand = deck.slice(7, 10);
+        roomState.gameState.phase = 'playing';
+        roomState.gameState.currentRound = roomState.currentRound;
+        roomState.gameState.currentPlayerIndex = 0;
+        roomState.gameState.currentCombination = null;
+        roomState.gameState.isNewLead = true;
+        ioServer.to('TEST_ROOM').emit('gameStarted', { gameState: roomState.gameState, players: roomState.players });
       });
     });
 
@@ -142,72 +212,83 @@ describe('Online Game Play & Button State Test', () => {
     httpServer.close();
   });
 
-  it('1. should calculate playStatus correctly when tiles are selected', () => {
-    const sampleTile = { id: 'tile-0', number: 3, rank: 'EMPLOYEE' };
-    const myHand = [sampleTile, { id: 'tile-1', number: 4, rank: 'EMPLOYEE' }];
+  it('1. should verify playStatus when leading vs non-leading', () => {
+    const tileA = { id: 'tile-0', number: 3, rank: 'EMPLOYEE' };
+    const tileB = { id: 'tile-1', number: 5, rank: 'EMPLOYEE' };
+    const hand = [tileA, tileB];
 
-    // No cards selected on lead turn -> mustPlay (button disabled)
-    let status = getOnlinePlayStatus(true, [], myHand, null, true, 2);
-    expect(status).toBe('mustPlay');
+    // Leading turn, 0 tiles -> mustPlay
+    expect(getOnlinePlayStatus(true, [], hand, null, true, 2)).toBe('mustPlay');
 
-    // 1 valid card selected on lead turn -> ready (button ENABLED!)
-    status = getOnlinePlayStatus(true, ['tile-0'], myHand, null, true, 2);
-    expect(status).toBe('ready');
+    // Leading turn, 1 valid tile -> ready
+    expect(getOnlinePlayStatus(true, ['tile-0'], hand, null, true, 2)).toBe('ready');
 
-    // Invalid cards selected -> invalid (button disabled)
-    status = getOnlinePlayStatus(true, ['tile-0', 'tile-1'], myHand, null, true, 2); // 3 and 4 don't make a pair
-    expect(status).toBe('invalid');
+    // Non-leading turn, 0 tiles -> idle (can pass)
+    expect(getOnlinePlayStatus(true, [], hand, { type: 'SINGLE', tiles: [tileA], strength: [1, 1] }, false, 2)).toBe('idle');
   });
 
-  it('2. should simulate socket flow for online game start and tile playing', async () => {
-    let initialGameData: any = null;
-    let updatedGameData: any = null;
+  it('2. should simulate a full online game round until a player wins and roundEnd triggers', async () => {
+    let currentGameState: any = null;
+    let currentPlayers: any[] = [];
 
-    client1.on('gameStarted', (data) => {
-      initialGameData = data;
-    });
+    const handleUpdate = (data: any) => {
+      currentGameState = data.gameState;
+      currentPlayers = data.players;
+    };
 
-    client1.emit('createRoom', { playerName: 'P1' });
-    client2.emit('joinRoom', { playerName: 'P2' });
+    client1.on('gameStarted', handleUpdate);
+    client1.on('gameStateUpdated', handleUpdate);
+    client2.on('gameStarted', handleUpdate);
+    client2.on('gameStateUpdated', handleUpdate);
+
+    // 1. Host creates room and Player 2 joins
+    client1.emit('createRoom', { playerName: 'Host' });
+    client2.emit('joinRoom', { playerName: 'Player 2' });
     client1.emit('startGame');
 
-    // Wait for gameStarted
-    await new Promise<void>((resolve) => {
-      const interval = setInterval(() => {
-        if (initialGameData) {
-          clearInterval(interval);
-          resolve();
-        }
-      }, 50);
-    });
+    // Wait for game start
+    await new Promise<void>(res => setTimeout(res, 100));
 
-    expect(initialGameData).not.toBeNull();
-    expect(initialGameData.players.length).toBe(2);
-    expect(initialGameData.players[0].hand.length).toBe(13);
+    expect(currentGameState).not.toBeNull();
+    expect(currentGameState.phase).toBe('playing');
+    expect(currentGameState.currentPlayerIndex).toBe(0); // Host's turn
 
-    // Simulate P1 selecting first card and clicking '내기' (playTiles)
-    const cardToPlay = initialGameData.players[0].hand[0];
-    const evaluated = evaluateCombination([cardToPlay], 2);
+    // 2. Host plays 1st tile
+    const hostTile1 = currentPlayers[0].hand[0];
+    const eval1 = evaluateCombination([hostTile1], 2);
+    client1.emit('playTiles', { tiles: [hostTile1], combination: eval1 });
 
-    client2.on('gameStateUpdated', (data) => {
-      updatedGameData = data;
-    });
+    await new Promise<void>(res => setTimeout(res, 100));
 
-    client1.emit('playTiles', { roomId: 'ROOM1', tiles: [cardToPlay], combination: evaluated });
+    expect(currentGameState.currentPlayerIndex).toBe(1); // Player 2's turn
+    expect(currentPlayers[0].hand.length).toBe(1); // Host has 1 card left
 
-    // Wait for gameStateUpdated
-    await new Promise<void>((resolve) => {
-      const interval = setInterval(() => {
-        if (updatedGameData) {
-          clearInterval(interval);
-          resolve();
-        }
-      }, 50);
-    });
+    // 3. Player 2 passes turn
+    client2.emit('pass');
+    await new Promise<void>(res => setTimeout(res, 100));
 
-    expect(updatedGameData).not.toBeNull();
-    expect(updatedGameData.gameState.currentPlayerIndex).toBe(1); // Turn moved to P2
-    expect(updatedGameData.gameState.playedTiles.length).toBe(1); // Card placed on table
-    expect(updatedGameData.players[0].hand.length).toBe(12); // P1 has 12 cards left
+    expect(currentGameState.currentPlayerIndex).toBe(0); // Host becomes lead again
+    expect(currentGameState.isNewLead).toBe(true);
+
+    // 4. Host plays final tile (empties hand!)
+    const hostTile2 = currentPlayers[0].hand[0];
+    const eval2 = evaluateCombination([hostTile2], 2);
+    client1.emit('playTiles', { tiles: [hostTile2], combination: eval2 });
+
+    await new Promise<void>(res => setTimeout(res, 100));
+
+    // 5. Verify roundEnd phase triggered & winner set!
+    expect(currentGameState.phase).toBe('roundEnd');
+    expect(currentGameState.roundWinnerId).toBe(client1.id);
+    expect(currentGameState.roundScores).not.toBeNull();
+    expect(currentPlayers[0].hand.length).toBe(0);
+
+    // 6. Host starts next round
+    client1.emit('nextRound');
+    await new Promise<void>(res => setTimeout(res, 100));
+
+    expect(currentGameState.phase).toBe('playing');
+    expect(currentGameState.currentRound).toBe(2);
+    expect(currentPlayers[0].hand.length).toBe(2); // New hand dealt for round 2
   });
 });
