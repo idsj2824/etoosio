@@ -161,14 +161,79 @@
 }
 
 .playedTilesHeader {
-  margin-bottom: 12px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
 .playedTilesHeader h3 {
   margin: 0;
   font-size: 1.1rem;
   color: #1e293b;
-  text-align: center;
+  text-align: left;
+}
+
+.toggleHistoryBtn {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #64748b;
+  background: rgba(255,255,255,0.7);
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  padding: 3px 10px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s;
+  flex-shrink: 0;
+}
+
+.toggleHistoryBtn:hover {
+  background: #e2e8f0;
+}
+
+/* 마지막 낸 조합 강조 박스 */
+.lastPlayedHighlight {
+  background: rgba(255, 255, 255, 0.92);
+  border-radius: 16px;
+  border: 2px solid rgba(37, 99, 235, 0.25);
+  box-shadow: 0 4px 16px rgba(37, 99, 235, 0.10);
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.lastPlayedMeta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.lastPlayedBy {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #1e3a5f;
+}
+
+.lastComboLabel {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: white;
+  background: #2563eb;
+  padding: 2px 10px;
+  border-radius: 20px;
+}
+
+.lastPlayedTiles {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
 }
 
 .allPlayedTiles {
@@ -229,14 +294,180 @@
   z-index: 100;
 }
 
+.mobileOnlyBtn {
+  display: none;
+}
+
+.desktopOnlyBtn {
+  display: inline-block;
+}
+
+/* Mobile Modal Dialog for Combination Reference and Game Log */
+.mobileModalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(6px);
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.mobileModalCard {
+  background: white;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 480px;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+}
+
+.mobileModalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 18px;
+  background: #1e3a5f;
+  color: white;
+}
+
+.mobileModalHeader h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.closeBtn {
+  background: rgba(255, 255, 255, 0.15);
+  border: none;
+  color: white;
+  font-size: 1.1rem;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mobileModalBody {
+  padding: 16px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
 @media (max-width: 1024px) {
   .sidebar {
     display: none;
   }
 
+  .mobileOnlyBtn {
+    display: inline-block;
+  }
+
+  .desktopOnlyBtn {
+    display: none;
+  }
+
+  .header {
+    padding: 8px 12px;
+  }
+
+  .round {
+    font-size: 0.85rem;
+  }
+
+  .headerRight {
+    gap: 4px;
+  }
+
   .headerRight button {
-    padding: 5px 10px;
+    padding: 5px 8px;
     font-size: 0.75rem;
+    border-radius: 6px;
+  }
+
+  .table {
+    padding: 8px 10px;
+    padding-bottom: 210px;
+  }
+
+  .turnInfo {
+    gap: 8px;
+    font-size: 0.82rem;
+  }
+
+  .turnInfo strong {
+    font-size: 0.95rem;
+  }
+
+  .playedArea {
+    max-width: 100%;
+  }
+
+  .allPlayedTiles {
+    max-height: 130px;
+    padding: 8px;
+    border-radius: 10px;
+    margin-top: 8px;
+  }
+
+  .lastPlayedHighlight {
+    padding: 12px 14px;
+  }
+
+  .lastPlayedBy {
+    font-size: 0.82rem;
+  }
+
+  .lastPlayedTiles {
+    gap: 5px;
+  }
+
+  .playedTilesHeader h3 {
+    font-size: 0.95rem;
+  }
+
+  .scores {
+    gap: 6px;
+  }
+
+  .scoreItem {
+    padding: 4px 8px;
+    font-size: 0.75rem;
+    min-width: 64px;
+    border-radius: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .headerRight button {
+    padding: 4px 6px;
+    font-size: 0.7rem;
+  }
+
+  .allPlayedTiles {
+    max-height: 110px;
+    padding: 6px;
+  }
+
+  .table {
+    padding-bottom: 220px;
   }
 }
 
@@ -245,3 +476,4 @@
     width: 300px;
   }
 }
+

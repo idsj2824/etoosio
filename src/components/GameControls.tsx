@@ -36,53 +36,57 @@ export function GameControls({
   return (
     <div className={styles.controls}>
       <p className={styles.status}>{statusMessage()}</p>
-      <div className={styles.buttons}>
+      
+      <div className={styles.mainActionRow}>
         <button
           type="button"
           className={styles.primary}
           onClick={onPlay}
           disabled={!isHumanTurn || playStatus !== "ready"}
         >
-          내기
+          🚀 내기
         </button>
         <button
           type="button"
-          className={styles.secondary}
+          className={styles.secondaryPass}
           onClick={onPass}
           disabled={!isHumanTurn || isNewLead}
           title={isNewLead ? "선일 때는 패스할 수 없습니다" : ""}
         >
-          패스
+          PASS 패스
         </button>
+      </div>
+
+      <div className={styles.utilityRow}>
         <button
           type="button"
-          className={styles.secondary}
+          className={styles.utilityBtn}
           onClick={onClear}
           disabled={!isHumanTurn}
         >
-          선택 초기화
+          🔄 초기화
         </button>
         <button
           type="button"
-          className={styles.secondary}
+          className={styles.utilityBtn}
           onClick={onHint}
           disabled={!isHumanTurn}
         >
-          힌트
+          💡 힌트
         </button>
         <button
           type="button"
-          className={styles.tertiary}
+          className={styles.utilityBtn}
           onClick={onSortNumber}
         >
-          숫자순 정렬
+          🔢 숫자순
         </button>
         <button
           type="button"
-          className={styles.tertiary}
+          className={styles.utilityBtn}
           onClick={onSortRank}
         >
-          직급순 정렬
+          👔 직급순
         </button>
       </div>
     </div>

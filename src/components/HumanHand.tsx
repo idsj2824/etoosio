@@ -31,11 +31,11 @@ export function HumanHand({
       <div className={styles.info}>
         {selected.length > 0 && evaluated && (
           <span
-            className={
+            className={`${styles.badge} ${
               evaluated.type === "INVALID"
                 ? styles.invalid
                 : styles.valid
-            }
+            }`}
           >
             {evaluated.type === "INVALID"
               ? "유효하지 않은 조합입니다"

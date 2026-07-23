@@ -1,32 +1,43 @@
 .container {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  padding: 12px 16px;
+  gap: 4px;
+  padding: 8px 12px calc(8px + env(safe-area-inset-bottom, 0px));
   background: linear-gradient(180deg, rgba(30, 58, 95, 0.05) 0%, rgba(30, 58, 95, 0.12) 100%);
-  border-top: 2px solid rgba(30, 58, 95, 0.15);
+  border-top: 1px solid rgba(30, 58, 95, 0.15);
 }
 
 .info {
   text-align: center;
-  min-height: 24px;
+  min-height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.badge {
+  display: inline-block;
+  padding: 3px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 700;
 }
 
 .valid {
-  color: #059669;
-  font-weight: 600;
-  font-size: 0.95rem;
+  color: #047857;
+  background: #d1fae5;
+  border: 1px solid #a7f3d0;
 }
 
 .invalid {
-  color: #dc2626;
-  font-weight: 600;
-  font-size: 0.95rem;
+  color: #b91c1c;
+  background: #fee2e2;
+  border: 1px solid #fca5a5;
 }
 
 .hint {
   color: #64748b;
-  font-size: 0.9rem;
+  font-size: 0.82rem;
 }
 
 .hand {
@@ -34,10 +45,30 @@
   flex-wrap: wrap;
   gap: 6px;
   justify-content: center;
-  padding: 8px 0;
+  align-items: center;
+  padding: 6px 0;
   max-width: 100%;
 }
 
 .compactHand {
   gap: 4px;
 }
+
+@media (max-width: 640px) {
+  .container {
+    padding: 6px 8px calc(6px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .badge {
+    padding: 2px 10px;
+    font-size: 0.78rem;
+  }
+
+  .hand {
+    gap: 4px;
+    padding: 4px 0;
+    max-height: 160px;
+    overflow-y: auto;
+  }
+}
+

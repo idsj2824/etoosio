@@ -3,22 +3,29 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 72px;
-  height: 96px;
+  width: 68px;
+  height: 90px;
   border-radius: 10px;
   border: 2px solid rgba(0, 0, 0, 0.15);
   background: linear-gradient(145deg, #ffffff 0%, #f0f0f0 100%);
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.8);
   cursor: pointer;
   transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
-  padding: 6px 4px;
+  padding: 4px 2px;
   font-family: inherit;
   position: relative;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
 }
 
 .tile:hover {
-  transform: scale(1.06);
+  transform: scale(1.04);
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+}
+
+.tile:active {
+  transform: scale(0.96);
 }
 
 .tile:focus-visible {
@@ -27,28 +34,30 @@
 }
 
 .tile.compact {
-  width: 48px;
-  height: 64px;
+  width: 44px;
+  height: 58px;
   font-size: 0.75em;
   border-width: 1px;
+  padding: 2px;
 }
 
 .tile.compact .icon {
-  font-size: 0.9rem;
+  font-size: 0.85rem;
+  margin-bottom: 0;
 }
 
 .tile.compact .rank {
-  font-size: 0.65rem;
+  font-size: 0.6rem;
 }
 
 .tile.compact .number {
-  font-size: 1.1rem;
+  font-size: 1rem;
 }
 
 .tile.selected {
-  transform: translateY(-12px) scale(1.04);
+  transform: translateY(-8px) scale(1.02);
   border-color: #2563eb;
-  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.35);
+  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.4), 0 0 0 2px #2563eb;
 }
 
 .tile.hinted {
@@ -62,7 +71,8 @@
   border-color: #2d4a6f;
 }
 
-.tile.faceDown:hover {
+.tile.faceDown:hover,
+.tile.faceDown:active {
   transform: none;
 }
 
@@ -75,19 +85,19 @@
 }
 
 .icon {
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   line-height: 1;
   margin-bottom: 2px;
 }
 
 .rank {
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: -0.02em;
 }
 
 .number {
-  font-size: 1.4rem;
+  font-size: 1.3rem;
   font-weight: 800;
   line-height: 1.1;
 }
@@ -123,3 +133,67 @@
 
 .director .rank { color: #6d28d9; }
 .director .number { color: #5b21b6; }
+
+@media (max-width: 640px) {
+  .tile {
+    width: 52px;
+    height: 72px;
+    border-radius: 8px;
+    padding: 3px 2px;
+  }
+
+  .icon {
+    font-size: 0.9rem;
+    margin-bottom: 1px;
+  }
+
+  .rank {
+    font-size: 0.62rem;
+  }
+
+  .number {
+    font-size: 1.05rem;
+  }
+
+  .tile.compact {
+    width: 38px;
+    height: 50px;
+    border-radius: 6px;
+  }
+
+  .tile.compact .icon {
+    font-size: 0.75rem;
+  }
+
+  .tile.compact .rank {
+    font-size: 0.55rem;
+  }
+
+  .tile.compact .number {
+    font-size: 0.85rem;
+  }
+
+  .tile.selected {
+    transform: translateY(-6px) scale(1.02);
+  }
+}
+
+@media (max-width: 380px) {
+  .tile {
+    width: 46px;
+    height: 64px;
+  }
+
+  .icon {
+    font-size: 0.8rem;
+  }
+
+  .rank {
+    font-size: 0.58rem;
+  }
+
+  .number {
+    font-size: 0.95rem;
+  }
+}
+

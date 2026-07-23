@@ -137,12 +137,37 @@
   background: #cbd5e1;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 640px) {
+  .screen {
+    padding: 16px;
+  }
+
   .card {
-    padding: 32px 28px;
+    padding: 28px 20px;
+    border-radius: 16px;
   }
 
   .logo h1 {
-    font-size: 2.4rem;
+    font-size: 2.2rem;
+  }
+
+  .subtitle {
+    font-size: 0.95rem;
+  }
+
+  .players {
+    margin: 24px 0;
+  }
+
+  .playerButtons button {
+    padding: 10px 14px;
+    font-size: 0.9rem;
+    flex: 1;
+  }
+
+  .actions button {
+    padding: 14px 18px;
+    font-size: 0.95rem;
   }
 }
+

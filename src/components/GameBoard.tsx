@@ -6,6 +6,7 @@ import { GameLog } from "./GameLog";
 import { TileCard } from "./TileCard";
 import { CombinationReference } from "./CombinationReference";
 import { Notification } from "./Notification";
+import { getCombinationLabel, evaluateCombination } from "../game/combination";
 import { useState, useEffect, useRef } from "react";
 import styles from "./GameBoard.module.css";
 
@@ -46,6 +47,10 @@ export function GameBoard({
   const playedTilesRef = useRef<HTMLDivElement>(null);
   const [remainingTime, setRemainingTime] = useState<number>(state.turnTimeLimit);
 
+  const [showComboModal, setShowComboModal] = useState(false);
+  const [showLogModal, setShowLogModal] = useState(false);
+  const [showAllPlayed, setShowAllPlayed] = useState(false);
+
   const human = state.players.find((p) => p.type === "human") ?? null;
   const computers = state.players.filter((p) => p.type === "computer");
   const currentPlayer = state.players[state.currentPlayerIndex];
@@ -54,6 +59,14 @@ export function GameBoard({
       ? state.players[state.lastPlayedByIndex]
       : null;
   const isHumanTurn = currentPlayer?.type === "human";
+
+  // Get the last played group for prominent display
+  const lastPlayedGroup = state.playedTiles && state.playedTiles.length > 0
+    ? state.playedTiles[state.playedTiles.length - 1]
+    : null;
+  const lastComboLabel = lastPlayedGroup
+    ? getCombinationLabel(evaluateCombination(lastPlayedGroup.tiles, state.playerCount))
+    : null;
 
   // Show notification when human becomes lead
   useEffect(() => {
@@ -97,6 +110,35 @@ export function GameBoard({
           onClose={() => setNotification(null)}
         />
       )}
+
+      {showComboModal && (
+        <div className={styles.mobileModalOverlay} onClick={() => setShowComboModal(false)}>
+          <div className={styles.mobileModalCard} onClick={(e) => e.stopPropagation()}>
+            <div className={styles.mobileModalHeader}>
+              <h3>📖 조합 족보</h3>
+              <button type="button" className={styles.closeBtn} onClick={() => setShowComboModal(false)}>✕</button>
+            </div>
+            <div className={styles.mobileModalBody}>
+              <CombinationReference />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showLogModal && (
+        <div className={styles.mobileModalOverlay} onClick={() => setShowLogModal(false)}>
+          <div className={styles.mobileModalCard} onClick={(e) => e.stopPropagation()}>
+            <div className={styles.mobileModalHeader}>
+              <h3>📜 게임 로그</h3>
+              <button type="button" className={styles.closeBtn} onClick={() => setShowLogModal(false)}>✕</button>
+            </div>
+            <div className={styles.mobileModalBody}>
+              <GameLog logs={state.logs} />
+            </div>
+          </div>
+        </div>
+      )}
+
       <header className={styles.header}>
         <div className={styles.headerLeft}>
           <span className={styles.round}>
@@ -104,20 +146,26 @@ export function GameBoard({
           </span>
         </div>
         <div className={styles.headerRight}>
-          <button type="button" onClick={onNewGame}>
-            새 게임
+          <button type="button" className={styles.mobileOnlyBtn} onClick={() => setShowComboModal(true)}>
+            📖 족보
+          </button>
+          <button type="button" className={styles.mobileOnlyBtn} onClick={() => setShowLogModal(true)}>
+            📜 로그
           </button>
           <button type="button" onClick={onShowRules}>
-            게임 방법
+            게임방법
           </button>
           <button type="button" onClick={onToggleSound}>
-            {state.soundEnabled ? "🔊 음향" : "🔇 음향"}
+            {state.soundEnabled ? "🔊" : "🔇"}
           </button>
-          <button type="button" onClick={onSave}>
-            게임 저장
+          <button type="button" onClick={onNewGame}>
+            새게임
+          </button>
+          <button type="button" onClick={onSave} className={styles.desktopOnlyBtn}>
+            저장
           </button>
           <button type="button" onClick={onMenu}>
-            메인으로
+            메인
           </button>
         </div>
       </header>
@@ -167,29 +215,54 @@ export function GameBoard({
             <div className={styles.playedArea}>
               <div className={styles.playedTilesHeader}>
                 <h3>바닥에 깔린 타일</h3>
+                {state.playedTiles && state.playedTiles.length > 1 && (
+                  <button
+                    type="button"
+                    className={styles.toggleHistoryBtn}
+                    onClick={() => setShowAllPlayed(v => !v)}
+                  >
+                    {showAllPlayed ? '▲ 접기' : `▼ 이전 이력 (${state.playedTiles.length - 1}번)`}
+                  </button>
+                )}
               </div>
-              <div className={styles.allPlayedTiles} ref={playedTilesRef}>
-                {state.playedTiles && state.playedTiles.length > 0 ? (
+
+              {/* 마지막 낸 조합 - 크고 선명하게 */}
+              {lastPlayedGroup ? (
+                <div className={styles.lastPlayedHighlight}>
+                  <div className={styles.lastPlayedMeta}>
+                    <span className={styles.lastPlayedBy}>{lastPlayedGroup.playerName}</span>
+                    {lastComboLabel && <span className={styles.lastComboLabel}>{lastComboLabel}</span>}
+                  </div>
+                  <div className={styles.lastPlayedTiles}>
+                    {lastPlayedGroup.tiles.map((tile) => (
+                      <TileCard key={tile.id} tile={tile} />
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <div className={styles.empty}>
+                  <p>아직 타일이 없습니다</p>
+                </div>
+              )}
+
+              {/* 이전 이력 - 토글로 펼치기 */}
+              {showAllPlayed && state.playedTiles && state.playedTiles.length > 1 && (
+                <div className={styles.allPlayedTiles} ref={playedTilesRef}>
                   <div className={styles.tilesContainer}>
-                    {state.playedTiles.map((played, index) => (
+                    {state.playedTiles.slice(0, -1).map((played, index) => (
                       <div key={index} className={styles.tileGroup}>
                         {played.tiles.map((tile) => (
                           <TileCard
                             key={tile.id}
                             tile={tile}
                             compact
-                            className={index === state.playedTiles.length - 1 ? styles.recent : ''}
                           />
                         ))}
                       </div>
                     ))}
                   </div>
-                ) : (
-                  <div className={styles.empty}>
-                    <p>아직 타일이 없습니다</p>
-                  </div>
-                )}
-              </div>
+                </div>
+              )}
             </div>
 
             <div className={styles.scores}>

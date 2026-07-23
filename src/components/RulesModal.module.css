@@ -113,3 +113,34 @@
   color: #64748b;
   font-style: italic;
 }
+
+@media (max-width: 640px) {
+  .overlay {
+    padding: 12px;
+  }
+
+  .modal {
+    max-height: 90vh;
+    border-radius: 12px;
+  }
+
+  .header {
+    padding: 12px 16px;
+  }
+
+  .header h2 {
+    font-size: 1.1rem;
+  }
+
+  .content {
+    padding: 14px 16px;
+    font-size: 0.85rem;
+  }
+
+  .table th,
+  .table td {
+    padding: 6px 6px;
+    font-size: 0.78rem;
+  }
+}
+

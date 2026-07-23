@@ -60,3 +60,33 @@
 .left { align-items: flex-start; }
 .right { align-items: flex-end; }
 .bottom { align-items: center; }
+
+@media (max-width: 768px) {
+  .player {
+    padding: 6px 10px;
+    border-radius: 10px;
+    gap: 4px;
+    background: rgba(255, 255, 255, 0.85);
+  }
+
+  .name {
+    font-size: 0.82rem;
+  }
+
+  .count {
+    font-size: 0.75rem;
+    padding: 2px 8px;
+    font-weight: 700;
+  }
+
+  .turnBadge {
+    font-size: 0.65rem;
+    padding: 2px 6px;
+  }
+
+  .tiles {
+    display: none;
+  }
+}
+
+

@@ -264,3 +264,37 @@
   font-size: 0.9rem;
   margin: 0;
 }
+
+@media (max-width: 640px) {
+  .screen {
+    padding: 16px;
+  }
+
+  .card {
+    padding: 28px 20px;
+    border-radius: 16px;
+  }
+
+  .card h2 {
+    font-size: 1.6rem;
+    margin-bottom: 18px;
+  }
+
+  .modeToggle button,
+  .playerCount button {
+    padding: 10px 8px;
+    font-size: 0.9rem;
+  }
+
+  .field input {
+    padding: 10px 14px;
+    font-size: 0.95rem;
+  }
+
+  .primary,
+  .secondary {
+    padding: 12px 18px;
+    font-size: 0.95rem;
+  }
+}
+
