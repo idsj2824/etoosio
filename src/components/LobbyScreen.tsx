@@ -101,7 +101,8 @@ export function LobbyScreen({ onBack, onGameStart }: LobbyScreenProps) {
 
   if (currentRoom) {
     const isHost = currentRoom.hostId === currentRoom.players.find(p => p.name === playerName)?.id;
-    const canStart = currentRoom.players.length >= 2 && currentRoom.status === 'waiting';
+    const isFull = currentRoom.players.length === currentRoom.playerCount;
+    const canStart = isFull && currentRoom.status === 'waiting';
 
     return (
       <div className={styles.screen}>
@@ -126,14 +127,18 @@ export function LobbyScreen({ onBack, onGameStart }: LobbyScreenProps) {
           </div>
 
           <div className={styles.actions}>
-            {isHost && canStart && (
-              <button className={styles.primary} onClick={handleStartGame}>
-                게임 시작
+            {isHost && (
+              <button 
+                className={styles.primary} 
+                onClick={handleStartGame}
+                disabled={!canStart}
+              >
+                게임 시작 ({currentRoom.players.length}/{currentRoom.playerCount})
               </button>
             )}
-            {!canStart && currentRoom.status === 'waiting' && (
+            {!isFull && currentRoom.status === 'waiting' && (
               <p className={styles.waiting}>
-                {currentRoom.players.length < 2 ? '최소 2명이 필요합니다.' : '기다리는 중...'}
+                플레이어를 기다리는 중... ({currentRoom.players.length}/{currentRoom.playerCount} 명)
               </p>
             )}
             <button className={styles.secondary} onClick={handleLeaveRoom}>

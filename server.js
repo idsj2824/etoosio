@@ -406,10 +406,10 @@ io.on('connection', (socket) => {
       return;
     }
     
-    console.log('Players count:', room.players.length);
-    if (room.players.length < 2) {
-      console.log('Not enough players');
-      socket.emit('error', { message: '최소 2명이 필요합니다.' });
+    console.log('Players count:', room.players.length, 'Target:', room.playerCount);
+    if (room.players.length < room.playerCount) {
+      console.log('Not enough players to start game');
+      socket.emit('error', { message: `설정한 인원(${room.playerCount}명)이 모두 입장해야 게임을 시작할 수 있습니다.` });
       return;
     }
     
