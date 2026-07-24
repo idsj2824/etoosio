@@ -8,6 +8,7 @@ import { CombinationReference } from "./CombinationReference";
 import { Notification } from "./Notification";
 import { getCombinationLabel, evaluateCombination } from "../game/combination";
 import { useState, useEffect, useRef } from "react";
+import { useSound } from "../hooks/useSound";
 import styles from "./GameBoard.module.css";
 
 interface GameBoardProps {
@@ -43,6 +44,7 @@ export function GameBoard({
   onSave,
   onMenu,
 }: GameBoardProps) {
+  const { play } = useSound(state.soundEnabled);
   const [notification, setNotification] = useState<string | null>(null);
   const playedTilesRef = useRef<HTMLDivElement>(null);
   const [remainingTime, setRemainingTime] = useState<number>(state.turnTimeLimit);
@@ -67,6 +69,13 @@ export function GameBoard({
   const lastComboLabel = lastPlayedGroup
     ? getCombinationLabel(evaluateCombination(lastPlayedGroup.tiles, state.playerCount))
     : null;
+
+  // Trigger sound on my turn
+  useEffect(() => {
+    if (isHumanTurn) {
+      play("turn");
+    }
+  }, [isHumanTurn, play]);
 
   // Show notification when human becomes lead
   useEffect(() => {
@@ -192,8 +201,8 @@ export function GameBoard({
 
           <div className={styles.center}>
             <div className={styles.turnInfo}>
-              <span className={styles.currentTurn}>
-                현재 차례: <strong>{currentPlayer?.name}</strong>
+              <span className={`${styles.currentTurn} ${isHumanTurn ? styles.myTurn : ""}`}>
+                현재 차례: <strong>{currentPlayer?.name}{isHumanTurn && " (나)"}</strong>
               </span>
               {state.phase === "playing" && (
                 <span className={`${styles.timer} ${remainingTime <= 5 ? styles.urgent : ''}`}>
@@ -266,21 +275,30 @@ export function GameBoard({
             </div>
 
             <div className={styles.scores}>
-              {state.players.map((p) => (
-                <div key={p.id} className={styles.scoreItem}>
-                  <span>{p.name}</span>
-                  <span>{p.hand?.length ?? 0}장</span>
-                  <span className={styles.cumulative}>
-                    {state.cumulativeScores[p.id] ?? 0}점
-                  </span>
-                </div>
-              ))}
+              {state.players.map((p) => {
+                const isCurrent = state.players.indexOf(p) === state.currentPlayerIndex;
+                const isHuman = p.type === "human";
+                return (
+                  <div
+                    key={p.id}
+                    className={`${styles.scoreItem} ${
+                      isCurrent ? styles.activeScoreItem : ""
+                    } ${isCurrent && isHuman ? styles.myTurnScoreItem : ""}`}
+                  >
+                    <span>{p.name}</span>
+                    <span>{p.hand?.length ?? 0}장</span>
+                    <span className={styles.cumulative}>
+                      {state.cumulativeScores[p.id] ?? 0}점
+                    </span>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>
       </div>
 
-      <div className={styles.playerSection}>
+      <div className={`${styles.playerSection} ${isHumanTurn ? styles.myTurnActive : ""}`}>
         <GameControls
           playStatus={playStatus}
           isHumanTurn={isHumanTurn}

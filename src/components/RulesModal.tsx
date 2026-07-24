@@ -88,9 +88,27 @@ export function RulesModal({ onClose }: RulesModalProps) {
               </tbody>
             </table>
             <p className={styles.note}>
-              5장 조합 강도: 스트레이트 &lt; 플러시 &lt; 풀하우스 &lt; 포카드
-              &lt; 스트레이트 플러시
+              5장 조합 강도 순서: 스트레이트 &lt; 플러시 &lt; 풀하우스 &lt; 포카드 &lt; 스트레이트 플러시
             </p>
+          </section>
+
+          <section>
+            <h3>조합 제출 &amp; 족보 승부 규칙</h3>
+            <ul>
+              <li><strong>1장(싱글), 2장(페어), 3장(트리플):</strong> 오직 <strong>같은 장수의 똑같은 조합 타입</strong>으로만 낼 수 있습니다. (예: 싱글은 싱글로만, 페어는 페어로만)</li>
+              <li><strong>5장 조합 (스트레이트~스트레이트 플러시):</strong> 같은 5장 조합뿐만 아니라 <strong>더 높은 상위 족보 5장 조합</strong>을 바로 낼 수 있습니다! (예: 스트레이트 위에 플러시, 풀하우스, 포카드, 스트레이트 플러시 제출 가능)</li>
+            </ul>
+          </section>
+
+          <section>
+            <h3>동일 조합 우열 비교 방식</h3>
+            <ul>
+              <li><strong>스트레이트:</strong> 가장 높은 숫자 비교 → 같으면 가장 높은 숫자의 직급(부장&gt;과장&gt;대리&gt;사원) 비교</li>
+              <li><strong>플러시:</strong> 가장 높은 숫자부터 순서대로 비교 → 5개 숫자가 모두 같으면 직급 비교</li>
+              <li><strong>풀하우스:</strong> 3장(트리플) 부분의 숫자가 더 높은 쪽이 승리 (페어 숫자 무관)</li>
+              <li><strong>포카드:</strong> 4장(포카드) 부분의 숫자가 더 높은 쪽이 승리</li>
+              <li><strong>스트레이트 플러시:</strong> 가장 높은 숫자 비교 → 같으면 직급 비교</li>
+            </ul>
           </section>
 
           <section>
@@ -109,13 +127,13 @@ export function RulesModal({ onClose }: RulesModalProps) {
             <ul>
               <li>사원 3을 가진 플레이어가 선입니다.</li>
               <li>1, 2, 3, 5장만 낼 수 있습니다 (4장 불가).</li>
-              <li>이전 조합보다 높은 같은 장수의 조합을 내야 합니다.</li>
+              <li>이전 조합보다 높은 조합을 내야 합니다.</li>
               <li>패스해도 다음 차례에 다시 낼 수 있습니다.</li>
               <li>
                 마지막 제출자를 제외한 모든 플레이어가 패스하면, 제출자가 새
                 선이 됩니다.
               </li>
-              <li>새 선일 때는 반드시 조합을 내야 합니다.</li>
+              <li>새 선일 때는 원하는 어떤 조합이든 자유롭게 낼 수 있습니다.</li>
             </ul>
           </section>
 

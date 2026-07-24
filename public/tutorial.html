@@ -444,7 +444,6 @@
   <div id="progress-bar"></div>
 
   <header>
-    <img src="/app_icon.jpg" alt="이투시오 로고" style="width:68px;height:68px;border-radius:16px;box-shadow:0 8px 24px rgba(0,0,0,0.4);margin-bottom:14px;object-fit:cover;" />
     <div class="header-badge">📖 입문 튜토리얼</div>
     <h1>이투시오</h1>
     <p>먼저 퇴근할 사람은 누구?<br/>회사 직급 테마의 타일 보드게임을 처음부터 배워보세요.</p>
@@ -793,6 +792,25 @@
           <span class="fr-name" style="color:var(--gold);">스트레이트 플러시</span>
           <span class="fr-desc">같은 직급 + 연속 숫자 🏆</span>
         </div>
+      </div>
+
+      <hr class="divider" style="margin:28px 0;" />
+
+      <h3 style="font-size:1rem;font-weight:700;color:#f1f5f9;margin-bottom:16px;">⚔️ 장수별 제약 &amp; 5장 족보 규칙</h3>
+      <div style="background:rgba(124,106,240,0.06);border:1px solid rgba(124,106,240,0.3);border-radius:12px;padding:18px;margin-bottom:20px;font-size:0.9rem;line-height:1.7;">
+        <p style="margin-bottom:12px;"><strong style="color:#a78bfa;">1️⃣ 싱글(1장) / 페어(2장) / 트리플(3장) 규칙:</strong><br/>싱글일 때는 싱글만, 페어일 때는 페어만, 트리플일 때는 트리플만 낼 수 있습니다. 오직 <strong>같은 장수의 똑같은 조합 타입</strong>으로만 받아쳐야 합니다.</p>
+        <p><strong style="color:#60a5fa;">2️⃣ 5장 조합 (스트레이트 ~ 스트레이트 플러시) 규칙:</strong><br/>5장 조합은 <strong>같은 5장 조합이 아니더라도 더 높은 족보 계급</strong>이라면 얼마든지 올려 낼 수 있습니다!<br/>👉 <em>예: 바닥에 스트레이트가 깔려있을 때 ➔ 더 높은 스트레이트 뿐만 아니라 <strong>플러시, 풀하우스, 포카드, 스트레이트 플러시</strong>를 바로 내서 덮을 수 있습니다.</em></p>
+      </div>
+
+      <h3 style="font-size:1rem;font-weight:700;color:#f1f5f9;margin-bottom:16px;">🔍 같은 조합끼리의 우열 판정 방법</h3>
+      <div style="background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:12px;padding:18px;font-size:0.88rem;line-height:1.7;">
+        <ul style="padding-left:20px;color:#cbd5e1;display:flex;flex-direction:column;gap:10px;">
+          <li><strong style="color:#f1f5f9;">스트레이트 vs 스트레이트:</strong> 구성 타일 중 <strong>가장 높은 숫자</strong>를 가진 스트레이트가 승리! (숫자가 동일하면 가장 높은 숫자의 <strong>직급(부장 &gt; 과장 &gt; 대리 &gt; 사원)</strong> 비교)</li>
+          <li><strong style="color:#f1f5f9;">플러시 vs 플러시:</strong> 5장 중 <strong>가장 높은 숫자부터 차례대로 비교</strong>하여 높은 숫자가 있는 쪽이 승리! (5개 숫자가 모두 같으면 <strong>직급</strong> 비교)</li>
+          <li><strong style="color:#f1f5f9;">풀하우스 vs 풀하우스:</strong> 3장 세트인 <strong>'트리플' 부분의 숫자가 더 높은 풀하우스</strong>가 승리! (함께 낸 2장 페어 숫자는 무관)</li>
+          <li><strong style="color:#f1f5f9;">포카드 vs 포카드:</strong> 4장 세트인 <strong>'포카드' 부분의 숫자가 더 높은 쪽</strong>이 승리!</li>
+          <li><strong style="color:#f1f5f9;">스트레이트 플러시 vs 스트레이트 플러시:</strong> 가장 높은 숫자 비교 ➔ 같으면 직급 비교!</li>
+        </ul>
       </div>
     </div>
   </section>

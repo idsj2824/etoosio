@@ -1,6 +1,6 @@
 import { useCallback, useRef } from "react";
 
-type SoundType = "select" | "play" | "pass" | "win";
+type SoundType = "select" | "play" | "pass" | "win" | "turn";
 
 export function useSound(enabled: boolean) {
   const ctxRef = useRef<AudioContext | null>(null);
@@ -46,6 +46,10 @@ export function useSound(enabled: boolean) {
           break;
         case "pass":
           playTone(220, 0.15, "sawtooth");
+          break;
+        case "turn":
+          playTone(587.33, 0.08, "sine");
+          setTimeout(() => playTone(880, 0.12, "sine"), 80);
           break;
         case "win":
           playTone(523, 0.15, "sine");

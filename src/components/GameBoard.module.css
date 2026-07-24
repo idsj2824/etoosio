@@ -477,3 +477,113 @@
   }
 }
 
+/* ==========================================================================
+   내 차례 알림 시각 효과 (Visual Indicators for Player's Turn)
+   ========================================================================== */
+
+/* 하단 플레이어 영역 (My Turn Glow) */
+.playerSection.myTurnActive {
+  background: rgba(235, 245, 255, 0.98) !important;
+  border-top: 4px solid #3b82f6 !important;
+  box-shadow: 
+    0 -10px 30px rgba(37, 99, 235, 0.45),
+    0 -2px 10px rgba(59, 130, 246, 0.8),
+    inset 0 4px 16px rgba(59, 130, 246, 0.2);
+  animation: borderPulse 1.2s infinite alternate ease-in-out;
+}
+
+@keyframes borderPulse {
+  0% {
+    box-shadow: 
+      0 -6px 20px rgba(37, 99, 235, 0.35),
+      0 -2px 8px rgba(59, 130, 246, 0.6),
+      inset 0 2px 10px rgba(59, 130, 246, 0.15);
+    border-top-color: #3b82f6;
+  }
+  100% {
+    box-shadow: 
+      0 -16px 45px rgba(37, 99, 235, 0.65),
+      0 -4px 16px rgba(59, 130, 246, 0.95),
+      inset 0 6px 22px rgba(59, 130, 246, 0.3);
+    border-top-color: #60a5fa;
+  }
+}
+
+/* 화면 중앙 일시적 배너 (Transient Center Banner) */
+.myTurnBanner {
+  position: fixed;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+  pointer-events: none;
+  animation: bannerSequence 1.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+.myTurnText {
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  color: white;
+  padding: 16px 36px;
+  border-radius: 50px;
+  font-size: 1.6rem;
+  font-weight: 800;
+  box-shadow: 0 10px 25px rgba(37, 99, 235, 0.35), 0 0 0 4px rgba(255, 255, 255, 0.2);
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  letter-spacing: 0.5px;
+}
+
+@keyframes bannerSequence {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -20%) scale(0.85);
+  }
+  15% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.08);
+  }
+  25% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+  80% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -80%) scale(0.9);
+  }
+}
+
+/* 점수판 하이라이트 (Scoreboard highlights) */
+.activeScoreItem {
+  border: 2px solid #3b82f6 !important;
+  background: rgba(59, 130, 246, 0.12) !important;
+  transform: scale(1.04);
+  transition: all 0.2s ease;
+}
+
+.myTurnScoreItem {
+  border: 2px solid #10b981 !important;
+  background: rgba(16, 185, 129, 0.12) !important;
+  animation: scorePulse 1.5s infinite alternate ease-in-out;
+}
+
+@keyframes scorePulse {
+  0% {
+    box-shadow: 0 0 4px rgba(16, 185, 129, 0.25);
+  }
+  100% {
+    box-shadow: 0 0 14px rgba(16, 185, 129, 0.65);
+  }
+}
+
+/* 현재 차례 텍스트 하이라이트 */
+.currentTurn.myTurn strong {
+  color: #10b981;
+  text-shadow: 0 0 8px rgba(16, 185, 129, 0.25);
+}
+
+
