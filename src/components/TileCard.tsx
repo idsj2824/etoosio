@@ -28,7 +28,10 @@ export function TileCard({
         aria-label="뒷면 타일"
       >
         <div className={styles.cardInner}>
-          <span className={styles.backPattern}>이투시오</span>
+          <div className={styles.backBadge}>
+            <span className={styles.backIcon}>🏢</span>
+            <span className={styles.backText}>이투시오</span>
+          </div>
         </div>
       </div>
     );
@@ -49,7 +52,6 @@ export function TileCard({
       className={`${styles.tile} ${rankClass} ${selected ? styles.selected : ""} ${hinted ? styles.hinted : ""} ${compact ? styles.compact : ""} ${className}`}
       {...buttonProps}
     >
-      <div className={styles.cardShine} />
       <div className={styles.cardHeader}>
         <span className={styles.icon}>{RANK_ICONS[tile.rank]}</span>
         <span className={styles.rank}>{RANK_LABELS[tile.rank]}</span>

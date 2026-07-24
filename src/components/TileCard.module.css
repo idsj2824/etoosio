@@ -3,18 +3,17 @@
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  width: 68px;
-  height: 94px;
+  width: 70px;
+  height: 96px;
   border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.7);
+  border: 2px solid rgba(0, 0, 0, 0.1);
   background: #ffffff;
   box-shadow: 
-    0 4px 12px rgba(0, 0, 0, 0.08),
-    0 1px 3px rgba(0, 0, 0, 0.05),
+    0 4px 10px rgba(0, 0, 0, 0.08),
     inset 0 1px 0 rgba(255, 255, 255, 0.9);
   cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
-  padding: 6px 4px 8px;
+  transition: all 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
+  padding: 5px 4px 6px;
   font-family: inherit;
   position: relative;
   overflow: hidden;
@@ -23,27 +22,9 @@
   user-select: none;
 }
 
-.cardShine {
-  position: absolute;
-  top: 0;
-  left: -50%;
-  width: 200%;
-  height: 100%;
-  background: linear-gradient(
-    120deg,
-    transparent 30%,
-    rgba(255, 255, 255, 0.45) 50%,
-    transparent 70%
-  );
-  pointer-events: none;
-  opacity: 0.6;
-}
-
 .tile:hover {
   transform: translateY(-4px) scale(1.04);
-  box-shadow: 
-    0 10px 24px rgba(0, 0, 0, 0.15),
-    0 4px 8px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.14);
 }
 
 .tile:active {
@@ -55,37 +36,41 @@
   outline-offset: 2px;
 }
 
+/* Card Header (Rank Badge) */
 .cardHeader {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 3px;
   width: 100%;
-  justify-content: center;
-  padding: 2px 4px;
-  border-radius: 6px;
-  background: rgba(0, 0, 0, 0.03);
+  padding: 3px 4px;
+  border-radius: 7px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
 }
 
 .icon {
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   line-height: 1;
 }
 
 .rank {
-  font-size: 0.68rem;
-  font-weight: 800;
+  font-size: 0.78rem;
+  font-weight: 900;
   letter-spacing: -0.02em;
+  white-space: nowrap;
 }
 
+/* Card Number */
 .cardNumber {
   display: flex;
   align-items: center;
   justify-content: center;
   flex: 1;
+  width: 100%;
 }
 
 .number {
-  font-size: 1.5rem;
+  font-size: 1.6rem;
   font-weight: 900;
   line-height: 1;
   letter-spacing: -0.03em;
@@ -93,15 +78,16 @@
 
 /* Compact mode */
 .tile.compact {
-  width: 44px;
-  height: 60px;
-  padding: 3px 2px;
+  width: 46px;
+  height: 62px;
+  padding: 3px 2px 4px;
   border-radius: 8px;
 }
 
 .tile.compact .cardHeader {
-  padding: 1px 2px;
+  padding: 2px 2px;
   gap: 2px;
+  border-radius: 5px;
 }
 
 .tile.compact .icon {
@@ -109,11 +95,12 @@
 }
 
 .tile.compact .rank {
-  font-size: 0.55rem;
+  font-size: 0.6rem;
+  font-weight: 900;
 }
 
 .tile.compact .number {
-  font-size: 1.1rem;
+  font-size: 1.15rem;
 }
 
 /* Selected state */
@@ -121,9 +108,8 @@
   transform: translateY(-10px) scale(1.05) !important;
   border-color: #3b82f6 !important;
   box-shadow: 
-    0 12px 28px rgba(37, 99, 235, 0.4),
-    0 0 0 3px #3b82f6,
-    0 0 15px rgba(59, 130, 246, 0.5) !important;
+    0 12px 26px rgba(37, 99, 235, 0.4),
+    0 0 0 3px #3b82f6 !important;
   z-index: 10;
 }
 
@@ -138,99 +124,146 @@
   100% { transform: translateY(-4px); }
 }
 
-/* Card Back */
+/* Casual & Friendly Card Back */
 .tile.faceDown {
-  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%) !important;
-  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  background: linear-gradient(135deg, #4f46e5 0%, #3b82f6 50%, #06b6d4 100%) !important;
+  border: 2px solid #ffffff !important;
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3) !important;
   cursor: default;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 4px;
 }
 
 .tile.faceDown:hover {
   transform: none;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 .cardInner {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 90%;
-  height: 90%;
-  border: 1px dashed rgba(255, 255, 255, 0.2);
+  width: 100%;
+  height: 100%;
+  border: 1.5px dashed rgba(255, 255, 255, 0.4);
   border-radius: 8px;
+  background: rgba(255, 255, 255, 0.1);
 }
 
-.backPattern {
-  color: rgba(255, 255, 255, 0.4);
-  font-size: 0.65rem;
-  font-weight: 800;
-  letter-spacing: 0.08em;
+.backBadge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
 }
 
-/* Rank Themes */
+.backIcon {
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+.backText {
+  color: #ffffff;
+  font-size: 0.62rem;
+  font-weight: 900;
+  letter-spacing: 0.05em;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.tile.compact .backIcon {
+  font-size: 0.85rem;
+}
+
+.tile.compact .backText {
+  font-size: 0.52rem;
+}
+
+/* Rank Themes (High Contrast Rank Badges & Numbers) */
 .employee {
   border-top: 4px solid #2563eb;
-  background: linear-gradient(180deg, #ffffff 0%, #f0f7ff 60%, #e0f2fe 100%);
+  background: linear-gradient(180deg, #ffffff 0%, #eff6ff 100%);
 }
-.employee .cardHeader { background: rgba(37, 99, 235, 0.08); }
-.employee .rank { color: #1d4ed8; }
-.employee .number { color: #1e40af; text-shadow: 0 1px 2px rgba(30, 64, 175, 0.15); }
+.employee .cardHeader {
+  background: #dbeafe;
+}
+.employee .rank {
+  color: #1d4ed8;
+}
+.employee .number {
+  color: #1e40af;
+}
 
 .assistant-manager {
   border-top: 4px solid #059669;
-  background: linear-gradient(180deg, #ffffff 0%, #f0fdf4 60%, #d1fae5 100%);
+  background: linear-gradient(180deg, #ffffff 0%, #ecfdf5 100%);
 }
-.assistant-manager .cardHeader { background: rgba(5, 150, 105, 0.08); }
-.assistant-manager .rank { color: #047857; }
-.assistant-manager .number { color: #065f46; text-shadow: 0 1px 2px rgba(6, 95, 70, 0.15); }
+.assistant-manager .cardHeader {
+  background: #d1fae5;
+}
+.assistant-manager .rank {
+  color: #047857;
+}
+.assistant-manager .number {
+  color: #065f46;
+}
 
 .manager {
   border-top: 4px solid #d97706;
-  background: linear-gradient(180deg, #ffffff 0%, #fffbeb 60%, #fef3c7 100%);
+  background: linear-gradient(180deg, #ffffff 0%, #fffbeb 100%);
 }
-.manager .cardHeader { background: rgba(217, 119, 6, 0.08); }
-.manager .rank { color: #b45309; }
-.manager .number { color: #92400e; text-shadow: 0 1px 2px rgba(146, 64, 14, 0.15); }
+.manager .cardHeader {
+  background: #fef3c7;
+}
+.manager .rank {
+  color: #b45309;
+}
+.manager .number {
+  color: #92400e;
+}
 
 .director {
   border-top: 4px solid #7c3aed;
-  background: linear-gradient(180deg, #ffffff 0%, #faf5ff 60%, #ede9fe 100%);
+  background: linear-gradient(180deg, #ffffff 0%, #faf5ff 100%);
 }
-.director .cardHeader { background: rgba(124, 58, 237, 0.08); }
-.director .rank { color: #6d28d9; }
-.director .number { color: #5b21b6; text-shadow: 0 1px 2px rgba(91, 33, 182, 0.15); }
+.director .cardHeader {
+  background: #ede9fe;
+}
+.director .rank {
+  color: #6d28d9;
+}
+.director .number {
+  color: #5b21b6;
+}
 
 @media (max-width: 640px) {
   .tile {
-    width: 54px;
-    height: 76px;
+    width: 56px;
+    height: 78px;
     border-radius: 10px;
-    padding: 4px 2px 6px;
+    padding: 4px 3px 5px;
   }
 
   .cardHeader {
-    padding: 1px 3px;
+    padding: 2px 3px;
   }
 
   .icon {
-    font-size: 0.8rem;
+    font-size: 0.85rem;
   }
 
   .rank {
-    font-size: 0.6rem;
+    font-size: 0.68rem;
   }
 
   .number {
-    font-size: 1.2rem;
+    font-size: 1.3rem;
   }
 
   .tile.compact {
-    width: 38px;
-    height: 52px;
-    border-radius: 6px;
+    width: 40px;
+    height: 54px;
+    border-radius: 7px;
   }
 
   .tile.compact .icon {
@@ -238,11 +271,11 @@
   }
 
   .tile.compact .rank {
-    font-size: 0.52rem;
+    font-size: 0.55rem;
   }
 
   .tile.compact .number {
-    font-size: 0.95rem;
+    font-size: 1rem;
   }
 
   .tile.selected {
@@ -252,19 +285,19 @@
 
 @media (max-width: 380px) {
   .tile {
-    width: 48px;
-    height: 68px;
+    width: 50px;
+    height: 70px;
   }
 
   .icon {
-    font-size: 0.75rem;
+    font-size: 0.8rem;
   }
 
   .rank {
-    font-size: 0.55rem;
+    font-size: 0.62rem;
   }
 
   .number {
-    font-size: 1.05rem;
+    font-size: 1.15rem;
   }
 }
