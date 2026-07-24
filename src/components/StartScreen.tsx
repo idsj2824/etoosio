@@ -1,21 +1,25 @@
 import { useState } from "react";
 import { GAME_NAME, GAME_SUBTITLE } from "../game/constants";
+import { UserProfileCard } from "./UserProfileCard";
+import type { UserProfile } from "../game/level";
 import styles from "./StartScreen.module.css";
 
 interface StartScreenProps {
   savedGameExists: boolean;
+  userProfile: UserProfile;
   onStart: (playerCount: number) => void;
   onContinue: () => void;
-  onShowRules: () => void;
   onOnlinePlay: () => void;
+  onOpenSaveCodeModal: () => void;
 }
 
 export function StartScreen({
   savedGameExists,
+  userProfile,
   onStart,
   onContinue,
-  onShowRules,
   onOnlinePlay,
+  onOpenSaveCodeModal,
 }: StartScreenProps) {
   const [playerCount, setPlayerCount] = useState(5);
 
@@ -27,6 +31,12 @@ export function StartScreen({
           <h1>{GAME_NAME}</h1>
           <p className={styles.subtitle}>{GAME_SUBTITLE}</p>
         </div>
+
+        {/* 유저 프로필 카드 */}
+        <UserProfileCard
+          profile={userProfile}
+          onOpenSaveCodeModal={onOpenSaveCodeModal}
+        />
 
         <div className={styles.players}>
           <span className={styles.label}>인원 선택</span>
@@ -77,13 +87,6 @@ export function StartScreen({
             disabled={!savedGameExists}
           >
             이어하기
-          </button>
-          <button
-            type="button"
-            className={styles.secondary}
-            onClick={onShowRules}
-          >
-            게임 방법
           </button>
         </div>
       </div>

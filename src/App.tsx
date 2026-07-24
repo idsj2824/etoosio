@@ -8,12 +8,26 @@ import { RoundResultModal } from "./components/RoundResultModal";
 import { FinalResultScreen } from "./components/FinalResultScreen";
 import { LobbyScreen } from "./components/LobbyScreen";
 import { OnlineGameBoard } from "./components/OnlineGameBoard";
+import { SaveCodeModal } from "./components/SaveCodeModal";
+import { LevelUpModal } from "./components/LevelUpModal";
 import { clearSavedGame } from "./game/storage";
 import "./styles.css";
 
 function App() {
-  const { state, dispatch, savedGameExists, continueGame, playStatus } =
-    useGame();
+  const {
+    state,
+    dispatch,
+    savedGameExists,
+    continueGame,
+    playStatus,
+    userProfile,
+    lastExpResult,
+    isSaveCodeModalOpen,
+    setIsSaveCodeModalOpen,
+    handleUpdateProfile,
+    closeLevelUpModal,
+  } = useGame();
+
   const { play } = useSound(state.soundEnabled);
   const [showRules, setShowRules] = useState(false);
   const [showLobby, setShowLobby] = useState(false);
@@ -97,23 +111,34 @@ function App() {
       <>
         <StartScreen
           savedGameExists={savedGameExists}
+          userProfile={userProfile}
           onStart={handleStart}
           onContinue={continueGame}
-          onShowRules={() => setShowRules(true)}
           onOnlinePlay={handleOnlinePlay}
+          onOpenSaveCodeModal={() => setIsSaveCodeModalOpen(true)}
         />
         {showRules && <RulesModal onClose={() => setShowRules(false)} />}
+        <SaveCodeModal
+          isOpen={isSaveCodeModalOpen}
+          onClose={() => setIsSaveCodeModalOpen(false)}
+          profile={userProfile}
+          onLoadProfile={handleUpdateProfile}
+        />
       </>
     );
   }
 
   if (state.phase === "gameEnd") {
     return (
-      <FinalResultScreen
-        state={state}
-        onNewGame={() => handleNewGame()}
-        onMenu={() => dispatch({ type: "GO_TO_MENU" })}
-      />
+      <>
+        <FinalResultScreen
+          state={state}
+          expResult={lastExpResult}
+          onNewGame={() => handleNewGame()}
+          onMenu={() => dispatch({ type: "GO_TO_MENU" })}
+        />
+        <LevelUpModal result={lastExpResult} onClose={closeLevelUpModal} />
+      </>
     );
   }
 
@@ -147,6 +172,13 @@ function App() {
           onMenu={() => dispatch({ type: "GO_TO_MENU" })}
         />
       )}
+      <LevelUpModal result={lastExpResult} onClose={closeLevelUpModal} />
+      <SaveCodeModal
+        isOpen={isSaveCodeModalOpen}
+        onClose={() => setIsSaveCodeModalOpen(false)}
+        profile={userProfile}
+        onLoadProfile={handleUpdateProfile}
+      />
     </>
   );
 }

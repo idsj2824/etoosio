@@ -1,9 +1,8 @@
 import { compareCombinations } from "./comparison";
-import {
-  findAllPlayableCombinations,
-} from "./playableMoves";
+import { findAllPlayableCombinations } from "./playableMoves";
 import { getNumberStrengthValue } from "./combination";
 import type { Combination, GameState, Tile } from "./types";
+import { type AIDifficulty } from "./level";
 
 const STRONG_TYPES = new Set([
   "STRAIGHT_FLUSH",
@@ -16,7 +15,8 @@ const HIGH_NUMBERS = new Set([1, 2]);
 export function chooseComputerMove(
   hand: Tile[],
   currentCombination: Combination | null,
-  gameState: GameState
+  gameState: GameState,
+  aiDifficulty: AIDifficulty = "INTERMEDIATE"
 ): Combination | null {
   const { playerCount } = gameState;
   const allPlayable = findAllPlayableCombinations(
@@ -27,19 +27,32 @@ export function chooseComputerMove(
 
   if (allPlayable.length === 0) return null;
 
+  // BEGINNER 난이도: 서툰 실수 (35% 확률로 낼 수 있어도 패스함)
+  if (aiDifficulty === "BEGINNER" && currentCombination && Math.random() < 0.35) {
+    return null;
+  }
+
   const handCount = hand.length;
   const opponentsLowHand = gameState.players.some(
-    (p) => p.type === "human" && p.hand.length <= 3 && p.hand.length > 0
+    (p) => p.type === "human" && p.hand.length <= 4 && p.hand.length > 0
   ) || gameState.players.some(
-    (p) => p.type === "computer" && p.id !== gameState.players[gameState.currentPlayerIndex].id && p.hand.length <= 3 && p.hand.length > 0
+    (p) =>
+      p.type === "computer" &&
+      p.id !== gameState.players[gameState.currentPlayerIndex].id &&
+      p.hand.length <= 4 &&
+      p.hand.length > 0
   );
 
-  if (handCount <= 2) {
-    return findBestFinishingMove(allPlayable, hand);
+  // ADVANCED 이상에서는 상대방이 4장 이하일 때 무조건 공격적 견제
+  const aggressive = aiDifficulty === "EXPERT" || aiDifficulty === "ADVANCED" ? opponentsLowHand : (handCount <= 4);
+
+  if (handCount <= 2 || aiDifficulty === "EXPERT") {
+    const finishing = findBestFinishingMove(allPlayable, hand);
+    if (finishing) return finishing;
   }
 
   if (!currentCombination) {
-    return chooseLeadMove(hand, allPlayable, handCount, opponentsLowHand);
+    return chooseLeadMove(hand, allPlayable, handCount, aggressive, aiDifficulty);
   }
 
   return chooseResponseMove(
@@ -47,7 +60,8 @@ export function chooseComputerMove(
     allPlayable,
     currentCombination,
     handCount,
-    opponentsLowHand
+    aggressive,
+    aiDifficulty
   );
 }
 
@@ -71,9 +85,16 @@ function chooseLeadMove(
   _hand: Tile[],
   playable: Combination[],
   handCount: number,
-  aggressive: boolean
+  aggressive: boolean,
+  aiDifficulty: AIDifficulty
 ): Combination {
-  if (handCount >= 8 && !aggressive) {
+  // EXPERT 난이도: 가장 카드를 많이 털 수 있는 조합 우선
+  if (aiDifficulty === "EXPERT") {
+    const fiveCard = playable.filter((c) => c.tiles.length === 5);
+    if (fiveCard.length > 0) return findWeakestInList(fiveCard);
+  }
+
+  if (handCount >= 8 && !aggressive && aiDifficulty !== "BEGINNER") {
     const fiveCard = playable.filter((c) => c.tiles.length === 5);
     if (fiveCard.length > 0) {
       const safe = fiveCard.filter((c) => !isStrongCombo(c) && !usesHighCards(c));
@@ -102,11 +123,17 @@ function chooseResponseMove(
   playable: Combination[],
   current: Combination,
   handCount: number,
-  aggressive: boolean
+  aggressive: boolean,
+  aiDifficulty: AIDifficulty
 ): Combination | null {
   const weakest = findWeakestInList(playable);
 
-  if (!aggressive && handCount > 4) {
+  // BEGINNER는 패스하지 않고 아무거나 막 냄
+  if (aiDifficulty === "BEGINNER") {
+    return weakest;
+  }
+
+  if (!aggressive && handCount > 4 && aiDifficulty !== "EXPERT") {
     if (isStrongCombo(weakest) && hasWeakerAlternative(playable, weakest)) {
       const alternatives = playable.filter((c) => !isStrongCombo(c));
       if (alternatives.length > 0) {
@@ -135,7 +162,7 @@ function chooseResponseMove(
     }
   }
 
-  if (!aggressive && handCount > 6 && Math.random() < 0.15) {
+  if (!aggressive && handCount > 6 && Math.random() < 0.15 && aiDifficulty !== "EXPERT") {
     return null;
   }
 

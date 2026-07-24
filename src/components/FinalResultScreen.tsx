@@ -1,14 +1,17 @@
 import type { GameState } from "../game/types";
+import type { ExpGainResult } from "../game/level";
 import styles from "./FinalResultScreen.module.css";
 
 interface FinalResultScreenProps {
   state: GameState;
+  expResult: ExpGainResult | null;
   onNewGame: () => void;
   onMenu: () => void;
 }
 
 export function FinalResultScreen({
   state,
+  expResult,
   onNewGame,
   onMenu,
 }: FinalResultScreenProps) {
@@ -25,6 +28,27 @@ export function FinalResultScreen({
       <div className={styles.card}>
         <h1>최종 결과</h1>
         <p className={styles.subtitle}>5라운드 완료!</p>
+
+        {/* 경험치 획득 안내 카운터 */}
+        {expResult && (
+          <div
+            style={{
+              backgroundColor: "#f0f9ff",
+              border: "1px solid #bae6fd",
+              borderRadius: "12px",
+              padding: "12px 16px",
+              marginBottom: "16px",
+              textAlign: "center",
+            }}
+          >
+            <div style={{ color: "#0369a1", fontWeight: "700", fontSize: "14px", marginBottom: "4px" }}>
+              ✨ 획득 경험치: +{expResult.totalEarnedExp} EXP
+            </div>
+            <div style={{ color: "#0284c7", fontSize: "12px" }}>
+              완주(+{expResult.baseExp}) | 순위 보너스(+{expResult.rankBonusExp})
+            </div>
+          </div>
+        )}
 
         <ol className={styles.rankings}>
           {rankings.map((r, i) => (

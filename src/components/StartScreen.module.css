@@ -37,6 +37,10 @@
   letter-spacing: -0.03em;
 }
 
+.logo {
+  margin-bottom: 24px;
+}
+
 .subtitle {
   margin: 8px 0 0;
   font-size: 1.1rem;

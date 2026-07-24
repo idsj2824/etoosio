@@ -99,6 +99,7 @@ describe('Online Game Full Round Simulation', () => {
       });
 
       socket.on('joinRoom', ({ playerName }) => {
+        if (!roomState) return;
         roomState.players.push({ id: socket.id, name: playerName, hand: [] });
         roomState.cumulativeScores[socket.id] = 0;
         socket.join('TEST_ROOM');
