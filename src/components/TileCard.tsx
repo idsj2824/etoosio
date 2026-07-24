@@ -52,8 +52,11 @@ export function TileCard({
       className={`${styles.tile} ${rankClass} ${selected ? styles.selected : ""} ${hinted ? styles.hinted : ""} ${compact ? styles.compact : ""} ${className}`}
       {...buttonProps}
     >
+      <div className={styles.topCap} />
       <div className={styles.cardHeader}>
-        <span className={styles.icon}>{RANK_ICONS[tile.rank]}</span>
+        <div className={styles.iconBox}>
+          <span className={styles.icon}>{RANK_ICONS[tile.rank]}</span>
+        </div>
         <span className={styles.rank}>{RANK_LABELS[tile.rank]}</span>
       </div>
       <div className={styles.cardNumber}>
