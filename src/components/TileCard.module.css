@@ -31,17 +31,34 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 88%;
+  gap: 4px;
+  width: 92%;
   margin-top: 5px;
-  padding: 3px 6px;
+  padding: 2px 5px;
   border-radius: 20px;
   border: 1px solid rgba(0, 0, 0, 0.06);
 }
 
+.iconBox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
+}
+
+.icon {
+  font-size: 0.75rem;
+  line-height: 1;
+}
+
 .rank {
-  font-size: 0.82rem;
+  font-size: 0.78rem;
   font-weight: 900;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.02em;
   white-space: nowrap;
 }
 
@@ -165,11 +182,21 @@
 
 .tile.compact .cardHeader {
   margin-top: 3px;
-  padding: 2px 3px;
+  padding: 1px 3px;
+  gap: 2px;
+}
+
+.tile.compact .iconBox {
+  width: 13px;
+  height: 13px;
+}
+
+.tile.compact .icon {
+  font-size: 0.6rem;
 }
 
 .tile.compact .rank {
-  font-size: 0.62rem;
+  font-size: 0.58rem;
   font-weight: 900;
 }
 
@@ -237,11 +264,20 @@
 
   .cardHeader {
     margin-top: 3px;
-    padding: 2px 3px;
+    padding: 1px 3px;
+  }
+
+  .iconBox {
+    width: 15px;
+    height: 15px;
+  }
+
+  .icon {
+    font-size: 0.68rem;
   }
 
   .rank {
-    font-size: 0.72rem;
+    font-size: 0.68rem;
   }
 
   .number {
