@@ -3,7 +3,10 @@
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  background: linear-gradient(135deg, #1e3a5f 0%, #2d5a87 50%, #1a365d 100%);
+  background: 
+    radial-gradient(circle at 20% 20%, rgba(186, 230, 253, 0.6) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(221, 214, 254, 0.6) 0%, transparent 50%),
+    linear-gradient(135deg, #e0f2fe 0%, #f0f9ff 50%, #e0e7ff 100%);
   padding: 24px;
 }
 
