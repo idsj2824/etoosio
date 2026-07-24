@@ -1,5 +1,5 @@
 import type { Tile } from "../game/types";
-import { RANK_LABELS, RANK_ICONS } from "../game/constants";
+import { RANK_LABELS } from "../game/constants";
 import styles from "./TileCard.module.css";
 
 interface TileCardProps {
@@ -54,9 +54,6 @@ export function TileCard({
     >
       <div className={styles.topCap} />
       <div className={styles.cardHeader}>
-        <div className={styles.iconBox}>
-          <span className={styles.icon}>{RANK_ICONS[tile.rank]}</span>
-        </div>
         <span className={styles.rank}>{RANK_LABELS[tile.rank]}</span>
       </div>
       <div className={styles.cardNumber}>
