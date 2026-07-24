@@ -16,46 +16,42 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg: #0d0f1a;
-      --surface: #161824;
-      --card: #1e2235;
-      --border: rgba(255,255,255,0.08);
-      --accent: #7c6af0;
-      --accent2: #4fa3f7;
-      --gold: #f5c542;
-      --success: #34d399;
-      --warn: #fb923c;
-      --emp: #3b82f6;
-      --asst: #10b981;
-      --mgr: #f59e0b;
-      --dir: #8b5cf6;
+      --bg: #f0f9ff;
+      --surface: #ffffff;
+      --card: rgba(255, 255, 255, 0.92);
+      --border: rgba(0, 0, 0, 0.08);
+      --accent: #2563eb;
+      --accent2: #0284c7;
+      --gold: #d97706;
+      --success: #059669;
+      --warn: #ea580c;
+      --emp: #2563eb;
+      --asst: #059669;
+      --mgr: #d97706;
+      --dir: #7c3aed;
+      --text-main: #0f172a;
+      --text-sub: #475569;
     }
 
     html { scroll-behavior: smooth; }
 
     body {
       font-family: 'Noto Sans KR', sans-serif;
-      background: var(--bg);
-      color: #e2e8f0;
+      background: 
+        radial-gradient(circle at 20% 15%, rgba(186, 230, 253, 0.55) 0%, transparent 50%),
+        radial-gradient(circle at 85% 80%, rgba(221, 214, 254, 0.55) 0%, transparent 50%),
+        linear-gradient(180deg, #e0f2fe 0%, #f0f9ff 50%, #e0e7ff 100%);
+      color: var(--text-main);
       min-height: 100vh;
       overflow-x: hidden;
-    }
-
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background:
-        radial-gradient(ellipse at 20% 10%, rgba(124,106,240,0.15) 0%, transparent 50%),
-        radial-gradient(ellipse at 80% 80%, rgba(79,163,247,0.12) 0%, transparent 50%);
-      pointer-events: none;
-      z-index: 0;
+      word-break: keep-all;
+      overflow-wrap: break-word;
     }
 
     #progress-bar {
       position: fixed;
       top: 0; left: 0;
-      height: 3px;
+      height: 4px;
       background: linear-gradient(90deg, var(--accent), var(--accent2));
       width: 0%;
       z-index: 1000;
@@ -66,42 +62,37 @@
       position: relative;
       z-index: 10;
       text-align: center;
-      padding: 80px 20px 60px;
-      background: linear-gradient(180deg, rgba(124,106,240,0.08) 0%, transparent 100%);
+      padding: 60px 20px 40px;
     }
 
     .header-badge {
       display: inline-block;
       background: linear-gradient(135deg, var(--accent), var(--accent2));
       color: #fff;
-      font-size: 0.75rem;
+      font-size: 0.8rem;
       font-weight: 700;
-      letter-spacing: 0.1em;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
-      padding: 4px 14px;
+      padding: 5px 16px;
       border-radius: 100px;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
     }
 
     header h1 {
-      font-size: clamp(2.2rem, 6vw, 4rem);
+      font-size: clamp(2.2rem, 6vw, 3.5rem);
       font-weight: 900;
       line-height: 1.15;
-      background: linear-gradient(135deg, #fff 0%, #c4b5fd 50%, var(--accent2) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      margin-bottom: 14px;
+      color: #1e3a8a;
+      margin-bottom: 12px;
+      word-break: keep-all;
     }
 
     header p {
       font-size: 1.1rem;
-      color: #94a3b8;
-      margin-bottom: 36px;
-      max-width: 500px;
-      margin-left: auto;
-      margin-right: auto;
-      line-height: 1.7;
+      color: var(--text-sub);
+      margin-bottom: 24px;
+      word-break: keep-all;
     }
 
     .step-nav {
@@ -109,43 +100,44 @@
       justify-content: center;
       gap: 10px;
       flex-wrap: wrap;
-      padding: 0 16px 40px;
-      position: relative;
-      z-index: 10;
+      padding: 0 20px;
+      margin-bottom: 40px;
     }
 
     .step-dot {
       width: 36px;
       height: 36px;
       border-radius: 50%;
-      border: 2px solid var(--border);
-      background: var(--card);
+      border: 2px solid #cbd5e1;
+      background: #ffffff;
       color: #64748b;
-      font-size: 0.8rem;
-      font-weight: 700;
+      font-weight: 800;
+      font-size: 0.9rem;
       cursor: pointer;
+      transition: all 0.2s ease;
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: all 0.2s;
     }
 
-    .step-dot:hover, .step-dot.active {
-      background: var(--accent);
+    .step-dot.active, .step-dot:hover {
       border-color: var(--accent);
-      color: #fff;
-      transform: scale(1.12);
+      background: var(--accent);
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+    }
+
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 20px 80px;
     }
 
     .section {
-      position: relative;
-      z-index: 5;
-      max-width: 900px;
-      margin: 0 auto 60px;
-      padding: 0 20px;
+      margin-bottom: 40px;
       opacity: 0;
-      transform: translateY(40px);
-      transition: opacity 0.6s ease, transform 0.6s ease;
+      transform: translateY(20px);
+      transition: all 0.4s ease-out;
     }
 
     .section.visible {
@@ -157,7 +149,7 @@
       display: flex;
       align-items: center;
       gap: 12px;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
     }
 
     .step-number {
@@ -168,94 +160,162 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1rem;
+      font-size: 1.1rem;
       font-weight: 900;
       color: #fff;
       flex-shrink: 0;
-      box-shadow: 0 4px 16px rgba(124,106,240,0.4);
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.25);
     }
 
-    .section-title { font-size: 1.65rem; font-weight: 800; color: #f1f5f9; }
-    .section-subtitle { font-size: 0.9rem; color: #64748b; margin-top: 2px; }
+    .section-title { font-size: 1.5rem; font-weight: 800; color: #0f172a; word-break: keep-all; }
+    .section-subtitle { font-size: 0.9rem; color: #475569; margin-top: 2px; word-break: keep-all; }
 
     .glass {
       background: var(--card);
-      border: 1px solid var(--border);
+      border: 1px solid rgba(255, 255, 255, 0.9);
       border-radius: 20px;
       padding: 32px;
-      backdrop-filter: blur(20px);
-      box-shadow: 0 8px 40px rgba(0,0,0,0.4);
+      backdrop-filter: blur(16px);
+      box-shadow: 0 8px 32px rgba(37, 99, 235, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04);
+      word-break: keep-all;
     }
 
-    /* ─── Tiles ─── */
+    /* ─── Tiles (Matched with In-Game TileCard UI) ─── */
     .tile {
       display: inline-flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
       width: 68px;
-      height: 90px;
-      border-radius: 10px;
-      border: 2px solid rgba(0,0,0,0.15);
-      background: linear-gradient(145deg, #fff, #f0f0f0);
-      box-shadow: 0 3px 8px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.8);
+      height: 92px;
+      border-radius: 12px;
+      border: 1px solid rgba(0,0,0,0.08);
+      background: #ffffff;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
       transition: transform 0.2s, box-shadow 0.2s;
       cursor: pointer;
       user-select: none;
       vertical-align: top;
       flex-shrink: 0;
+      overflow: hidden;
+      padding: 0 4px 6px;
     }
 
-    .tile:hover { transform: translateY(-6px) scale(1.05); box-shadow: 0 12px 24px rgba(0,0,0,0.3); }
-    .tile.selected { transform: translateY(-10px) scale(1.04); border-color: #2563eb; box-shadow: 0 8px 20px rgba(37,99,235,0.5), 0 0 0 2px #2563eb; }
-    .tile .t-icon { font-size: 1rem; line-height: 1; margin-bottom: 2px; }
-    .tile .t-rank { font-size: 0.7rem; font-weight: 700; }
-    .tile .t-num  { font-size: 1.3rem; font-weight: 900; line-height: 1.1; }
-    .tile.emp  { border-left: 4px solid var(--emp);  background: linear-gradient(145deg, #eff6ff, #dbeafe); }
-    .tile.emp  .t-rank { color: #1d4ed8; } .tile.emp  .t-num { color: #1e40af; }
-    .tile.asst { border-left: 4px solid var(--asst); background: linear-gradient(145deg, #ecfdf5, #d1fae5); }
-    .tile.asst .t-rank { color: #047857; } .tile.asst .t-num { color: #065f46; }
-    .tile.mgr  { border-left: 4px solid var(--mgr);  background: linear-gradient(145deg, #fffbeb, #fef3c7); }
-    .tile.mgr  .t-rank { color: #b45309; } .tile.mgr  .t-num { color: #92400e; }
-    .tile.dir  { border-left: 4px solid var(--dir);  background: linear-gradient(145deg, #f5f3ff, #ede9fe); }
-    .tile.dir  .t-rank { color: #6d28d9; } .tile.dir  .t-num { color: #5b21b6; }
-    .tile.back {
-      background: linear-gradient(145deg, #1e3a5f, #0f2744);
-      border-color: #2d4a6f; cursor: default;
+    .tile .top-cap {
+      width: 100%;
+      height: 6px;
+      border-radius: 12px 12px 0 0;
     }
-    .tile.back:hover { transform: none; box-shadow: 0 3px 8px rgba(0,0,0,0.25); }
-    .tile.back .back-text { color: rgba(255,255,255,0.25); font-size: 0.55rem; font-weight: 700; transform: rotate(-15deg); letter-spacing: 0.05em; }
+
+    .tile .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      width: 92%;
+      margin-top: 4px;
+      padding: 2px 4px;
+      border-radius: 20px;
+      border: 1px solid rgba(0,0,0,0.06);
+    }
+
+    .tile .icon-box {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 16px;
+      height: 16px;
+      border-radius: 4px;
+      background: rgba(255,255,255,0.95);
+      box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    }
+
+    .tile .t-icon { font-size: 0.75rem; line-height: 1; }
+    .tile .t-rank { font-size: 0.75rem; font-weight: 900; letter-spacing: -0.02em; }
+    .tile .t-num  { font-size: 1.5rem; font-weight: 900; line-height: 1; margin-top: auto; margin-bottom: auto; }
+
+    .tile.emp  .top-cap { background: linear-gradient(90deg, #2563eb, #3b82f6); }
+    .tile.emp  .card-header { background: #eff6ff; border-color: #bfdbfe; }
+    .tile.emp  .t-rank { color: #1d4ed8; }
+    .tile.emp  .t-num  { color: #1e40af; }
+
+    .tile.asst .top-cap { background: linear-gradient(90deg, #059669, #10b981); }
+    .tile.asst .card-header { background: #ecfdf5; border-color: #a7f3d0; }
+    .tile.asst .t-rank { color: #047857; }
+    .tile.asst .t-num  { color: #065f46; }
+
+    .tile.mgr  .top-cap { background: linear-gradient(90deg, #d97706, #f59e0b); }
+    .tile.mgr  .card-header { background: #fffbeb; border-color: #fde68a; }
+    .tile.mgr  .t-rank { color: #b45309; }
+    .tile.mgr  .t-num  { color: #92400e; }
+
+    .tile.dir  .top-cap { background: linear-gradient(90deg, #7c3aed, #8b5cf6); }
+    .tile.dir  .card-header { background: #faf5ff; border-color: #ddd6fe; }
+    .tile.dir  .t-rank { color: #6d28d9; }
+    .tile.dir  .t-num  { color: #5b21b6; }
+
+    .tile.back {
+      background: linear-gradient(135deg, #4f46e5 0%, #3b82f6 50%, #06b6d4 100%);
+      border: 2px solid #ffffff;
+      box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+      cursor: default;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px;
+    }
+    .tile.back:hover { transform: none; }
 
     /* small tiles */
     .tile-sm {
       display: inline-flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      width: 50px; height: 66px;
-      border-radius: 8px;
-      border: 2px solid rgba(0,0,0,0.12);
-      font-size: 0.85em;
+      width: 48px;
+      height: 64px;
+      border-radius: 10px;
+      border: 1px solid rgba(0,0,0,0.08);
+      background: #ffffff;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.06);
       transition: transform 0.15s;
       flex-shrink: 0;
+      overflow: hidden;
+      padding: 0 2px 4px;
     }
     .tile-sm:hover { transform: translateY(-4px); }
-    .tile-sm .t-icon { font-size: 0.82rem; margin-bottom: 1px; }
-    .tile-sm .t-rank { font-size: 0.58rem; font-weight: 700; }
-    .tile-sm .t-num  { font-size: 1.05rem; font-weight: 900; }
-    .tile-sm.emp  { border-left: 3px solid var(--emp);  background: linear-gradient(145deg, #eff6ff, #dbeafe); }
-    .tile-sm.emp  .t-rank { color: #1d4ed8; } .tile-sm.emp  .t-num { color: #1e40af; }
-    .tile-sm.asst { border-left: 3px solid var(--asst); background: linear-gradient(145deg, #ecfdf5, #d1fae5); }
-    .tile-sm.asst .t-rank { color: #047857; } .tile-sm.asst .t-num { color: #065f46; }
-    .tile-sm.mgr  { border-left: 3px solid var(--mgr);  background: linear-gradient(145deg, #fffbeb, #fef3c7); }
-    .tile-sm.mgr  .t-rank { color: #b45309; } .tile-sm.mgr  .t-num { color: #92400e; }
-    .tile-sm.dir  { border-left: 3px solid var(--dir);  background: linear-gradient(145deg, #f5f3ff, #ede9fe); }
-    .tile-sm.dir  .t-rank { color: #6d28d9; } .tile-sm.dir  .t-num { color: #5b21b6; }
+    .tile-sm .top-cap { width: 100%; height: 4px; border-radius: 10px 10px 0 0; }
+    .tile-sm .card-header {
+      display: flex; align-items: center; justify-content: center; gap: 2px;
+      width: 90%; margin-top: 3px; padding: 1px 2px; border-radius: 12px;
+      border: 1px solid rgba(0,0,0,0.06);
+    }
+    .tile-sm .icon-box {
+      display: flex; align-items: center; justify-content: center;
+      width: 13px; height: 13px; border-radius: 3px; background: rgba(255,255,255,0.95);
+    }
+    .tile-sm .t-icon { font-size: 0.6rem; line-height: 1; }
+    .tile-sm .t-rank { font-size: 0.58rem; font-weight: 900; }
+    .tile-sm .t-num  { font-size: 1.15rem; font-weight: 900; margin-top: auto; margin-bottom: auto; }
+
+    .tile-sm.emp  .top-cap { background: linear-gradient(90deg, #2563eb, #3b82f6); }
+    .tile-sm.emp  .card-header { background: #eff6ff; border-color: #bfdbfe; }
+    .tile-sm.emp  .t-rank { color: #1d4ed8; } .tile-sm.emp  .t-num  { color: #1e40af; }
+
+    .tile-sm.asst .top-cap { background: linear-gradient(90deg, #059669, #10b981); }
+    .tile-sm.asst .card-header { background: #ecfdf5; border-color: #a7f3d0; }
+    .tile-sm.asst .t-rank { color: #047857; } .tile-sm.asst .t-num  { color: #065f46; }
+
+    .tile-sm.mgr  .top-cap { background: linear-gradient(90deg, #d97706, #f59e0b); }
+    .tile-sm.mgr  .card-header { background: #fffbeb; border-color: #fde68a; }
+    .tile-sm.mgr  .t-rank { color: #b45309; } .tile-sm.mgr  .t-num  { color: #92400e; }
+
+    .tile-sm.dir  .top-cap { background: linear-gradient(90deg, #7c3aed, #8b5cf6); }
+    .tile-sm.dir  .card-header { background: #faf5ff; border-color: #ddd6fe; }
+    .tile-sm.dir  .t-rank { color: #6d28d9; } .tile-sm.dir  .t-num  { color: #5b21b6; }
 
     /* rank cards */
     .rank-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 16px; }
-    .rank-card { border-radius: 14px; padding: 18px 20px; border: 1px solid transparent; transition: transform 0.2s, box-shadow 0.2s; }
-    .rank-card:hover { transform: translateY(-4px); box-shadow: 0 12px 30px rgba(0,0,0,0.3); }
+    .rank-card { border-radius: 14px; padding: 18px 20px; border: 1px solid transparent; transition: transform 0.2s, box-shadow 0.2s; word-break: keep-all; }
+    .rank-card:hover { transform: translateY(-4px); box-shadow: 0 12px 30px rgba(0,0,0,0.08); }
     .rank-card.emp  { background: linear-gradient(135deg, #eff6ff, #dbeafe); border-color: #bfdbfe; }
     .rank-card.asst { background: linear-gradient(135deg, #ecfdf5, #d1fae5); border-color: #a7f3d0; }
     .rank-card.mgr  { background: linear-gradient(135deg, #fffbeb, #fef3c7); border-color: #fde68a; }
@@ -272,172 +332,80 @@
     /* strength bar */
     .strength-bar {
       display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
-      padding: 20px; background: rgba(255,255,255,0.03);
-      border-radius: 14px; border: 1px solid var(--border); margin-top: 16px;
+      padding: 16px; background: rgba(255,255,255,0.7);
+      border-radius: 14px; border: 1px solid rgba(0,0,0,0.06); margin-top: 16px;
     }
     .sn {
       display: inline-flex; align-items: center; justify-content: center;
       width: 36px; height: 36px; border-radius: 8px;
-      background: linear-gradient(135deg, #334155, #1e293b);
-      font-weight: 800; font-size: 0.85rem; color: #94a3b8;
-      border: 1px solid rgba(255,255,255,0.06); transition: transform 0.15s;
+      background: #ffffff;
+      font-weight: 800; font-size: 0.85rem; color: #334155;
+      border: 1px solid #cbd5e1; transition: transform 0.15s;
     }
-    .sn:hover { transform: scale(1.2); }
-    .sn.strong { color: var(--accent2); border-color: rgba(79,163,247,0.3); }
-    .sn.strongest { color: var(--gold); border-color: rgba(245,197,66,0.4); background: linear-gradient(135deg, #2d1f00, #3d2c00); }
-    .arrow { color: #4b5563; font-size: 0.7rem; }
+    .sn:hover { transform: scale(1.15); }
+    .sn.strong { color: #2563eb; border-color: #93c5fd; background: #eff6ff; }
+    .sn.strongest { color: #d97706; border-color: #fde68a; background: #fffbeb; }
+    .arrow { color: #94a3b8; font-size: 0.75rem; }
 
     /* combo grid */
     .combo-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
     .combo-card {
-      background: rgba(255,255,255,0.03);
-      border: 1px solid var(--border);
+      background: #ffffff;
+      border: 1px solid rgba(0,0,0,0.08);
       border-radius: 16px; padding: 20px;
-      transition: all 0.25s; cursor: default;
+      transition: all 0.2s; cursor: default;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+      word-break: keep-all;
     }
     .combo-card:hover {
-      background: rgba(124,106,240,0.08);
-      border-color: rgba(124,106,240,0.3);
-      transform: translateY(-4px);
-      box-shadow: 0 12px 32px rgba(124,106,240,0.15);
+      box-shadow: 0 8px 24px rgba(37, 99, 235, 0.1);
+      border-color: #bfdbfe;
     }
-    .combo-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
-    .combo-name { font-size: 1.05rem; font-weight: 800; color: #f1f5f9; }
-    .combo-rank-badge {
-      font-size: 0.7rem; font-weight: 700; padding: 2px 8px; border-radius: 100px;
-      background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #fff;
-    }
-    .combo-desc { font-size: 0.82rem; color: #94a3b8; margin-bottom: 14px; }
+    .combo-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+    .combo-name { font-size: 1.05rem; font-weight: 800; color: #0f172a; }
+    .combo-rank-badge { font-size: 0.72rem; font-weight: 700; background: #e0f2fe; color: #0284c7; padding: 2px 10px; border-radius: 100px; }
+    .combo-desc { font-size: 0.8rem; color: #64748b; margin-bottom: 14px; }
     .tiles-row { display: flex; gap: 6px; flex-wrap: wrap; }
 
-    /* 5-card rank */
+    /* five rank list */
     .five-rank { display: flex; flex-direction: column; gap: 10px; }
     .five-rank-row {
-      display: flex; align-items: center; gap: 14px; padding: 12px 18px;
-      border-radius: 12px; border: 1px solid var(--border);
-      background: rgba(255,255,255,0.02); transition: background 0.2s;
+      display: flex; align-items: center; gap: 14px;
+      padding: 12px 18px; background: #ffffff;
+      border: 1px solid rgba(0,0,0,0.08); border-radius: 12px;
+      word-break: keep-all;
     }
-    .five-rank-row:hover { background: rgba(255,255,255,0.05); }
-    .five-rank-row .fr-num  { font-size: 1.3rem; font-weight: 900; color: var(--accent); min-width: 28px; }
-    .five-rank-row .fr-name { font-size: 1rem; font-weight: 700; color: #f1f5f9; min-width: 130px; }
-    .five-rank-row .fr-desc { font-size: 0.82rem; color: #64748b; }
+    .fr-num { font-size: 0.82rem; font-weight: 800; color: #64748b; width: 32px; flex-shrink: 0; }
+    .fr-name { font-size: 0.95rem; font-weight: 800; color: #0f172a; width: 140px; flex-shrink: 0; }
+    .fr-desc { font-size: 0.8rem; color: #64748b; }
 
-    /* flow */
-    .flow { display: flex; flex-direction: column; gap: 0; }
+    /* flow timeline */
+    .flow { display: flex; flex-direction: column; }
     .flow-step { display: flex; gap: 16px; }
-    .flow-left { display: flex; flex-direction: column; align-items: center; width: 40px; flex-shrink: 0; }
-    .flow-dot { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0; }
-    .flow-line { width: 2px; flex: 1; min-height: 20px; background: linear-gradient(180deg, var(--accent), transparent); margin: 4px auto; }
-    .flow-content { padding-bottom: 28px; flex: 1; }
-    .flow-content h4 { font-size: 1rem; font-weight: 700; color: #f1f5f9; margin-bottom: 4px; }
-    .flow-content p  { font-size: 0.85rem; color: #94a3b8; line-height: 1.6; }
-
-    /* rule box */
-    .rule-box {
-      display: flex; align-items: flex-start; gap: 14px;
-      padding: 16px 18px; border-radius: 12px;
-      background: rgba(255,255,255,0.03); border: 1px solid var(--border); margin-bottom: 10px;
-      transition: background 0.2s;
+    .flow-left { display: flex; flex-direction: column; align-items: center; }
+    .flow-dot {
+      width: 44px; height: 44px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem; flex-shrink: 0;
     }
-    .rule-box:hover { background: rgba(255,255,255,0.06); }
-    .rule-box .rb-icon { font-size: 1.4rem; flex-shrink: 0; margin-top: 2px; }
-    .rule-box h4 { font-size: 0.95rem; font-weight: 700; color: #f1f5f9; margin-bottom: 4px; }
-    .rule-box p  { font-size: 0.82rem; color: #94a3b8; line-height: 1.6; }
-    .rule-box.highlight { border-color: rgba(124,106,240,0.3); background: rgba(124,106,240,0.06); }
+    .flow-line { width: 2px; flex: 1; background: #cbd5e1; margin: 4px 0; }
+    .flow-step:last-child .flow-line { display: none; }
+    .flow-content { padding-bottom: 28px; word-break: keep-all; }
+    .flow-content h4 { font-size: 1.05rem; font-weight: 800; color: #0f172a; margin-bottom: 6px; }
+    .flow-content p { font-size: 0.85rem; color: #475569; line-height: 1.6; }
 
-    /* score */
-    .score-example { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; margin-top: 16px; }
-    .player-score-card {
-      flex: 1; min-width: 140px; max-width: 190px;
-      background: rgba(255,255,255,0.03); border: 1px solid var(--border);
-      border-radius: 14px; padding: 16px; text-align: center; transition: transform 0.2s;
-    }
-    .player-score-card:hover { transform: translateY(-4px); }
-    .player-score-card .ps-name { font-size: 0.85rem; font-weight: 700; color: #94a3b8; margin-bottom: 8px; }
-    .player-score-card .ps-tiles { display: flex; justify-content: center; flex-wrap: wrap; gap: 4px; margin-bottom: 10px; min-height: 32px; align-items: center; }
-    .tile-dot { width: 16px; height: 22px; border-radius: 3px; border: 1.5px solid rgba(0,0,0,0.1); }
-    .tile-dot.emp  { background: linear-gradient(145deg, #eff6ff, #dbeafe); border-color: var(--emp); }
-    .tile-dot.asst { background: linear-gradient(145deg, #ecfdf5, #d1fae5); border-color: var(--asst); }
-    .tile-dot.mgr  { background: linear-gradient(145deg, #fffbeb, #fef3c7); border-color: var(--mgr); }
-    .tile-dot.dir  { background: linear-gradient(145deg, #f5f3ff, #ede9fe); border-color: var(--dir); }
-    .player-score-card .ps-score { font-size: 1.5rem; font-weight: 900; }
-    .player-score-card .ps-label { font-size: 0.72rem; color: #64748b; }
-    .player-score-card.winner { border-color: var(--gold); background: rgba(245,197,66,0.06); }
-    .player-score-card.winner .ps-score { color: var(--gold); }
-    .player-score-card.loser  .ps-score { color: #ef4444; }
-
-    /* compare */
-    .compare-box {
-      display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
-      justify-content: center; padding: 20px;
-      background: rgba(255,255,255,0.02); border-radius: 14px;
-      border: 1px solid var(--border); margin-top: 12px;
-    }
-    .vs-label { font-size: 1rem; font-weight: 900; color: var(--warn); padding: 6px 12px; background: rgba(251,146,60,0.1); border-radius: 8px; }
-    .win-label { font-size: 0.75rem; font-weight: 700; color: var(--success); padding: 3px 8px; background: rgba(52,211,153,0.1); border-radius: 6px; }
-
-    /* tips */
-    .tips-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; }
-    .tip-card { background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 14px; padding: 20px; transition: all 0.25s; }
-    .tip-card:hover { background: rgba(255,255,255,0.05); transform: translateY(-3px); }
-    .tip-card .tip-icon { font-size: 1.8rem; margin-bottom: 10px; }
-    .tip-card h4 { font-size: 0.95rem; font-weight: 700; color: #f1f5f9; margin-bottom: 6px; }
-    .tip-card p  { font-size: 0.8rem; color: #94a3b8; line-height: 1.65; }
-
-    /* demo */
-    .demo-hand { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-top: 20px; }
-    .demo-info { text-align: center; margin-top: 16px; min-height: 40px; }
-    .combo-tag {
-      display: inline-block;
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      color: #fff; padding: 6px 16px; border-radius: 8px;
-      font-weight: 700; font-size: 0.9rem;
-      animation: popIn 0.3s cubic-bezier(0.34,1.56,0.64,1);
-    }
-    @keyframes popIn { from { transform: scale(0.6); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-    .hint-text { font-size: 0.82rem; color: #64748b; }
-    .demo-btn {
-      margin-top: 12px; display: inline-block;
-      padding: 8px 20px; border-radius: 8px;
-      border: 1px solid rgba(124,106,240,0.4);
-      background: rgba(124,106,240,0.08); color: #c4b5fd;
-      font-size: 0.85rem; font-weight: 700; cursor: pointer; transition: all 0.2s;
-    }
-    .demo-btn:hover { background: rgba(124,106,240,0.2); transform: translateY(-2px); }
-
-    /* cta */
-    .cta-section { text-align: center; padding: 60px 20px 80px; position: relative; z-index: 5; }
-    .cta-box {
-      display: inline-block; max-width: 520px; width: 100%;
-      background: linear-gradient(135deg, rgba(124,106,240,0.15), rgba(79,163,247,0.1));
-      border: 1px solid rgba(124,106,240,0.3); border-radius: 24px; padding: 48px 40px;
-    }
-    .cta-box h2 { font-size: 1.8rem; font-weight: 900; color: #f1f5f9; margin-bottom: 10px; }
-    .cta-box p  { font-size: 0.95rem; color: #94a3b8; margin-bottom: 28px; line-height: 1.7; }
-    .btn-primary {
-      display: inline-block; padding: 14px 36px;
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      color: #fff; font-size: 1rem; font-weight: 800;
-      border-radius: 12px; text-decoration: none; border: none; cursor: pointer;
-      box-shadow: 0 6px 24px rgba(124,106,240,0.4); transition: transform 0.2s, box-shadow 0.2s;
-    }
-    .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 12px 36px rgba(124,106,240,0.55); }
-
-    .divider { border: none; border-top: 1px solid var(--border); margin: 0 0; }
     .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-
-    @media (max-width: 600px) {
-      header { padding: 60px 16px 40px; }
-      .glass { padding: 22px; }
-      .combo-grid, .two-col { grid-template-columns: 1fr; }
-      .rank-grid { grid-template-columns: 1fr 1fr; }
-      .tile { width: 52px; height: 70px; }
-      .tile .t-num { font-size: 1.1rem; }
+    @media (max-width: 600px) { .two-col { grid-template-columns: 1fr; } }
+    .rule-box {
+      display: flex; gap: 14px; padding: 18px;
+      background: #ffffff; border: 1px solid rgba(0,0,0,0.08);
+      border-radius: 14px; word-break: keep-all;
     }
+    .rb-icon { font-size: 1.6rem; flex-shrink: 0; }
+    .rule-box h4 { font-size: 0.95rem; font-weight: 800; color: #0f172a; margin-bottom: 4px; }
+    .rule-box p { font-size: 0.8rem; color: #64748b; line-height: 1.5; }
 
-    ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { background: var(--bg); }
-    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
+    .divider { border: none; height: 1px; background: rgba(0,0,0,0.08); margin: 36px 0; }
   </style>
 </head>
 <body>
@@ -456,746 +424,357 @@
     <button class="step-dot" onclick="scrollToSection(3)" id="dot-3" aria-label="4단계: 조합 종류">4</button>
     <button class="step-dot" onclick="scrollToSection(4)" id="dot-4" aria-label="5단계: 게임 진행">5</button>
     <button class="step-dot" onclick="scrollToSection(5)" id="dot-5" aria-label="6단계: 점수 계산">6</button>
-    <button class="step-dot" onclick="scrollToSection(6)" id="dot-6" aria-label="7단계: 직접 해보기">7</button>
   </nav>
 
-  <!-- STEP 1 -->
-  <section class="section" id="sec-0" data-index="0">
-    <div class="section-label">
-      <div class="step-number">1</div>
-      <div>
-        <div class="section-title">🎯 게임 목표</div>
-        <div class="section-subtitle">이투시오가 뭔지 한눈에 파악하기</div>
-      </div>
-    </div>
-    <div class="glass">
-      <div class="two-col">
-        <div class="rule-box highlight" style="flex-direction:column;gap:8px;">
-          <div class="rb-icon">🏆</div>
-          <h4>라운드 목표</h4>
-          <p>손에 든 타일을 <strong style="color:#f1f5f9">모두 먼저 내면</strong> 그 라운드에서 <strong style="color:var(--gold)">"퇴근"</strong> 성공!</p>
-        </div>
-        <div class="rule-box" style="flex-direction:column;gap:8px;">
-          <div class="rb-icon">📊</div>
-          <h4>최종 목표</h4>
-          <p><strong style="color:#f1f5f9">5라운드</strong> 동안 누적 점수를 쌓아 가장 높은 점수를 얻은 플레이어가 최종 승리!</p>
-        </div>
-        <div class="rule-box" style="flex-direction:column;gap:8px;">
-          <div class="rb-icon">👥</div>
-          <h4>인원</h4>
-          <p><strong style="color:#f1f5f9">3~5명</strong> 플레이. 인원에 따라 사용하는 숫자 범위가 달라집니다.</p>
-        </div>
-        <div class="rule-box" style="flex-direction:column;gap:8px;">
-          <div class="rb-icon">🃏</div>
-          <h4>핵심 방식</h4>
-          <p>차례마다 타일을 선택해 <strong style="color:#f1f5f9">이전보다 강한 조합</strong>을 내거나 패스합니다.</p>
+  <main class="container">
+    <!-- STEP 1 -->
+    <section class="section visible" id="sec-0" data-index="0">
+      <div class="section-label">
+        <div class="step-number">1</div>
+        <div>
+          <div class="section-title">🎯 게임 목표</div>
+          <div class="section-subtitle">어떻게 승리하나요?</div>
         </div>
       </div>
-      <div style="margin-top:24px;padding:18px;background:rgba(245,197,66,0.06);border:1px solid rgba(245,197,66,0.2);border-radius:12px;text-align:center;">
-        <p style="font-size:0.85rem;color:#94a3b8;">한마디로 요약하면...</p>
-        <p style="font-size:1.1rem;font-weight:800;color:var(--gold);margin-top:6px;">"더 강한 패를 내 상대를 이겨라, 먼저 손패를 털면 퇴근!"</p>
+      <div class="glass">
+        <p style="font-size:1.05rem;line-height:1.7;color:#334155;margin-bottom:20px;">
+          이투시오는 <strong style="color:#2563eb">자신의 손패에 있는 타일을 가장 먼저 모두 털어내는 플레이어가 그 라운드에서 승리하는 게임</strong>입니다.
+        </p>
+        <p style="font-size:0.9rem;line-height:1.6;color:#64748b;margin-bottom:20px;">
+          게임은 총 <strong style="color:#0f172a">5라운드</strong> 동안 진행되며, 라운드가 끝날 때마다 남은 타일 수에 따라 점수를 얻거나 잃습니다. 5라운드가 끝난 후 누적 점수가 가장 높은 사람이 최종 우승!
+        </p>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- STEP 2 -->
-  <section class="section" id="sec-1" data-index="1">
-    <div class="section-label">
-      <div class="step-number">2</div>
-      <div>
-        <div class="section-title">🃏 타일 구성</div>
-        <div class="section-subtitle">타일에는 숫자와 직급이 있어요</div>
-      </div>
-    </div>
-    <div class="glass">
-      <p style="color:#94a3b8;margin-bottom:24px;">각 타일에는 <strong style="color:#f1f5f9">숫자</strong>와 <strong style="color:#f1f5f9">직급</strong> 두 가지 속성이 있습니다. 직급마다 색상이 달라서 쉽게 구별할 수 있어요!</p>
-
-      <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-bottom:28px;">
-        <div class="tile emp"><span class="t-icon">▣</span><span class="t-rank">사원</span><span class="t-num">5</span></div>
-        <div class="tile asst"><span class="t-icon">💼</span><span class="t-rank">대리</span><span class="t-num">5</span></div>
-        <div class="tile mgr"><span class="t-icon">📊</span><span class="t-rank">과장</span><span class="t-num">5</span></div>
-        <div class="tile dir"><span class="t-icon">👔</span><span class="t-rank">부장</span><span class="t-num">5</span></div>
-        <div style="display:flex;align-items:center;color:#4b5563;font-size:1.4rem;padding:0 4px;">|</div>
-        <div class="tile back"><span class="back-text">이투시오</span></div>
-      </div>
-      <p style="font-size:0.8rem;color:#64748b;text-align:center;margin-bottom:24px;">같은 숫자 5라도 직급이 다르면 강도가 다릅니다 | 뒷면은 상대에게 안 보여요</p>
-
-      <hr class="divider" style="margin:0 0 24px;" />
-
-      <h3 style="font-size:1rem;font-weight:700;color:#f1f5f9;margin-bottom:16px;">📋 4가지 직급</h3>
-      <div class="rank-grid">
-        <div class="rank-card emp">
-          <div class="rc-icon">▣</div>
-          <div class="rc-name">사원</div>
-          <div class="rc-strength">★☆☆☆ 가장 약함</div>
-          <div class="rc-desc">파란색 테두리. 같은 숫자면 직급이 낮아 가장 약합니다.</div>
-        </div>
-        <div class="rank-card asst">
-          <div class="rc-icon">💼</div>
-          <div class="rc-name">대리</div>
-          <div class="rc-strength">★★☆☆ 보통</div>
-          <div class="rc-desc">초록색 테두리. 사원보다 강하고 과장보다 약합니다.</div>
-        </div>
-        <div class="rank-card mgr">
-          <div class="rc-icon">📊</div>
-          <div class="rc-name">과장</div>
-          <div class="rc-strength">★★★☆ 강함</div>
-          <div class="rc-desc">노란색 테두리. 대리보다 강하고 부장보다 약합니다.</div>
-        </div>
-        <div class="rank-card dir">
-          <div class="rc-icon">👔</div>
-          <div class="rc-name">부장</div>
-          <div class="rc-strength">★★★★ 최강</div>
-          <div class="rc-desc">보라색 테두리. 같은 숫자라면 언제나 가장 강합니다.</div>
+    <!-- STEP 2 -->
+    <section class="section" id="sec-1" data-index="1">
+      <div class="section-label">
+        <div class="step-number">2</div>
+        <div>
+          <div class="section-title">🃏 타일 구성</div>
+          <div class="section-subtitle">타일에는 숫자와 직급이 있어요</div>
         </div>
       </div>
-    </div>
-  </section>
+      <div class="glass">
+        <p style="color:#475569;margin-bottom:24px;">각 타일에는 <strong style="color:#0f172a">숫자</strong>와 <strong style="color:#0f172a">직급</strong> 두 가지 속성이 있습니다. 직급마다 색상이 달라서 쉽게 구별할 수 있어요!</p>
 
-  <!-- STEP 3 -->
-  <section class="section" id="sec-2" data-index="2">
-    <div class="section-label">
-      <div class="step-number">3</div>
-      <div>
-        <div class="section-title">⚡ 강도 체계</div>
-        <div class="section-subtitle">어떤 타일이 더 강한지 알아보기</div>
-      </div>
-    </div>
-    <div class="glass">
-      <h3 style="font-size:1rem;font-weight:700;color:#f1f5f9;margin-bottom:8px;">1️⃣ 숫자 강도 (낮음 → 높음)</h3>
-      <p style="font-size:0.85rem;color:#64748b;margin-bottom:4px;">3이 가장 약하고 2가 가장 강합니다. 1과 2가 맨 끝에 위치하는 게 특징!</p>
-      <div class="strength-bar">
-        <span class="sn">3</span><span class="arrow">›</span>
-        <span class="sn">4</span><span class="arrow">›</span>
-        <span class="sn">5</span><span class="arrow">›</span>
-        <span class="sn">6</span><span class="arrow">›</span>
-        <span class="sn">7</span><span class="arrow">›</span>
-        <span class="sn">8</span><span class="arrow">›</span>
-        <span class="sn">9</span><span class="arrow">›</span>
-        <span class="sn">10</span><span class="arrow">›</span>
-        <span class="sn">11</span><span class="arrow">›</span>
-        <span class="sn">12</span><span class="arrow">›</span>
-        <span class="sn">13</span><span class="arrow">›</span>
-        <span class="sn strong">14</span><span class="arrow">›</span>
-        <span class="sn strong">15</span><span class="arrow">›</span>
-        <span class="sn strongest">1</span><span class="arrow">›</span>
-        <span class="sn strongest">2</span>
-      </div>
-
-      <hr class="divider" style="margin:24px 0;" />
-
-      <h3 style="font-size:1rem;font-weight:700;color:#f1f5f9;margin-bottom:12px;">2️⃣ 직급 강도 — 같은 숫자일 때</h3>
-      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:18px;background:rgba(255,255,255,0.02);border-radius:12px;border:1px solid var(--border);">
-        <div class="tile-sm emp"><span class="t-icon">▣</span><span class="t-rank">사원</span><span class="t-num">9</span></div>
-        <span class="arrow" style="font-size:1.2rem;">‹</span>
-        <div class="tile-sm asst"><span class="t-icon">💼</span><span class="t-rank">대리</span><span class="t-num">9</span></div>
-        <span class="arrow" style="font-size:1.2rem;">‹</span>
-        <div class="tile-sm mgr"><span class="t-icon">📊</span><span class="t-rank">과장</span><span class="t-num">9</span></div>
-        <span class="arrow" style="font-size:1.2rem;">‹</span>
-        <div class="tile-sm dir"><span class="t-icon">👔</span><span class="t-rank">부장</span><span class="t-num">9</span></div>
-        <div style="margin-left:12px;font-size:0.82rem;color:#64748b;">숫자가 모두 9지만 직급으로 결정!</div>
-      </div>
-
-      <hr class="divider" style="margin:24px 0;" />
-
-      <h3 style="font-size:1rem;font-weight:700;color:#f1f5f9;margin-bottom:12px;">💡 비교 예시</h3>
-      <div class="compare-box">
-        <div style="text-align:center;">
-          <div class="tile-sm emp"><span class="t-icon">▣</span><span class="t-rank">사원</span><span class="t-num">9</span></div>
-          <div style="font-size:0.7rem;color:#94a3b8;margin-top:4px;">사원 9</div>
-        </div>
-        <span class="vs-label">VS</span>
-        <div style="text-align:center;">
-          <div class="tile-sm dir"><span class="t-icon">👔</span><span class="t-rank">부장</span><span class="t-num">8</span></div>
-          <div style="font-size:0.7rem;color:#94a3b8;margin-top:4px;">부장 8</div>
-        </div>
-        <div style="font-size:1.5rem;color:#4b5563;">→</div>
-        <div style="text-align:center;">
-          <div class="tile-sm emp"><span class="t-icon">▣</span><span class="t-rank">사원</span><span class="t-num">9</span></div>
-          <div class="win-label" style="margin-top:4px;display:block;text-align:center;">승리!</div>
-        </div>
-        <div style="font-size:0.8rem;color:#64748b;max-width:150px;">숫자 9 > 숫자 8<br/>직급 무관, 숫자가 우선!</div>
-      </div>
-      <div class="compare-box">
-        <div style="text-align:center;">
-          <div class="tile-sm emp"><span class="t-icon">▣</span><span class="t-rank">사원</span><span class="t-num">7</span></div>
-          <div style="font-size:0.7rem;color:#94a3b8;margin-top:4px;">사원 7</div>
-        </div>
-        <span class="vs-label">VS</span>
-        <div style="text-align:center;">
-          <div class="tile-sm dir"><span class="t-icon">👔</span><span class="t-rank">부장</span><span class="t-num">7</span></div>
-          <div style="font-size:0.7rem;color:#94a3b8;margin-top:4px;">부장 7</div>
-        </div>
-        <div style="font-size:1.5rem;color:#4b5563;">→</div>
-        <div style="text-align:center;">
-          <div class="tile-sm dir"><span class="t-icon">👔</span><span class="t-rank">부장</span><span class="t-num">7</span></div>
-          <div class="win-label" style="margin-top:4px;display:block;text-align:center;">승리!</div>
-        </div>
-        <div style="font-size:0.8rem;color:#64748b;max-width:150px;">숫자가 같으면 직급으로!<br/>부장 > 사원</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- STEP 4 -->
-  <section class="section" id="sec-3" data-index="3">
-    <div class="section-label">
-      <div class="step-number">4</div>
-      <div>
-        <div class="section-title">🃏 조합 종류</div>
-        <div class="section-subtitle">낼 수 있는 패의 종류 마스터하기</div>
-      </div>
-    </div>
-    <div class="glass">
-      <div style="background:rgba(251,146,60,0.08);border:1px solid rgba(251,146,60,0.25);border-radius:12px;padding:14px 18px;margin-bottom:24px;font-size:0.85rem;color:#fed7aa;">
-        ⚠️ <strong>중요:</strong> <strong>1장, 2장, 3장, 5장</strong>만 낼 수 있습니다. <strong style="color:#ef4444">4장은 불가!</strong>
-      </div>
-
-      <div class="combo-grid">
-        <div class="combo-card">
-          <div class="combo-header">
-            <span class="combo-name">싱글</span>
-            <span class="combo-rank-badge">1장</span>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-bottom:28px;">
+          <div class="tile emp">
+            <div class="top-cap"></div>
+            <div class="card-header"><div class="icon-box"><span class="t-icon">▣</span></div><span class="t-rank">사원</span></div>
+            <span class="t-num">5</span>
           </div>
-          <p class="combo-desc">타일 1장. 가장 기본 형태.</p>
-          <div class="tiles-row">
-            <div class="tile-sm mgr"><span class="t-icon">📊</span><span class="t-rank">과장</span><span class="t-num">7</span></div>
+          <div class="tile asst">
+            <div class="top-cap"></div>
+            <div class="card-header"><div class="icon-box"><span class="t-icon">💼</span></div><span class="t-rank">대리</span></div>
+            <span class="t-num">5</span>
+          </div>
+          <div class="tile mgr">
+            <div class="top-cap"></div>
+            <div class="card-header"><div class="icon-box"><span class="t-icon">📊</span></div><span class="t-rank">과장</span></div>
+            <span class="t-num">5</span>
+          </div>
+          <div class="tile dir">
+            <div class="top-cap"></div>
+            <div class="card-header"><div class="icon-box"><span class="t-icon">👔</span></div><span class="t-rank">부장</span></div>
+            <span class="t-num">5</span>
           </div>
         </div>
 
-        <div class="combo-card">
-          <div class="combo-header">
-            <span class="combo-name">페어</span>
-            <span class="combo-rank-badge">2장</span>
-          </div>
-          <p class="combo-desc">같은 숫자 2장. 더 높은 직급 타일로 비교.</p>
-          <div class="tiles-row">
-            <div class="tile-sm emp"><span class="t-icon">▣</span><span class="t-rank">사원</span><span class="t-num">6</span></div>
-            <div class="tile-sm dir"><span class="t-icon">👔</span><span class="t-rank">부장</span><span class="t-num">6</span></div>
-          </div>
-        </div>
+        <hr class="divider" style="margin:0 0 24px;" />
 
-        <div class="combo-card">
-          <div class="combo-header">
-            <span class="combo-name">트리플</span>
-            <span class="combo-rank-badge">3장</span>
+        <h3 style="font-size:1rem;font-weight:700;color:#0f172a;margin-bottom:16px;">📋 4가지 직급</h3>
+        <div class="rank-grid">
+          <div class="rank-card emp">
+            <div class="rc-icon">▣</div>
+            <div class="rc-name">사원</div>
+            <div class="rc-strength">★☆☆☆ 가장 약함</div>
+            <div class="rc-desc">파란색 상단 캡. 같은 숫자일 때 가장 기본 직급입니다.</div>
           </div>
-          <p class="combo-desc">같은 숫자 3장. 가장 높은 직급으로 비교.</p>
-          <div class="tiles-row">
-            <div class="tile-sm emp"><span class="t-icon">▣</span><span class="t-rank">사원</span><span class="t-num">10</span></div>
-            <div class="tile-sm asst"><span class="t-icon">💼</span><span class="t-rank">대리</span><span class="t-num">10</span></div>
-            <div class="tile-sm mgr"><span class="t-icon">📊</span><span class="t-rank">과장</span><span class="t-num">10</span></div>
+          <div class="rank-card asst">
+            <div class="rc-icon">💼</div>
+            <div class="rc-name">대리</div>
+            <div class="rc-strength">★★☆☆ 보통</div>
+            <div class="rc-desc">초록색 상단 캡. 사원보다 강하고 과장보다 약합니다.</div>
           </div>
-        </div>
-
-        <div class="combo-card">
-          <div class="combo-header">
-            <span class="combo-name">스트레이트</span>
-            <span class="combo-rank-badge">5장</span>
+          <div class="rank-card mgr">
+            <div class="rc-icon">📊</div>
+            <div class="rc-name">과장</div>
+            <div class="rc-strength">★★★☆ 강함</div>
+            <div class="rc-desc">주황색 상단 캡. 대리보다 강하고 부장보다 약합니다.</div>
           </div>
-          <p class="combo-desc">연속된 숫자 5장. ⚠️ 숫자 2는 사용 불가!</p>
-          <div class="tiles-row">
-            <div class="tile-sm emp"><span class="t-icon">▣</span><span class="t-rank">사원</span><span class="t-num">5</span></div>
-            <div class="tile-sm asst"><span class="t-icon">💼</span><span class="t-rank">대리</span><span class="t-num">6</span></div>
-            <div class="tile-sm mgr"><span class="t-icon">📊</span><span class="t-rank">과장</span><span class="t-num">7</span></div>
-            <div class="tile-sm dir"><span class="t-icon">👔</span><span class="t-rank">부장</span><span class="t-num">8</span></div>
-            <div class="tile-sm emp"><span class="t-icon">▣</span><span class="t-rank">사원</span><span class="t-num">9</span></div>
-          </div>
-        </div>
-
-        <div class="combo-card">
-          <div class="combo-header">
-            <span class="combo-name">플러시</span>
-            <span class="combo-rank-badge">5장</span>
-          </div>
-          <p class="combo-desc">같은 직급(색) 5장. 숫자 합으로 비교.</p>
-          <div class="tiles-row">
-            <div class="tile-sm dir"><span class="t-icon">👔</span><span class="t-rank">부장</span><span class="t-num">4</span></div>
-            <div class="tile-sm dir"><span class="t-icon">👔</span><span class="t-rank">부장</span><span class="t-num">7</span></div>
-            <div class="tile-sm dir"><span class="t-icon">👔</span><span class="t-rank">부장</span><span class="t-num">9</span></div>
-            <div class="tile-sm dir"><span class="t-icon">👔</span><span class="t-rank">부장</span><span class="t-num">11</span></div>
-            <div class="tile-sm dir"><span class="t-icon">👔</span><span class="t-rank">부장</span><span class="t-num">13</span></div>
-          </div>
-        </div>
-
-        <div class="combo-card">
-          <div class="combo-header">
-            <span class="combo-name">풀하우스</span>
-            <span class="combo-rank-badge">5장</span>
-          </div>
-          <p class="combo-desc">트리플(3장) + 페어(2장). 트리플 숫자로 비교.</p>
-          <div class="tiles-row">
-            <div class="tile-sm emp"><span class="t-icon">▣</span><span class="t-rank">사원</span><span class="t-num">8</span></div>
-            <div class="tile-sm asst"><span class="t-icon">💼</span><span class="t-rank">대리</span><span class="t-num">8</span></div>
-            <div class="tile-sm dir"><span class="t-icon">👔</span><span class="t-rank">부장</span><span class="t-num">8</span></div>
-            <div class="tile-sm mgr"><span class="t-icon">📊</span><span class="t-rank">과장</span><span class="t-num">12</span></div>
-            <div class="tile-sm asst"><span class="t-icon">💼</span><span class="t-rank">대리</span><span class="t-num">12</span></div>
-          </div>
-        </div>
-
-        <div class="combo-card">
-          <div class="combo-header">
-            <span class="combo-name">포카드</span>
-            <span class="combo-rank-badge">5장</span>
-          </div>
-          <p class="combo-desc">같은 숫자 4장 + 아무 타일 1장.</p>
-          <div class="tiles-row">
-            <div class="tile-sm emp"><span class="t-icon">▣</span><span class="t-rank">사원</span><span class="t-num">11</span></div>
-            <div class="tile-sm asst"><span class="t-icon">💼</span><span class="t-rank">대리</span><span class="t-num">11</span></div>
-            <div class="tile-sm mgr"><span class="t-icon">📊</span><span class="t-rank">과장</span><span class="t-num">11</span></div>
-            <div class="tile-sm dir"><span class="t-icon">👔</span><span class="t-rank">부장</span><span class="t-num">11</span></div>
-            <div class="tile-sm emp"><span class="t-icon">▣</span><span class="t-rank">사원</span><span class="t-num">5</span></div>
-          </div>
-        </div>
-
-        <div class="combo-card">
-          <div class="combo-header">
-            <span class="combo-name">스트레이트 플러시</span>
-            <span class="combo-rank-badge" style="background:linear-gradient(135deg,#f59e0b,#ef4444);">최강!</span>
-          </div>
-          <p class="combo-desc">같은 직급 + 연속 숫자 5장. 가장 강력한 조합!</p>
-          <div class="tiles-row">
-            <div class="tile-sm asst"><span class="t-icon">💼</span><span class="t-rank">대리</span><span class="t-num">6</span></div>
-            <div class="tile-sm asst"><span class="t-icon">💼</span><span class="t-rank">대리</span><span class="t-num">7</span></div>
-            <div class="tile-sm asst"><span class="t-icon">💼</span><span class="t-rank">대리</span><span class="t-num">8</span></div>
-            <div class="tile-sm asst"><span class="t-icon">💼</span><span class="t-rank">대리</span><span class="t-num">9</span></div>
-            <div class="tile-sm asst"><span class="t-icon">💼</span><span class="t-rank">대리</span><span class="t-num">10</span></div>
+          <div class="rank-card dir">
+            <div class="rc-icon">👔</div>
+            <div class="rc-name">부장</div>
+            <div class="rc-strength">★★★★ 최강</div>
+            <div class="rc-desc">보라색 상단 캡. 같은 숫자라면 언제나 가장 강합니다.</div>
           </div>
         </div>
       </div>
+    </section>
 
-      <hr class="divider" style="margin:28px 0;" />
-
-      <h3 style="font-size:1rem;font-weight:700;color:#f1f5f9;margin-bottom:16px;">📊 5장 조합 강도 순위</h3>
-      <div class="five-rank">
-        <div class="five-rank-row">
-          <span class="fr-num">5위</span>
-          <span class="fr-name">스트레이트</span>
-          <span class="fr-desc">연속 숫자 5장</span>
-        </div>
-        <div class="five-rank-row">
-          <span class="fr-num">4위</span>
-          <span class="fr-name">플러시</span>
-          <span class="fr-desc">같은 직급 5장</span>
-        </div>
-        <div class="five-rank-row">
-          <span class="fr-num">3위</span>
-          <span class="fr-name">풀하우스</span>
-          <span class="fr-desc">트리플 + 페어</span>
-        </div>
-        <div class="five-rank-row">
-          <span class="fr-num">2위</span>
-          <span class="fr-name">포카드</span>
-          <span class="fr-desc">같은 숫자 4장 + 1장</span>
-        </div>
-        <div class="five-rank-row" style="border-color:rgba(245,197,66,0.3);background:rgba(245,197,66,0.05);">
-          <span class="fr-num" style="color:var(--gold);">1위</span>
-          <span class="fr-name" style="color:var(--gold);">스트레이트 플러시</span>
-          <span class="fr-desc">같은 직급 + 연속 숫자 🏆</span>
+    <!-- STEP 3 -->
+    <section class="section" id="sec-2" data-index="2">
+      <div class="section-label">
+        <div class="step-number">3</div>
+        <div>
+          <div class="section-title">⚡ 강도 체계</div>
+          <div class="section-subtitle">어떤 타일이 더 강한지 알아보기</div>
         </div>
       </div>
-
-      <hr class="divider" style="margin:28px 0;" />
-
-      <h3 style="font-size:1rem;font-weight:700;color:#f1f5f9;margin-bottom:16px;">⚔️ 장수별 제약 &amp; 5장 족보 규칙</h3>
-      <div style="background:rgba(124,106,240,0.06);border:1px solid rgba(124,106,240,0.3);border-radius:12px;padding:18px;margin-bottom:20px;font-size:0.9rem;line-height:1.7;">
-        <p style="margin-bottom:12px;"><strong style="color:#a78bfa;">1️⃣ 싱글(1장) / 페어(2장) / 트리플(3장) 규칙:</strong><br/>싱글일 때는 싱글만, 페어일 때는 페어만, 트리플일 때는 트리플만 낼 수 있습니다. 오직 <strong>같은 장수의 똑같은 조합 타입</strong>으로만 받아쳐야 합니다.</p>
-        <p><strong style="color:#60a5fa;">2️⃣ 5장 조합 (스트레이트 ~ 스트레이트 플러시) 규칙:</strong><br/>5장 조합은 <strong>같은 5장 조합이 아니더라도 더 높은 족보 계급</strong>이라면 얼마든지 올려 낼 수 있습니다!<br/>👉 <em>예: 바닥에 스트레이트가 깔려있을 때 ➔ 더 높은 스트레이트 뿐만 아니라 <strong>플러시, 풀하우스, 포카드, 스트레이트 플러시</strong>를 바로 내서 덮을 수 있습니다.</em></p>
-      </div>
-
-      <h3 style="font-size:1rem;font-weight:700;color:#f1f5f9;margin-bottom:16px;">🔍 같은 조합끼리의 우열 판정 방법</h3>
-      <div style="background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:12px;padding:18px;font-size:0.88rem;line-height:1.7;">
-        <ul style="padding-left:20px;color:#cbd5e1;display:flex;flex-direction:column;gap:10px;">
-          <li><strong style="color:#f1f5f9;">스트레이트 vs 스트레이트:</strong> 구성 타일 중 <strong>가장 높은 숫자</strong>를 가진 스트레이트가 승리! (숫자가 동일하면 가장 높은 숫자의 <strong>직급(부장 &gt; 과장 &gt; 대리 &gt; 사원)</strong> 비교)</li>
-          <li><strong style="color:#f1f5f9;">플러시 vs 플러시:</strong> 5장 중 <strong>가장 높은 숫자부터 차례대로 비교</strong>하여 높은 숫자가 있는 쪽이 승리! (5개 숫자가 모두 같으면 <strong>직급</strong> 비교)</li>
-          <li><strong style="color:#f1f5f9;">풀하우스 vs 풀하우스:</strong> 3장 세트인 <strong>'트리플' 부분의 숫자가 더 높은 풀하우스</strong>가 승리! (함께 낸 2장 페어 숫자는 무관)</li>
-          <li><strong style="color:#f1f5f9;">포카드 vs 포카드:</strong> 4장 세트인 <strong>'포카드' 부분의 숫자가 더 높은 쪽</strong>이 승리!</li>
-          <li><strong style="color:#f1f5f9;">스트레이트 플러시 vs 스트레이트 플러시:</strong> 가장 높은 숫자 비교 ➔ 같으면 직급 비교!</li>
-        </ul>
-      </div>
-    </div>
-  </section>
-
-  <!-- STEP 5 -->
-  <section class="section" id="sec-4" data-index="4">
-    <div class="section-label">
-      <div class="step-number">5</div>
-      <div>
-        <div class="section-title">🔄 게임 진행</div>
-        <div class="section-subtitle">차례마다 어떻게 하는지 알아보기</div>
-      </div>
-    </div>
-    <div class="glass">
-      <div class="flow">
-        <div class="flow-step">
-          <div class="flow-left">
-            <div class="flow-dot" style="background:rgba(124,106,240,0.15);border:2px solid var(--accent);">🃏</div>
-            <div class="flow-line"></div>
-          </div>
-          <div class="flow-content">
-            <h4>게임 시작 &amp; 선 결정</h4>
-            <p>타일을 나눠 갖습니다. <strong style="color:#f1f5f9">사원 3</strong>을 가진 플레이어가 첫 번째 선. 반드시 조합을 내야 합니다 (패스 불가).</p>
-          </div>
+      <div class="glass">
+        <h3 style="font-size:1rem;font-weight:700;color:#0f172a;margin-bottom:8px;">1️⃣ 숫자 강도 (낮음 → 높음)</h3>
+        <p style="font-size:0.85rem;color:#475569;margin-bottom:8px;">3이 가장 약하고 2가 가장 강합니다. 1과 2가 맨 끝에 위치하는 게 특징!</p>
+        <div class="strength-bar">
+          <span class="sn">3</span><span class="arrow">›</span>
+          <span class="sn">4</span><span class="arrow">›</span>
+          <span class="sn">5</span><span class="arrow">›</span>
+          <span class="sn">6</span><span class="arrow">›</span>
+          <span class="sn">7</span><span class="arrow">›</span>
+          <span class="sn">8</span><span class="arrow">›</span>
+          <span class="sn">9</span><span class="arrow">›</span>
+          <span class="sn">10</span><span class="arrow">›</span>
+          <span class="sn">11</span><span class="arrow">›</span>
+          <span class="sn">12</span><span class="arrow">›</span>
+          <span class="sn">13</span><span class="arrow">›</span>
+          <span class="sn strong">14</span><span class="arrow">›</span>
+          <span class="sn strong">15</span><span class="arrow">›</span>
+          <span class="sn strongest">1</span><span class="arrow">›</span>
+          <span class="sn strongest">2</span>
         </div>
-        <div class="flow-step">
-          <div class="flow-left">
-            <div class="flow-dot" style="background:rgba(79,163,247,0.15);border:2px solid var(--accent2);">👆</div>
-            <div class="flow-line"></div>
-          </div>
-          <div class="flow-content">
-            <h4>타일 선택</h4>
-            <p>손패에서 내고 싶은 타일을 클릭해 선택합니다. 선택한 타일은 위로 올라옵니다. 1·2·3·5장 중 유효한 조합이어야 내기 버튼이 활성화됩니다.</p>
-          </div>
-        </div>
-        <div class="flow-step">
-          <div class="flow-left">
-            <div class="flow-dot" style="background:rgba(52,211,153,0.15);border:2px solid var(--success);">✅</div>
-            <div class="flow-line"></div>
-          </div>
-          <div class="flow-content">
-            <h4>내기 또는 패스</h4>
-            <p><strong style="color:#f1f5f9">내기:</strong> 이전 조합보다 강하고 같은 장수여야 합니다.<br/><strong style="color:#f1f5f9">패스:</strong> 낼 수 없으면 패스. 패스해도 다음 차례에 다시 낼 수 있어요!</p>
-          </div>
-        </div>
-        <div class="flow-step">
-          <div class="flow-left">
-            <div class="flow-dot" style="background:rgba(251,146,60,0.15);border:2px solid var(--warn);">🔄</div>
-            <div class="flow-line"></div>
-          </div>
-          <div class="flow-content">
-            <h4>새 선이 되는 경우</h4>
-            <p>마지막 제출자를 제외한 모든 플레이어가 패스하면, 마지막 제출자가 <strong style="color:#f1f5f9">새 선</strong>이 됩니다. 새 선이 되면 어떤 조합이든 자유롭게 낼 수 있습니다!</p>
-          </div>
-        </div>
-        <div class="flow-step">
-          <div class="flow-left">
-            <div class="flow-dot" style="background:rgba(245,197,66,0.15);border:2px solid var(--gold);">🎉</div>
-          </div>
-          <div class="flow-content">
-            <h4>라운드 종료</h4>
-            <p>가장 먼저 손패를 다 낸 플레이어가 <strong style="color:var(--gold)">"퇴근"</strong>! 남은 타일 수로 점수를 계산합니다.</p>
-          </div>
+
+        <hr class="divider" style="margin:24px 0;" />
+
+        <h3 style="font-size:1rem;font-weight:700;color:#0f172a;margin-bottom:12px;">2️⃣ 직급 강도 — 같은 숫자일 때</h3>
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:16px;background:#ffffff;border-radius:12px;border:1px solid rgba(0,0,0,0.06);">
+          <div class="tile-sm emp"><div class="top-cap"></div><div class="card-header"><div class="icon-box"><span class="t-icon">▣</span></div><span class="t-rank">사원</span></div><span class="t-num">9</span></div>
+          <span class="arrow" style="font-size:1.2rem;">‹</span>
+          <div class="tile-sm asst"><div class="top-cap"></div><div class="card-header"><div class="icon-box"><span class="t-icon">💼</span></div><span class="t-rank">대리</span></div><span class="t-num">9</span></div>
+          <span class="arrow" style="font-size:1.2rem;">‹</span>
+          <div class="tile-sm mgr"><div class="top-cap"></div><div class="card-header"><div class="icon-box"><span class="t-icon">📊</span></div><span class="t-rank">과장</span></div><span class="t-num">9</span></div>
+          <span class="arrow" style="font-size:1.2rem;">‹</span>
+          <div class="tile-sm dir"><div class="top-cap"></div><div class="card-header"><div class="icon-box"><span class="t-icon">👔</span></div><span class="t-rank">부장</span></div><span class="t-num">9</span></div>
+          <div style="margin-left:12px;font-size:0.85rem;color:#475569;">숫자가 모두 9로 같을 땐 직급으로 결정!</div>
         </div>
       </div>
+    </section>
 
-      <hr class="divider" style="margin:24px 0;" />
+    <!-- STEP 4 -->
+    <section class="section" id="sec-3" data-index="3">
+      <div class="section-label">
+        <div class="step-number">4</div>
+        <div>
+          <div class="section-title">🃏 조합 종류 &amp; 승부 규칙</div>
+          <div class="section-subtitle">낼 수 있는 패의 종류와 우열 마스터하기</div>
+        </div>
+      </div>
+      <div class="glass">
+        <div class="combo-grid">
+          <div class="combo-card">
+            <div class="combo-header">
+              <span class="combo-name">싱글</span>
+              <span class="combo-rank-badge">1장</span>
+            </div>
+            <p class="combo-desc">타일 1장. 오직 더 높은 싱글로만 받아칩니다.</p>
+            <div class="tiles-row">
+              <div class="tile-sm mgr"><div class="top-cap"></div><div class="card-header"><div class="icon-box"><span class="t-icon">📊</span></div><span class="t-rank">과장</span></div><span class="t-num">7</span></div>
+            </div>
+          </div>
 
-      <div class="two-col">
-        <div class="rule-box">
-          <div class="rb-icon">⏱️</div>
-          <div>
-            <h4>제한 시간</h4>
-            <p>각 차례마다 제한 시간이 있어요. 시간이 끝나면 자동으로 패스됩니다!</p>
+          <div class="combo-card">
+            <div class="combo-header">
+              <span class="combo-name">페어</span>
+              <span class="combo-rank-badge">2장</span>
+            </div>
+            <p class="combo-desc">같은 숫자 2장. 오직 더 높은 페어로만 받아칩니다.</p>
+            <div class="tiles-row">
+              <div class="tile-sm emp"><div class="top-cap"></div><div class="card-header"><div class="icon-box"><span class="t-icon">▣</span></div><span class="t-rank">사원</span></div><span class="t-num">6</span></div>
+              <div class="tile-sm dir"><div class="top-cap"></div><div class="card-header"><div class="icon-box"><span class="t-icon">👔</span></div><span class="t-rank">부장</span></div><span class="t-num">6</span></div>
+            </div>
+          </div>
+
+          <div class="combo-card">
+            <div class="combo-header">
+              <span class="combo-name">트리플</span>
+              <span class="combo-rank-badge">3장</span>
+            </div>
+            <p class="combo-desc">같은 숫자 3장. 오직 더 높은 트리플로만 받아칩니다.</p>
+            <div class="tiles-row">
+              <div class="tile-sm emp"><div class="top-cap"></div><div class="card-header"><div class="icon-box"><span class="t-icon">▣</span></div><span class="t-rank">사원</span></div><span class="t-num">10</span></div>
+              <div class="tile-sm asst"><div class="top-cap"></div><div class="card-header"><div class="icon-box"><span class="t-icon">💼</span></div><span class="t-rank">대리</span></div><span class="t-num">10</span></div>
+              <div class="tile-sm mgr"><div class="top-cap"></div><div class="card-header"><div class="icon-box"><span class="t-icon">📊</span></div><span class="t-rank">과장</span></div><span class="t-num">10</span></div>
+            </div>
+          </div>
+
+          <div class="combo-card">
+            <div class="combo-header">
+              <span class="combo-name">스트레이트</span>
+              <span class="combo-rank-badge">5장</span>
+            </div>
+            <p class="combo-desc">연속된 숫자 5장. (숫자 2 사용 불가)</p>
+            <div class="tiles-row">
+              <div class="tile-sm emp"><div class="top-cap"></div><div class="card-header"><div class="icon-box"><span class="t-icon">▣</span></div><span class="t-rank">사원</span></div><span class="t-num">5</span></div>
+              <div class="tile-sm asst"><div class="top-cap"></div><div class="card-header"><div class="icon-box"><span class="t-icon">💼</span></div><span class="t-rank">대리</span></div><span class="t-num">6</span></div>
+              <div class="tile-sm mgr"><div class="top-cap"></div><div class="card-header"><div class="icon-box"><span class="t-icon">📊</span></div><span class="t-rank">과장</span></div><span class="t-num">7</span></div>
+              <div class="tile-sm dir"><div class="top-cap"></div><div class="card-header"><div class="icon-box"><span class="t-icon">👔</span></div><span class="t-rank">부장</span></div><span class="t-num">8</span></div>
+              <div class="tile-sm emp"><div class="top-cap"></div><div class="card-header"><div class="icon-box"><span class="t-icon">▣</span></div><span class="t-rank">사원</span></div><span class="t-num">9</span></div>
+            </div>
+          </div>
+
+          <div class="combo-card">
+            <div class="combo-header">
+              <span class="combo-name">플러시</span>
+              <span class="combo-rank-badge">5장</span>
+            </div>
+            <p class="combo-desc">같은 직급(색) 5장.</p>
+            <div class="tiles-row">
+              <div class="tile-sm dir"><div class="top-cap"></div><div class="card-header"><div class="icon-box"><span class="t-icon">👔</span></div><span class="t-rank">부장</span></div><span class="t-num">4</span></div>
+              <div class="tile-sm dir"><div class="top-cap"></div><div class="card-header"><div class="icon-box"><span class="t-icon">👔</span></div><span class="t-rank">부장</span></div><span class="t-num">7</span></div>
+              <div class="tile-sm dir"><div class="top-cap"></div><div class="card-header"><div class="icon-box"><span class="t-icon">👔</span></div><span class="t-rank">부장</span></div><span class="t-num">9</span></div>
+              <div class="tile-sm dir"><div class="top-cap"></div><div class="card-header"><div class="icon-box"><span class="t-icon">👔</span></div><span class="t-rank">부장</span></div><span class="t-num">11</span></div>
+              <div class="tile-sm dir"><div class="top-cap"></div><div class="card-header"><div class="icon-box"><span class="t-icon">👔</span></div><span class="t-rank">부장</span></div><span class="t-num">13</span></div>
+            </div>
+          </div>
+
+          <div class="combo-card">
+            <div class="combo-header">
+              <span class="combo-name">풀하우스</span>
+              <span class="combo-rank-badge">5장</span>
+            </div>
+            <p class="combo-desc">트리플(3장) + 페어(2장).</p>
+            <div class="tiles-row">
+              <div class="tile-sm emp"><div class="top-cap"></div><div class="card-header"><div class="icon-box"><span class="t-icon">▣</span></div><span class="t-rank">사원</span></div><span class="t-num">8</span></div>
+              <div class="tile-sm asst"><div class="top-cap"></div><div class="card-header"><div class="icon-box"><span class="t-icon">💼</span></div><span class="t-rank">대리</span></div><span class="t-num">8</span></div>
+              <div class="tile-sm dir"><div class="top-cap"></div><div class="card-header"><div class="icon-box"><span class="t-icon">👔</span></div><span class="t-rank">부장</span></div><span class="t-num">8</span></div>
+              <div class="tile-sm mgr"><div class="top-cap"></div><div class="card-header"><div class="icon-box"><span class="t-icon">📊</span></div><span class="t-rank">과장</span></div><span class="t-num">12</span></div>
+              <div class="tile-sm asst"><div class="top-cap"></div><div class="card-header"><div class="icon-box"><span class="t-icon">💼</span></div><span class="t-rank">대리</span></div><span class="t-num">12</span></div>
+            </div>
           </div>
         </div>
-        <div class="rule-box">
-          <div class="rb-icon">💡</div>
-          <div>
-            <h4>힌트 버튼</h4>
-            <p>어떤 타일을 낼지 모르겠으면 힌트 버튼을 눌러보세요! 낼 수 있는 조합을 추천해줍니다.</p>
+
+        <hr class="divider" style="margin:28px 0;" />
+
+        <h3 style="font-size:1rem;font-weight:800;color:#0f172a;margin-bottom:16px;">⚔️ 장수별 제약 &amp; 5장 족보 역전 규칙</h3>
+        <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:14px;padding:18px;margin-bottom:20px;font-size:0.9rem;line-height:1.7;">
+          <p style="margin-bottom:12px;"><strong style="color:#1d4ed8;">1️⃣ 싱글(1장) / 페어(2장) / 트리플(3장) 규칙:</strong><br/>싱글일 때는 싱글만, 페어일 때는 페어만, 트리플일 때는 트리플만 낼 수 있습니다. 오직 <strong>같은 장수의 똑같은 조합 타입</strong>으로만 받아쳐야 합니다.</p>
+          <p><strong style="color:#0284c7;">2️⃣ 5장 조합 (스트레이트 ~ 스트레이트 플러시) 규칙:</strong><br/>5장 조합은 <strong>같은 5장 조합이 아니더라도 더 높은 족보 계급</strong>이라면 얼마든지 올려 낼 수 있습니다!<br/>👉 <em>예: 바닥에 스트레이트가 깔려있을 때 ➔ 더 높은 스트레이트 뿐만 아니라 <strong>플러시, 풀하우스, 포카드, 스트레이트 플러시</strong>를 바로 내서 덮을 수 있습니다.</em></p>
+        </div>
+
+        <h3 style="font-size:1rem;font-weight:800;color:#0f172a;margin-bottom:16px;">🔍 같은 조합끼리의 세부 우열 판정법</h3>
+        <div style="background:#ffffff;border:1px solid rgba(0,0,0,0.08);border-radius:14px;padding:18px;font-size:0.88rem;line-height:1.7;">
+          <ul style="padding-left:20px;color:#334155;display:flex;flex-direction:column;gap:10px;">
+            <li><strong style="color:#0f172a;">스트레이트 vs 스트레이트:</strong> 구성 타일 중 <strong>가장 높은 숫자</strong>를 가진 스트레이트가 승리! (숫자가 동일하면 가장 높은 숫자의 <strong>직급(부장 &gt; 과장 &gt; 대리 &gt; 사원)</strong> 비교)</li>
+            <li><strong style="color:#0f172a;">플러시 vs 플러시:</strong> 5장 중 <strong>가장 높은 숫자부터 차례대로 비교</strong>하여 높은 숫자가 있는 쪽이 승리! (5개 숫자가 모두 동률일 때 직급 비교)</li>
+            <li><strong style="color:#0f172a;">풀하우스 vs 풀하우스:</strong> 3장 세트인 <strong>'트리플' 부분의 숫자가 더 높은 풀하우스</strong>가 승리! (함께 낸 2장 페어 숫자는 영향 없음)</li>
+            <li><strong style="color:#0f172a;">포카드 vs 포카드:</strong> 4장 세트인 <strong>'포카드' 부분의 숫자가 더 높은 쪽</strong>이 승리!</li>
+            <li><strong style="color:#0f172a;">스트레이트 플러시 vs 스트레이트 플러시:</strong> 가장 높은 숫자 비교 ➔ 동률 시 직급 비교!</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- STEP 5 -->
+    <section class="section" id="sec-4" data-index="4">
+      <div class="section-label">
+        <div class="step-number">5</div>
+        <div>
+          <div class="section-title">🔄 게임 진행</div>
+          <div class="section-subtitle">차례마다 어떻게 하는지 알아보기</div>
+        </div>
+      </div>
+      <div class="glass">
+        <div class="flow">
+          <div class="flow-step">
+            <div class="flow-left">
+              <div class="flow-dot" style="background:#dbeafe;border:2px solid #2563eb;color:#1d4ed8;">🃏</div>
+              <div class="flow-line"></div>
+            </div>
+            <div class="flow-content">
+              <h4>게임 시작 &amp; 선 결정</h4>
+              <p>타일을 나눠 갖습니다. <strong style="color:#0f172a">사원 3</strong>을 가진 플레이어가 첫 번째 선이 되어 게임을 시작합니다.</p>
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-left">
+              <div class="flow-dot" style="background:#e0f2fe;border:2px solid #0284c7;color:#0369a1;">👆</div>
+              <div class="flow-line"></div>
+            </div>
+            <div class="flow-content">
+              <h4>타일 선택</h4>
+              <p>손패에서 내고 싶은 타일을 클릭해 선택합니다. 1·2·3·5장 중 유효한 조합일 때 내기 버튼이 활성화됩니다.</p>
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-left">
+              <div class="flow-dot" style="background:#d1fae5;border:2px solid #059669;color:#047857;">✅</div>
+              <div class="flow-line"></div>
+            </div>
+            <div class="flow-content">
+              <h4>내기 또는 패스</h4>
+              <p><strong style="color:#0f172a">내기:</strong> 이전 조합보다 더 강한 조합을 제출합니다.<br/><strong style="color:#0f172a">패스:</strong> 낼 수가 없거나 전략적으로 패스할 수 있으며, 패스 후에도 다음 턴에 다시 낼 수 있습니다.</p>
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-left">
+              <div class="flow-dot" style="background:#fef3c7;border:2px solid #d97706;color:#b45309;">🔄</div>
+            </div>
+            <div class="flow-content">
+              <h4>새 선이 되는 경우</h4>
+              <p>마지막 제출자를 제외한 모든 플레이어가 연속 패스하면, 마지막 제출자가 <strong style="color:#0f172a">새 선</strong>이 되어 원하는 어떤 조합이든 자유롭게 낼 수 있습니다!</p>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- STEP 6 -->
-  <section class="section" id="sec-5" data-index="5">
-    <div class="section-label">
-      <div class="step-number">6</div>
-      <div>
-        <div class="section-title">📈 점수 계산</div>
-        <div class="section-subtitle">라운드 점수가 쌓이는 방식</div>
-      </div>
-    </div>
-    <div class="glass">
-      <p style="color:#94a3b8;margin-bottom:20px;">라운드가 끝나면 플레이어간 <strong style="color:#f1f5f9">남은 타일 수</strong>를 비교해 점수를 계산합니다. 타일이 적을수록 점수를 뜯어냅니다!</p>
-
-      <div style="background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:20px;">
-        <h3 style="font-size:0.95rem;font-weight:700;color:#f1f5f9;margin-bottom:8px;">🧮 점수 계산 방식</h3>
-        <p style="font-size:0.85rem;color:#94a3b8;line-height:1.7;">두 플레이어를 비교할 때마다, 남은 타일 차이만큼 이긴 플레이어가 <strong style="color:#34d399">+점수</strong>, 진 플레이어가 <strong style="color:#ef4444">-점수</strong>를 받습니다.<br/><strong style="color:#f1f5f9">예:</strong> A가 0장, B가 5장 남으면 → A는 +5점, B는 -5점</p>
-      </div>
-
-      <h3 style="font-size:0.95rem;font-weight:700;color:#f1f5f9;margin-bottom:16px;">📊 4인 라운드 결과 예시</h3>
-      <div class="score-example">
-        <div class="player-score-card winner">
-          <div class="ps-name">나 (퇴근 🎉)</div>
-          <div class="ps-tiles"><span style="font-size:0.75rem;color:var(--gold);font-weight:700;">0장!</span></div>
-          <div class="ps-score">+12점</div>
-          <div class="ps-label">이번 라운드</div>
-        </div>
-        <div class="player-score-card">
-          <div class="ps-name">김대리</div>
-          <div class="ps-tiles">
-            <div class="tile-dot emp"></div><div class="tile-dot asst"></div>
-            <div class="tile-dot mgr"></div><div class="tile-dot dir"></div>
-          </div>
-          <div class="ps-score" style="color:var(--accent2);">+2점</div>
-          <div class="ps-label">4장 남음</div>
-        </div>
-        <div class="player-score-card">
-          <div class="ps-name">박과장</div>
-          <div class="ps-tiles">
-            <div class="tile-dot emp"></div><div class="tile-dot asst"></div>
-            <div class="tile-dot mgr"></div><div class="tile-dot dir"></div>
-            <div class="tile-dot emp"></div><div class="tile-dot asst"></div>
-          </div>
-          <div class="ps-score" style="color:#94a3b8;">-4점</div>
-          <div class="ps-label">6장 남음</div>
-        </div>
-        <div class="player-score-card loser">
-          <div class="ps-name">이부장</div>
-          <div class="ps-tiles">
-            <div class="tile-dot emp"></div><div class="tile-dot asst"></div>
-            <div class="tile-dot mgr"></div><div class="tile-dot dir"></div>
-            <div class="tile-dot emp"></div><div class="tile-dot asst"></div>
-            <div class="tile-dot mgr"></div><div class="tile-dot dir"></div>
-            <div class="tile-dot emp"></div><div class="tile-dot asst"></div>
-          </div>
-          <div class="ps-score">-10점</div>
-          <div class="ps-label">10장 남음</div>
+    <!-- STEP 6 -->
+    <section class="section" id="sec-5" data-index="5">
+      <div class="section-label">
+        <div class="step-number">6</div>
+        <div>
+          <div class="section-title">📈 점수 계산</div>
+          <div class="section-subtitle">라운드 점수가 쌓이는 방식</div>
         </div>
       </div>
+      <div class="glass">
+        <p style="color:#334155;margin-bottom:20px;">라운드가 끝나면 플레이어간 <strong style="color:#0f172a">남은 타일 수</strong>를 비교해 점수를 계산합니다. 타일이 적을수록 더 높은 점수를 얻습니다!</p>
 
-      <div style="margin-top:20px;padding:16px;background:rgba(245,197,66,0.06);border:1px solid rgba(245,197,66,0.2);border-radius:12px;font-size:0.85rem;color:#fef3c7;text-align:center;">
-        🏆 5라운드 후 <strong>가장 높은 누적 점수</strong>를 가진 플레이어가 최종 승리!
-      </div>
-    </div>
-  </section>
-
-  <!-- STEP 7: Interactive Demo -->
-  <section class="section" id="sec-6" data-index="6">
-    <div class="section-label">
-      <div class="step-number">7</div>
-      <div>
-        <div class="section-title">🎮 직접 해보기</div>
-        <div class="section-subtitle">타일을 클릭해서 조합을 만들어 보세요!</div>
-      </div>
-    </div>
-    <div class="glass">
-      <p style="color:#94a3b8;margin-bottom:8px;font-size:0.88rem;">아래 타일을 클릭해서 선택/해제해보세요. 어떤 조합이 만들어지는지 자동으로 판정해줍니다.</p>
-      <div class="demo-hand" id="demo-hand"></div>
-      <div class="demo-info" id="demo-info">
-        <span class="hint-text">타일을 클릭해서 선택해보세요 👆</span>
-      </div>
-      <div style="text-align:center;">
-        <button class="demo-btn" onclick="sortByNumber()">🔢 숫자순 정렬</button>
-        <button class="demo-btn" onclick="sortByRank()" style="margin-left:8px;">👔 직급순 정렬</button>
-        <button class="demo-btn" id="btn-shuffle" onclick="resetDemo()" style="margin-left:8px;">🔀 손패 섞기</button>
-        <button class="demo-btn" onclick="clearDemo()" style="margin-left:8px;">✕ 선택 초기화</button>
-      </div>
-
-      <hr class="divider" style="margin:28px 0;" />
-
-      <h3 style="font-size:1rem;font-weight:700;color:#f1f5f9;margin-bottom:14px;">💡 전략 팁</h3>
-      <div class="tips-grid">
-        <div class="tip-card">
-          <div class="tip-icon">🎯</div>
-          <h4>약한 패부터 털어라</h4>
-          <p>초반에 낮은 숫자 싱글들을 먼저 내서 손패를 줄이세요. 나중에 강패로 역전을 노릴 수 있습니다.</p>
-        </div>
-        <div class="tip-card">
-          <div class="tip-icon">👀</div>
-          <h4>상대 패 수를 관찰하라</h4>
-          <p>남은 타일이 적은 상대가 있다면 적극적으로 패스를 유도해 타일을 소진시키세요.</p>
-        </div>
-        <div class="tip-card">
-          <div class="tip-icon">🃏</div>
-          <h4>선을 잡아라</h4>
-          <p>선(리더)이 되면 원하는 조합으로 게임을 주도할 수 있습니다. 패스를 유도해 선을 확보하세요.</p>
-        </div>
-        <div class="tip-card">
-          <div class="tip-icon">⚡</div>
-          <h4>2는 최강 비장의 카드</h4>
-          <p>숫자 2는 가장 강한 싱글 패입니다. 상대의 강패를 꺾을 최후의 수단으로 아껴두세요.</p>
+        <div style="background:#ffffff;border:1px solid rgba(0,0,0,0.08);border-radius:14px;padding:20px;margin-bottom:20px;">
+          <h3 style="font-size:0.95rem;font-weight:800;color:#0f172a;margin-bottom:8px;">🧮 점수 계산 방식</h3>
+          <p style="font-size:0.85rem;color:#475569;line-height:1.7;">두 플레이어를 비교할 때마다, 남은 타일 차이만큼 이긴 플레이어가 <strong style="color:#059669">+점수</strong>, 진 플레이어가 <strong style="color:#dc2626">-점수</strong>를 받습니다.<br/><strong style="color:#0f172a">예:</strong> A가 0장, B가 5장 남으면 → A는 +5점, B는 -5점</p>
         </div>
       </div>
-    </div>
-  </section>
-
-  <!-- CTA -->
-  <div class="cta-section">
-    <div class="cta-box">
-      <div style="font-size:3rem;margin-bottom:16px;">🏢</div>
-      <h2>이제 출근할 시간!</h2>
-      <p>규칙을 익혔다면 게임을 시작해보세요.<br/>가장 먼저 퇴근하는 사람이 승자입니다!</p>
-      <a class="btn-primary" href="/">🎮 게임 시작하기</a>
-      <div style="margin-top:20px;font-size:0.78rem;color:#475569;">
-        싱글 플레이로 연습하거나 온라인 멀티플레이로 팀원과 대결하세요!
-      </div>
-    </div>
-  </div>
+    </section>
+  </main>
 
   <script>
-    /* Progress bar */
-    window.addEventListener('scroll', () => {
-      const el = document.getElementById('progress-bar');
-      const h  = document.documentElement;
-      const st = h.scrollTop || document.body.scrollTop;
-      const sh = h.scrollHeight - h.clientHeight;
-      el.style.width = sh > 0 ? (st / sh * 100) + '%' : '0%';
-    });
+    function scrollToSection(index) {
+      const section = document.getElementById(`sec-${index}`);
+      if (section) {
+        section.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
 
-    /* Scroll animations */
     const sections = document.querySelectorAll('.section');
-    const io = new IntersectionObserver(entries => {
-      entries.forEach(e => {
-        if (e.isIntersecting) {
-          e.target.classList.add('visible');
-          const idx = e.target.dataset.index;
-          document.querySelectorAll('.step-dot').forEach((d, i) => {
-            d.classList.toggle('active', String(i) === idx);
-          });
+    const dots = document.querySelectorAll('.step-dot');
+    const progressBar = document.getElementById('progress-bar');
+
+    window.addEventListener('scroll', () => {
+      const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const scrolled = (winScroll / height) * 100;
+      if (progressBar) progressBar.style.width = scrolled + '%';
+
+      sections.forEach((sec, idx) => {
+        const top = sec.getBoundingClientRect().top;
+        if (top < window.innerHeight * 0.75) {
+          sec.classList.add('visible');
+          dots.forEach(d => d.classList.remove('active'));
+          const activeDot = document.getElementById(`dot-${idx}`);
+          if (activeDot) activeDot.classList.add('active');
         }
       });
-    }, { threshold: 0.15 });
-    sections.forEach(s => io.observe(s));
-
-    function scrollToSection(idx) {
-      document.getElementById('sec-' + idx)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-
-    /* ─── Interactive demo ─── */
-    const RANKS = [
-      { key: 'emp',  label: '사원', icon: '&#9635;' },
-      { key: 'asst', label: '대리', icon: '💼' },
-      { key: 'mgr',  label: '과장', icon: '📊' },
-      { key: 'dir',  label: '부장', icon: '👔' },
-    ];
-    const NUMS = [3,4,5,6,7,8,9,10,11,12,13];
-
-    let demoHand = [];
-    let selectedIds = new Set();
-
-    function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5); }
-
-    function generateHand() {
-      const pool = [];
-      for (const n of NUMS) {
-        for (const r of RANKS) {
-          pool.push({ id: r.key + '-' + n, num: n, rank: r });
-        }
-      }
-      return shuffle(pool).slice(0, 12).sort((a,b) => a.num - b.num);
-    }
-
-    function renderHand() {
-      const container = document.getElementById('demo-hand');
-      container.innerHTML = '';
-      demoHand.forEach(tile => {
-        const el = document.createElement('div');
-        const sel = selectedIds.has(tile.id);
-        el.className = 'tile ' + tile.rank.key + (sel ? ' selected' : '');
-        el.innerHTML =
-          '<span class="t-icon">' + tile.rank.icon + '</span>' +
-          '<span class="t-rank">' + tile.rank.label + '</span>' +
-          '<span class="t-num">'  + tile.num + '</span>';
-        el.addEventListener('click', () => toggleTile(tile.id));
-        container.appendChild(el);
-      });
-      evaluateDemo();
-    }
-
-    function toggleTile(id) {
-      if (selectedIds.has(id)) selectedIds.delete(id);
-      else selectedIds.add(id);
-      renderHand();
-    }
-
-    function evaluateDemo() {
-      const selected = demoHand.filter(t => selectedIds.has(t.id));
-      const info = document.getElementById('demo-info');
-      const count = selected.length;
-
-      if (count === 0) {
-        info.innerHTML = '<span class="hint-text">타일을 클릭해서 선택해보세요 👆</span>';
-        return;
-      }
-
-      let result = '';
-      let valid = false;
-
-      if (count === 1) { result = '✅ 싱글 — 유효한 조합!'; valid = true; }
-      else if (count === 2) {
-        if (selected[0].num === selected[1].num) { result = '✅ 페어 — 유효한 조합!'; valid = true; }
-        else result = '❌ 페어 불가 — 같은 숫자 2장이어야 합니다';
-      }
-      else if (count === 3) {
-        const ns = selected.map(t => t.num);
-        if (ns[0] === ns[1] && ns[1] === ns[2]) { result = '✅ 트리플 — 유효한 조합!'; valid = true; }
-        else result = '❌ 트리플 불가 — 같은 숫자 3장이어야 합니다';
-      }
-      else if (count === 4) {
-        result = '❌ 4장은 낼 수 없습니다! (1·2·3·5장만 가능)';
-      }
-      else if (count === 5) {
-        const nums = selected.map(t => t.num);
-        const ranks = selected.map(t => t.rank.key);
-        const uniqueNums = [...new Set(nums)];
-        const uniqueRanks = [...new Set(ranks)];
-        const sorted = [...uniqueNums].sort((a,b) => a-b);
-        const isFlush = uniqueRanks.length === 1;
-        const has2 = nums.includes(2);
-        let isStraight = false;
-        if (!has2 && uniqueNums.length === 5) {
-          const diff = sorted[4] - sorted[0];
-          isStraight = diff === 4 && sorted.every((v,i) => i === 0 || v === sorted[i-1]+1);
-        }
-        const groups = {};
-        nums.forEach(n => { groups[n] = (groups[n]||0)+1; });
-        const gc = Object.values(groups).sort((a,b) => b-a);
-
-        if (isFlush && isStraight)       { result = '🏆 스트레이트 플러시 — 최강 조합!'; valid = true; }
-        else if (gc[0] === 4)            { result = '✅ 포카드 — 매우 강한 조합!'; valid = true; }
-        else if (gc[0] === 3 && gc[1] === 2) { result = '✅ 풀하우스 — 좋은 조합!'; valid = true; }
-        else if (isFlush)                { result = '✅ 플러시 — 유효한 조합!'; valid = true; }
-        else if (isStraight)             { result = '✅ 스트레이트 — 유효한 조합!'; valid = true; }
-        else                             { result = '❌ 유효하지 않은 5장 조합입니다'; }
-      }
-      else {
-        result = '❌ ' + count + '장은 낼 수 없습니다 (1·2·3·5장만 가능)';
-      }
-
-      if (valid) {
-        info.innerHTML = '<span class="combo-tag">' + result + '</span>';
-      } else {
-        info.innerHTML = '<span style="font-size:0.88rem;color:#ef4444;font-weight:600;">' + result + '</span>';
-      }
-    }
-
-    function resetDemo() {
-      selectedIds.clear();
-      demoHand = generateHand();
-      renderHand();
-    }
-
-    function clearDemo() {
-      selectedIds.clear();
-      renderHand();
-    }
-
-    const NUM_STRENGTH = {3:0,4:1,5:2,6:3,7:4,8:5,9:6,10:7,11:8,12:9,13:10,14:11,15:12,1:13,2:14};
-    const RANK_ORDER = {emp:0,asst:1,mgr:2,dir:3};
-
-    function sortByNumber() {
-      demoHand.sort((a,b) => {
-        const nd = (NUM_STRENGTH[a.num]||0) - (NUM_STRENGTH[b.num]||0);
-        if (nd !== 0) return nd;
-        return (RANK_ORDER[a.rank.key]||0) - (RANK_ORDER[b.rank.key]||0);
-      });
-      renderHand();
-    }
-
-    function sortByRank() {
-      demoHand.sort((a,b) => {
-        const rd = (RANK_ORDER[a.rank.key]||0) - (RANK_ORDER[b.rank.key]||0);
-        if (rd !== 0) return rd;
-        return (NUM_STRENGTH[a.num]||0) - (NUM_STRENGTH[b.num]||0);
-      });
-      renderHand();
-    }
-
-    demoHand = generateHand();
-    renderHand();
+    });
   </script>
 </body>
 </html>
