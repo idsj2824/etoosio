@@ -114,7 +114,7 @@ export function getAIDifficultyByLevel(level: number): { difficulty: AIDifficult
  */
 export function calculateEarnedExp(
   rankPosition: number, // 1등 = 1, 2등 = 2...
-  totalPlayers: number,
+  _totalPlayers: number = 5,
   playedSpecialCombinations: boolean = false
 ): { baseExp: number; rankBonusExp: number; combinationBonusExp: number; totalEarnedExp: number } {
   const baseExp = 50; // 기본 완주 경험치
